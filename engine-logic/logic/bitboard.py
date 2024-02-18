@@ -176,7 +176,7 @@ class GenerateMove:
         pass
 
     @classmethod
-    def generate_knight_move(cls, own_bitboard: Bitboard, square: int) -> list[int]:
+    def generate_knight_move(cls, square: int, own_bitboard: Bitboard) -> list[int]:
         moves = []
         if not (
                 cls.is_a_file(square) or
