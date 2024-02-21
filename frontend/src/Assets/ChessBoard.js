@@ -118,7 +118,7 @@ const ChessBoard = ({fen}) => {
                     ))}
                 </g>
             </svg>
-
+            
             {/* pieces */}
             {pieces.map((pieceObj, index) => (
                 <img

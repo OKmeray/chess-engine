@@ -9,43 +9,79 @@ position = get_position_from_fen(fen)
 
 
 # without checking if it's legal or not
-def get_all_moves(position):
+def get_all_moves_by_piece(position):
     result = []
 
-    for bit_color in range(0, 9, 8):
-        own_bitboard = position.get_white_bitboard() if bit_color else position.get_black_bitboard()
-        enemy_bitboard = position.get_white_bitboard() if not bit_color else position.get_black_bitboard()
+    for num_color in range(0, 9, 8):
+        own_bitboard = position.get_white_bitboard() if num_color else position.get_black_bitboard()
+        enemy_bitboard = position.get_white_bitboard() if not num_color else position.get_black_bitboard()
 
-        for bit_piece in range(1, 7):
-            separate_pieces = get_separate_piece(position, PieceEnum(bit_piece), PieceColor(bit_color))
+        for num_piece in range(1, 7):
+            separate_bit_pieces = get_separate_piece(position, PieceEnum(num_piece), PieceColor(num_color))
             separate_pieces_moves = []
 
-            for piece in separate_pieces:
-                if bit_piece == PieceEnum.PAWN:
+            for piece in separate_bit_pieces:
+                if num_piece == PieceEnum.PAWN:
                     pass
                     # TODO:
                     # separate_pieces_moves.append(GenerateMove.generate_pawn_move(piece, own_bitboard, enemy_bitboard))
-                elif bit_piece == PieceEnum.KNIGHT:
+                elif num_piece == PieceEnum.KNIGHT:
                     separate_pieces_moves.append(GenerateMove.generate_knight_move(piece, own_bitboard))
-                elif bit_piece == PieceEnum.BISHOP:
+                elif num_piece == PieceEnum.BISHOP:
                     separate_pieces_moves.append(GenerateMove.generate_bishop_move(piece, own_bitboard, enemy_bitboard))
-                elif bit_piece == PieceEnum.ROOK:
+                elif num_piece == PieceEnum.ROOK:
                     separate_pieces_moves.append(GenerateMove.generate_rook_move(piece, own_bitboard, enemy_bitboard))
-                elif bit_piece == PieceEnum.QUEEN:
+                elif num_piece == PieceEnum.QUEEN:
                     separate_pieces_moves.append(GenerateMove.generate_queen_move(piece, own_bitboard, enemy_bitboard))
-                elif bit_piece == PieceEnum.KING:
+                elif num_piece == PieceEnum.KING:
                     separate_pieces_moves.append(GenerateMove.generate_king_move(piece, own_bitboard, enemy_bitboard))
 
                 for piece_moves in separate_pieces_moves:
                     piece_moves_num = get_nums_from_bit_nums(piece_moves)
-                    local_dictionary = {bit_color + bit_piece: {"square": get_num_from_bitboard(piece), "possible_moves": piece_moves_num}}
+                    local_dictionary = {
+                        "piece": PieceEnum(num_piece),
+                        "color": PieceColor(num_color),
+                        "square": get_num_from_bitboard(piece),
+                        "possible_moves": piece_moves_num
+                    }
                     result.append(local_dictionary)
 
                 separate_pieces_moves.clear()
     return result
 
 
-result = get_all_moves(position=position)
+result = get_all_moves_by_piece(position=position)
 
-for i in result:
-    print(i)
+# for i in result:
+#     print(i)
+
+
+def return_moves_for_UI(all_moves_by_piece):
+    result = []
+
+    for piece in all_moves_by_piece:
+        piece_letter = None
+
+        match piece['piece']:
+            case 1:
+                piece_letter = 'p'
+            case 2:
+                piece_letter = 'n'
+            case 3:
+                piece_letter = 'b'
+            case 4:
+                piece_letter = 'r'
+            case 5:
+                piece_letter = 'q'
+            case 6:
+                piece_letter = 'k'
+
+        if piece['color'] == 8:
+            piece_letter = piece_letter.upper()
+
+        result.append({'piece': piece_letter, 'square': piece['square'], 'possible_moves': piece['possible_moves']})
+
+    return result
+
+
+# print(return_moves_for_UI(result))
