@@ -102,52 +102,97 @@ king_square_endgame_table = [
 def evaluate_position(position, side=PieceColor.WHITE):
     evaluation = 0
 
-    evaluation += evaluate_material(position=position, side=side)
-    evaluation += evaluate_piece_placement(position=position, side=side)
-
-    return evaluation
-
-
-def evaluate_material(position, side=PieceColor.WHITE):
-    evaluation = 0
-
     for num_color in range(0, 9, 8):
         for num_piece in range(1, 7):
             separate_bit_pieces = get_separate_piece(position, PieceEnum(num_piece), PieceColor(num_color))
-            separate_num_pieces = [get_num_from_bitboard(num) for num in separate_bit_pieces]
-            print(PieceEnum(num_piece), PieceColor(num_color), separate_num_pieces)
+            separate_pieces_squares = [get_num_from_bitboard(num) for num in separate_bit_pieces]
 
             side_sign = 1 if PieceColor(num_color) == side else -1
-            #for sep_num_piece in separate_num_pieces:
             for _ in separate_bit_pieces:
 
                 if PieceEnum(num_piece) == PieceEnum.PAWN:
+                    # material
                     evaluation += int(PiecePrice.PAWN) * side_sign
+
+                    # piece placement
+                    for square in separate_pieces_squares:
+                        evaluation += pawn_square_table[square] * side_sign
+
                 elif PieceEnum(num_piece) == PieceEnum.KNIGHT:
+                    # material
                     evaluation += int(PiecePrice.KNIGHT) * side_sign
+
+                    # piece placement
+                    for square in separate_pieces_squares:
+                        evaluation += knight_square_table[square] * side_sign
+
                 elif PieceEnum(num_piece) == PieceEnum.BISHOP:
+                    # material
                     evaluation += int(PiecePrice.BISHOP) * side_sign
+
+                    # piece placement
+                    for square in separate_pieces_squares:
+                        evaluation += bishop_square_table[square] * side_sign
+
                 elif PieceEnum(num_piece) == PieceEnum.ROOK:
+                    # material
                     evaluation += int(PiecePrice.ROOK) * side_sign
+
+                    # piece placement
+                    for square in separate_pieces_squares:
+                        evaluation += rook_square_table[square] * side_sign
+
                 elif PieceEnum(num_piece) == PieceEnum.QUEEN:
+                    # material
                     evaluation += int(PiecePrice.QUEEN) * side_sign
+
+                    # piece placement
+                    for square in separate_pieces_squares:
+                        evaluation += queen_square_table[square] * side_sign
+
                 elif PieceEnum(num_piece) == PieceEnum.KING:
+                    # material
                     evaluation += int(PiecePrice.KING) * side_sign
 
+                    # piece placement
+                    is_queenless_endgame = (
+                        position.get_piece_bitboard(piece=PieceEnum.QUEEN, color=PieceColor.WHITE) |
+                        position.get_piece_bitboard(piece=PieceEnum.QUEEN, color=PieceColor.BLACK)
+                                   ).bitboard == 0
+
+                    piece_bitboard = (
+                        (
+                            (
+                                    position.get_piece_bitboard(piece=PieceEnum.PAWN, color=PieceColor.WHITE) |
+                                    position.get_piece_bitboard(piece=PieceEnum.KING, color=PieceColor.WHITE)
+                            ) ^ position.get_white_bitboard()
+                        ) |
+                        (
+                            (
+                                    position.get_piece_bitboard(piece=PieceEnum.PAWN, color=PieceColor.BLACK) |
+                                    position.get_piece_bitboard(piece=PieceEnum.KING, color=PieceColor.BLACK)
+                            ) ^ position.get_black_bitboard()
+                        )
+                    )
+
+                    count = 0
+                    while piece_bitboard.bitboard:
+                        count += piece_bitboard.bitboard & 1
+                        piece_bitboard.bitboard >>= 1
+
+                    is_queen_endgame = False
+                    if count <= 4:
+                        is_queen_endgame = True
+
+                    # piece placement
+                    if is_queen_endgame or is_queenless_endgame:
+                        for square in separate_pieces_squares:
+                            evaluation += king_square_endgame_table[square] * side_sign
+                    else:
+                        for square in separate_pieces_squares:
+                            evaluation += king_square_middlegame_table[square] * side_sign
+
     return evaluation
-
-
-def evaluate_piece_placement(position, side=PieceColor.WHITE):
-    for num_color in range(0, 9, 8):
-        for num_piece in range(1, 7):
-            separate_bit_pieces = get_separate_piece(position, PieceEnum(num_piece), PieceColor(num_color))
-            separate_num_pieces = [get_num_from_bitboard(num) for num in separate_bit_pieces]
-            print(PieceEnum(num_piece), PieceColor(num_color), separate_num_pieces)
-
-            side_sign = 1 if PieceColor(num_color) == side else -1
-            # for sep_num_piece in separate_num_pieces:
-            for _ in separate_bit_pieces:
-                pass  # TODO: maybe the part above should be written only once, and all the evaluation moments in if-s
 
 
 eval = evaluate_position(position, side=PieceColor.WHITE)

@@ -62,6 +62,15 @@ class Bitboard:
     def __add__(self, other):
         return Bitboard(self.bitboard | other.bitboard)
 
+    def __or__(self, other):
+        return Bitboard(self.bitboard | other.bitboard)
+
+    def __xor__(self, other):
+        return Bitboard(self.bitboard ^ other.bitboard)
+
+    def __and__(self, other):
+        return Bitboard(self.bitboard & other.bitboard)
+
 
 class Position:
     def __init__(self):

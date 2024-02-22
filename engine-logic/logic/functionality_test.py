@@ -4,6 +4,8 @@ from logic.helping_function import get_position_from_fen, GenerateMove, PieceEnu
 # fen = "3k4/8/8/5N2/8/8/3N4/7K w - - 0 1"
 # fen = "3k4/8/8/8/8/8/3N4/7K w - - 0 1"
 fen = "3k4/8/3b4/3P1N2/2pr4/3QN1B1/8/7K w - - 0 1"
+# fen = "3k4/8/3b4/3P1N2/2pr4/4N1B1/8/7K w - - 0 1"  # fen_without_queens
+# fen = "q2k4/8/3b4/3P1N2/2pr4/3QN1B1/8/7K w - - 0 1"  # fen with two queens
 
 position = get_position_from_fen(fen)
 
