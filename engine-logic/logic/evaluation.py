@@ -195,6 +195,9 @@ def evaluate_position(position, side=PieceColor.WHITE):
     return evaluation
 
 
+# TODO: calculate piece activity (by checking how many possible moves each piece has)
+
+
 eval = evaluate_position(position, side=PieceColor.WHITE)
 regular_eval = eval / 100
 
