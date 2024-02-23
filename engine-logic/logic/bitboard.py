@@ -62,6 +62,15 @@ class Bitboard:
     def __add__(self, other):
         return Bitboard(self.bitboard | other.bitboard)
 
+    def __or__(self, other):
+        return Bitboard(self.bitboard | other.bitboard)
+
+    def __xor__(self, other):
+        return Bitboard(self.bitboard ^ other.bitboard)
+
+    def __and__(self, other):
+        return Bitboard(self.bitboard & other.bitboard)
+
 
 class Position:
     def __init__(self):
@@ -176,7 +185,7 @@ class GenerateMove:
         pass
 
     @classmethod
-    def generate_knight_move(cls, own_bitboard: Bitboard, square: int) -> list[int]:
+    def generate_knight_move(cls, square: int, own_bitboard: Bitboard) -> list[int]:
         moves = []
         if not (
                 cls.is_a_file(square) or
