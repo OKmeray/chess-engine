@@ -19,7 +19,9 @@ const Pieces = (initialPieces) => {
         const initialSquareNum = Number(initialSquare);
         const newSquareNum = Number(newSquare);
         
-        const piecesWithoutTarget = pieces["pieces"].filter(piece => piece.offset !== newSquareNum);
+        const piecesWithoutTarget = pieces["pieces"].filter(piece => {
+            return piece.offset !== newSquareNum || initialSquareNum === newSquareNum;
+        });
 
         const updatedPieces = piecesWithoutTarget.map(piece => {
             if (piece.offset === initialSquareNum) {
