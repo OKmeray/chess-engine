@@ -14,23 +14,20 @@ import whiteBishop from '../Assets/Images/bishop_white.svg';
 import whiteKnight from '../Assets/Images/knight_white.svg';
 import whitePawn from '../Assets/Images/pawn_white.svg';
 
-const ChessBoard = ({fen}) => {
+import Piece from '../Assets/Piece';
+import squareSize from '../Assets/variables';
+import Pieces from '../Assets/Pieces';
 
-    const squareSize = 80;  // px
+const ChessBoard = ({fen}) => {
 
     const boardWrapperStyles = {
         width: squareSize * 8 + "px",
         height: squareSize * 8 + "px",
         position: "relative",
-        align: "center"
-    }
-
-    const pieceStyles = {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        zIndex: 10000,
-        width: squareSize + "px",
+        align: "center",
+        display: "grid",
+        gridTemplateColumns: 'repeat(8, 1fr)',
+        gridTemplateRows: 'repeat(8, 1fr)',
     }
 
     //fen = "3k4/8/5q2/8/2Q5/4P3/8/3K4 w - - 0 1";
@@ -44,37 +41,9 @@ const ChessBoard = ({fen}) => {
         return false;
     }
 
-    function getImageFromFenSymbol(char) {
-        switch (char) {
-            case 'k':
-                return blackKing;
-            case 'q':
-                return blackQueen;
-            case 'r':
-                return blackRook;
-            case 'b':
-                return blackBishop;
-            case 'n':
-                return blackKnight;
-            case 'p':
-                return blackPawn;
-            case 'K':
-                return whiteKing;
-            case 'Q':
-                return whiteQueen;
-            case 'R':
-                return whiteRook;
-            case 'B':
-                return whiteBishop;
-            case 'N':
-                return whiteKnight;
-            case 'P':
-                return whitePawn
-        }
-    }
-
     let pieces = [];
     let squareIndex = 0;
+    let indexCounter = 0;
     for (let i = 0; i < piecePlacement.length; i++) {
 
         if (isDigit(piecePlacement[i]))
@@ -86,57 +55,32 @@ const ChessBoard = ({fen}) => {
         }
         else {
             pieces.push({
+                "id": indexCounter,
                 "piece": piecePlacement[i],
                 "offset": squareIndex
             });
             squareIndex += 1;
+            indexCounter += 1;
         }
         
     }
 
-    console.log(pieces);
-
     return (
-        <div className='board-image-wrapper' style={boardWrapperStyles}>
-            <svg width={squareSize * 8} height={squareSize * 8} xmlns="http://www.w3.org/2000/svg">
-                {/* Background rectangle */}
-                <rect width="100%" height="100%" fill="#e0e0e0" /> {/*fill="#e0e0e0"*/}
-
-                {/* Squares */}
-                <g id="squares">
-                    {Array.from({ length: 8 }, (_, row) => (
-                        Array.from({ length: 8 }, (_, col) => (
-                            <rect
-                                x={col * squareSize}
-                                y={row * squareSize}
-                                width={squareSize}
-                                height={squareSize}
-                                fill={(row + col) % 2 === 0 ? '#f0d9b5' : '#b58863'}
-                                key={`${row}-${col}`}
-                            />
-                        ))
-                    ))}
-                </g>
-            </svg>
-
-            {/* pieces */}
-            {pieces.map((pieceObj, index) => (
-                <img
-                    key={index}
-                    src={getImageFromFenSymbol(pieceObj.piece)}
-                    style={{
-                        position: 'absolute',
-                        top: Math.floor(pieceObj.offset / 8) * squareSize,
-                        left: (pieceObj.offset % 8) * squareSize,
-                        width: squareSize
-                    }}
-                    alt={`Chess Piece ${pieceObj.piece}`}
-                />
-            ))}
-
-        </div>
+    <div className='board-image-wrapper' style={boardWrapperStyles}>
+        {Array.from({ length: 8 }, (_, row) => (
+            Array.from({ length: 8 }, (_, col) => (
+            <div style={
+                {
+                    "background": (row + col) % 2 === 0 ? '#f0d9b5' : '#b58863', 
+                    "width": `${squareSize}px`,
+                    "height": `${squareSize}px`
+                }
+            }>
+            </div>
+            ))
+        ))}
+        <Pieces pieces={pieces}/>
+    </div>
     );
 }
-
-
 export default ChessBoard;
