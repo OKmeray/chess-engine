@@ -1,5 +1,4 @@
 import React from 'react';
-import { useDrag } from 'react-dnd';
 import squareSize from '../Assets/variables';
 
 import blackKing from '../Assets/Images/king_black.svg';

@@ -1,20 +1,5 @@
 import React, { useState } from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
-import blackKing from '../Assets/Images/king_black.svg';
-import blackQueen from '../Assets/Images/queen_black.svg';
-import blackRook from '../Assets/Images/rook_black.svg';
-import blackBishop from '../Assets/Images/bishop_black.svg';
-import blackKnight from '../Assets/Images/knight_black.svg';
-import blackPawn from '../Assets/Images/pawn_black.svg';
-import whiteKing from '../Assets/Images/king_white.svg';
-import whiteQueen from '../Assets/Images/queen_white.svg';
-import whiteRook from '../Assets/Images/rook_white.svg';
-import whiteBishop from '../Assets/Images/bishop_white.svg';
-import whiteKnight from '../Assets/Images/knight_white.svg';
-import whitePawn from '../Assets/Images/pawn_white.svg';
-
-import Piece from '../Assets/Piece';
 import squareSize from '../Assets/variables';
 import Pieces from '../Assets/Pieces';
 
