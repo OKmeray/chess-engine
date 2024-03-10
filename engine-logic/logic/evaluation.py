@@ -1,8 +1,9 @@
 from enum import IntEnum
 
-from functionality_test import get_all_moves_by_piece, position
+# from functionality_test import position
 from logic.bitboard import PieceEnum, PieceColor
-from logic.helping_function import get_separate_piece, get_num_from_bitboard
+from logic.position_helping_function import get_separate_piece
+from logic.square_helping_function import get_num_from_bitboard
 
 
 class PiecePrice(IntEnum):
