@@ -1,5 +1,3 @@
-from logic.bitboard import Position, PieceEnum, PieceColor, GenerateMove, CastleEnum, get_num_by_square_name
-
 
 # # ------------------------
 # WHITE_PAWN = 0b1001  # 9
@@ -16,6 +14,11 @@ from logic.bitboard import Position, PieceEnum, PieceColor, GenerateMove, Castle
 # BLACK_QUEEN = 0b0101  # 5
 # BLACK_KING = 0b0110  # 6
 # # ------------------------
+
+
+from logic.engine.enums import PieceColor, CastleEnum
+from logic.engine.position import Position
+from logic.engine.square_helping_functions import get_num_by_square_name
 
 
 def set_piece_placement(position: Position, pieces_placement_fen: str):
@@ -108,32 +111,3 @@ def get_position_from_fen(fen: str) -> Position:
 
     return position
 
-
-
-def get_all_pieces_of_one_color(position: Position, color: PieceColor = None):
-    if color is None:
-        bitboard = position.get_all_bitboard()
-    elif color == PieceColor.WHITE:
-        bitboard = position.get_white_bitboard()
-    else:
-        bitboard = position.get_black_bitboard()
-
-    j = 1
-    arr = []
-    while j <= 9223372036854775808:  # 2 ** 63
-        arr.append(bitboard.bitboard & j) if bitboard.bitboard & j == j else None
-        j <<= 1
-
-    return arr
-
-
-def get_separate_piece(position: Position, piece: PieceEnum, color: PieceColor):
-    separate_pieces = []
-
-    all_pieces_of_one_color = get_all_pieces_of_one_color(position=position, color=color)
-    piece_bitboard = position.get_piece_bitboard(piece, color)
-
-    for piece in all_pieces_of_one_color:
-        separate_pieces.append(piece & piece_bitboard.bitboard) if piece & piece_bitboard.bitboard != 0 else None
-
-    return separate_pieces

@@ -103,6 +103,10 @@ def get_num_by_square_name(square: str) -> int:
     return vertical + horizontal * 8
 
 
+def get_bitboard_from_num(num):
+    return 1 << num
+
+
 def get_num_from_bitboard(bitboard_number):
     return int.bit_length(bitboard_number) - 1
 

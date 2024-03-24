@@ -1,0 +1,126 @@
+from logic.engine.enums import PieceEnum, PieceColor
+from logic.evaluation.evaluation import evaluate_position
+from logic.fen.generator import get_position_from_fen
+from logic.engine.square_helping_functions import get_square_name_by_num
+from logic.evaluation.evaluation import evaluate_position
+from logic.fen.generator import get_position_from_fen
+
+
+def return_moves_for_UI(all_moves_by_piece):
+    result = []
+
+    for piece in all_moves_by_piece:
+        piece_letter = None
+
+        match piece['piece']:
+            case 1:
+                piece_letter = 'p'
+            case 2:
+                piece_letter = 'n'
+            case 3:
+                piece_letter = 'b'
+            case 4:
+                piece_letter = 'r'
+            case 5:
+                piece_letter = 'q'
+            case 6:
+                piece_letter = 'k'
+
+        if piece['color'] == 8:
+            piece_letter = piece_letter.upper()
+
+        result.append({'piece': piece_letter, 'square': piece['square'], 'possible_moves': piece['possible_moves']})
+
+    return result
+
+
+def return_moves_in_regular_notation(all_moves_by_piece):
+    result = []
+
+    for piece in all_moves_by_piece:
+        piece_letter = None
+
+        match piece['piece']:
+            case 1:
+                piece_letter = 'pawn'
+            case 2:
+                piece_letter = 'knight'
+            case 3:
+                piece_letter = 'bishop'
+            case 4:
+                piece_letter = 'rook'
+            case 5:
+                piece_letter = 'queen'
+            case 6:
+                piece_letter = 'king'
+
+        if piece['color'] == 8:
+            piece_letter = piece_letter.upper()
+
+        moves_notation = [get_square_name_by_num(piece) for piece in piece['possible_moves']]
+
+        result.append({'piece': piece_letter, 'square': get_square_name_by_num(piece['square']), 'possible_moves': moves_notation})
+
+    return result
+
+
+# fen = "3k4/8/8/5N2/8/8/3N4/7K w - - 0 1"
+# fen = "3k4/8/8/8/8/8/3N4/7K w - - 0 1"
+# fen = "3k4/8/3b4/3P1N2/2pr4/3QN1B1/8/7K w - - 0 1"
+# fen = "3k4/8/3b4/3P1N2/2pr4/4N1B1/8/7K w - - 0 1"  # fen_without_queens
+# fen = "q2k4/8/3b4/3P1N2/2pr4/3QN1B1/8/7K w - - 0 1"  # fen with two queens
+# new_fen = "rnb1kb1r/2qp1p1p/pP6/3npPp1/4P3/1p6/P3K1PP/RNBQ1BNR w kq g6 0 11"
+
+
+# black_not_checkmated = "K7/8/7r/8/8/8/1q6/5k2 w - - 0 1"
+# black_is_checkmated = "K7/8/r7/8/8/8/1q6/5k2 w - - 0 1"
+# regular_position = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+# position = get_position_from_fen(regular_position)
+#
+# print(position.is_checkmate())
+# print(evaluate_position(position, position.side_to_move))  # TODO: correct evaluate_position
+# # print(position.is_king_in_check())
+# # print(position.get_all_moves())
+#
+# move_detail = {
+#     'piece': PieceEnum.KING,
+#     'color': PieceColor.WHITE,
+#     'square': 1,
+#     'move': 2
+# }
+# print(position.is_move_legal(move_detail))
+# for i in result:
+#     print(i)
+
+# UI_moves = return_moves_for_UI(result)
+# print(UI_moves)
+
+
+# print("\n\nRegular notation: \n")
+# regular_notation_res = return_moves_in_regular_notation(result)
+# for i in regular_notation_res:
+#     print(i)
+
+
+# print(45)
+# print(get_num_from_bitboard(get_bitboard_from_num(45)))
+
+def main():
+    print("For the time being empty")
+
+
+fen = "b1r4k/2q3pp/pp2Q3/3N4/1PPbB3/P7/6PP/2R2r1K w - - 0 27"
+
+position_to_test = get_position_from_fen(fen)
+# print(position_to_test.is_checkmate())
+
+new_fen = "K3R3/Q5B1/8/8/8/2br4/1q6/5k2 w - - 0 1"
+position_for_apply_move = get_position_from_fen(new_fen)
+for piece in position_for_apply_move.generate_all_pseudo_legal_moves():
+    print(piece)
+move_detail = {'piece': PieceEnum.BISHOP, 'color': PieceColor.WHITE, 'square': 14, 'move': 42}
+position_for_apply_move.apply_move(move_detail)  # TODO: correct apply_move
+
+print("\n")
+for piece in position_for_apply_move.generate_all_pseudo_legal_moves():
+    print(piece)

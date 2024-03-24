@@ -1,18 +1,5 @@
-from enum import IntEnum
-
-# from functionality_test import position
-from logic.bitboard import PieceEnum, PieceColor
-from logic.position_helping_function import get_separate_piece
-from logic.square_helping_function import get_num_from_bitboard
-
-
-class PiecePrice(IntEnum):
-    PAWN = 100
-    KNIGHT = 300  # 320
-    BISHOP = 300  # 330
-    ROOK = 500
-    QUEEN = 900
-    KING = 20000
+from logic.engine.enums import PiecePrice, CastleEnum, PieceEnum, PieceColor
+from logic.engine.square_helping_functions import get_num_from_bitboard
 
 
 pawn_square_table = [
@@ -105,7 +92,7 @@ def evaluate_position(position, side=PieceColor.WHITE):
 
     for num_color in range(0, 9, 8):
         for num_piece in range(1, 7):
-            separate_bit_pieces = get_separate_piece(position, PieceEnum(num_piece), PieceColor(num_color))
+            separate_bit_pieces = position.get_separate_piece(PieceEnum(num_piece), PieceColor(num_color))
             separate_pieces_squares = [get_num_from_bitboard(num) for num in separate_bit_pieces]
 
             side_sign = 1 if PieceColor(num_color) == side else -1
@@ -196,10 +183,11 @@ def evaluate_position(position, side=PieceColor.WHITE):
     return evaluation
 
 
-# TODO: calculate piece activity (by checking how many possible moves each piece has)
-
-
-eval = evaluate_position(position, side=PieceColor.WHITE)
-regular_eval = eval / 100
-
-print(regular_eval)
+# # TODO: calculate piece activity (by checking how many possible moves each piece has)
+#
+#
+# from functionality_test import position
+# eval = evaluate_position(position, side=PieceColor.WHITE)
+# regular_eval = eval / 100
+#
+# print(regular_eval)
