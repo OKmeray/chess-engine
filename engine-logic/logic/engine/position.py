@@ -178,11 +178,6 @@ class Position:
                 capture_pawn_square_num = move_detail["move"] - 8
                 self.bitboard_position[PieceColor.WHITE + PieceEnum.PAWN].bitboard &= ~get_bitboard_from_num(
                     capture_pawn_square_num)
-            # TODO: pawn promotion (change queens bitboard)
-            # if move_detail["color"] == PieceColor.WHITE and 0 <= move_detail["move"] <= 7:
-            #     return  # to exit from the method
-            # if move_detail["color"] == PieceColor.BLACK and 56 <= move_detail["move"] <= 63:
-            #     return  # to exit from the method
 
         is_capture = False
         for num_color in range(0, 9, 8):  # for all the pieces clear the new_square
@@ -196,6 +191,17 @@ class Position:
 
         self.bitboard_position[move_detail["piece"] + move_detail["color"]].bitboard = \
             self.bitboard_position[move_detail["piece"] + move_detail["color"]].bitboard & ~old_square | new_square
+
+        # pawn promotion (change to queen) TODO: promotion to knight, bishop, rook
+        if move_detail["piece"] == PieceEnum.PAWN and move_detail["color"] == PieceColor.WHITE and 0 <= move_detail["move"] <= 7:
+            promotion_bitboard = get_bitboard_from_num(move_detail["move"])
+            self.bitboard_position[PieceEnum.PAWN + PieceColor.WHITE].bitboard &= ~promotion_bitboard
+            self.bitboard_position[PieceEnum.QUEEN + PieceColor.WHITE].bitboard |= promotion_bitboard
+
+        if move_detail["piece"] == PieceEnum.PAWN and move_detail["color"] == PieceColor.BLACK and 56 <= move_detail["move"] <= 63:
+            promotion_bitboard = get_bitboard_from_num(move_detail["move"])
+            self.bitboard_position[PieceEnum.PAWN + PieceColor.BLACK].bitboard &= ~promotion_bitboard
+            self.bitboard_position[PieceEnum.QUEEN + PieceColor.BLACK].bitboard |= promotion_bitboard
 
         # if rook moves, rook is capture or king moves then changing the castle rights
         if move_detail["piece"] == PieceEnum.KING:

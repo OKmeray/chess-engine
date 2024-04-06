@@ -203,7 +203,52 @@ test_data_for_apply_move = [
              'square': 35,
              'move': 42
         }
-    )
+    ),
+
+    # applying promotion
+    (
+        "3r4/2P2q2/6k1/8/8/8/3K4/8 w - - 0 1",
+        "3Q4/5q2/6k1/8/8/8/3K4/8 b - - 0 1",
+        {
+             'piece': PieceEnum.PAWN,
+             'color': PieceColor.WHITE,
+             'square': 10,
+             'move': 3
+        }
+    ),
+
+    (
+        "5nrq/2P2p2/1P4k1/6p1/8/B3Q3/3K4/8 w - - 0 1",
+        "2Q2nrq/5p2/1P4k1/6p1/8/B3Q3/3K4/8 b - - 0 1",
+        {
+             'piece': PieceEnum.PAWN,
+             'color': PieceColor.WHITE,
+             'square': 10,
+             'move': 2
+        }
+    ),
+
+    (
+        "5nr1/K1P1q2k/1PQ5/6p1/8/B7/5p2/8 b - - 0 1",
+        "5nr1/K1P1q2k/1PQ5/6p1/8/B7/8/5q2 w - - 0 2",
+        {
+             'piece': PieceEnum.PAWN,
+             'color': PieceColor.BLACK,
+             'square': 53,
+             'move': 61
+        }
+    ),
+
+    (
+        "5nr1/K1P1q2k/1PQ5/6p1/8/B7/5p2/4N3 b - - 0 2",
+        "5nr1/K1P1q2k/1PQ5/6p1/8/B7/8/4q3 w - - 0 3",
+        {
+             'piece': PieceEnum.PAWN,
+             'color': PieceColor.BLACK,
+             'square': 53,
+             'move': 60
+        }
+    ),
 ]
 
 # castles check
