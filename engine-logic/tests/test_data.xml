@@ -145,7 +145,65 @@
     </position>
 
 
-    <!-- TODO: -->
+
     <!-- draw by insufficient material -->
+    <position>
+        <fen>8/8/3k4/8/8/8/3K4/8 w - - 0 1</fen>
+        <state>draw by insufficient material</state>
+        <result>draw</result>
+    </position>
+    <position>
+        <fen>8/8/3k4/8/8/5B2/3K4/8 w - - 0 1</fen>
+        <state>draw by insufficient material</state>
+        <result>draw</result>
+    </position>
+    <position>
+        <fen>8/8/3k4/1b6/8/5B2/3K4/8 w - - 0 1</fen>
+        <state>draw by insufficient material</state>
+        <result>draw</result>
+    </position>
+    <position>
+        <fen>8/8/3k4/1b6/8/4B3/3K4/8 w - - 0 1</fen>
+        <state>none</state>
+        <result>ongoing</result>
+    </position>
+    <position>
+        <fen>8/8/3k4/2b5/2B5/8/3K4/8 w - - 0 1</fen>
+        <state>none</state>
+        <result>ongoing</result>
+    </position>
+    <position>
+        <fen>8/8/3k4/8/8/4N3/3K4/8 w - - 0 1</fen>
+        <state>draw by insufficient material</state>
+        <result>draw</result>
+    </position>
+    <position>
+        <fen>8/8/3k4/2n5/8/4N3/3K4/8 w - - 0 1</fen>
+        <state>none</state>
+        <result>ongoing</result>
+    </position>
+    <position>
+        <fen>8/8/3k4/1b6/8/4B3/3K4/8 w - - 0 1</fen>
+        <state>none</state>
+        <result>ongoing</result>
+    </position>
+    <position>
+        <fen>8/8/3k4/1b6/8/3N4/3K4/8 w - - 0 1</fen>
+        <state>none</state>
+        <result>ongoing</result>
+    </position>
+    <position>
+        <fen>8/8/3k4/8/4N3/3N4/3K4/8 b - - 0 1</fen>
+        <state>check</state>
+        <result>ongoing</result>
+    </position>
+    <position>
+        <fen>8/8/3k4/6b1/8/3N4/3K4/8 w - - 0 1</fen>
+        <state>check</state>
+        <result>ongoing</result>
+    </position>
+
+
+    <!--TODO: -->
     <!-- draw by Threefold repetition -->
 </positions>

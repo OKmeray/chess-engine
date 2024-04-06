@@ -1,4 +1,4 @@
-from logic.engine.enums import PieceEnum, PieceColor
+from logic.engine.enums import PieceEnum, PieceColor, CastleEnum
 from logic.evaluation.evaluation import evaluate_position
 from logic.fen.generator import get_position_from_fen
 from logic.engine.square_helping_functions import get_square_name_by_num
@@ -104,23 +104,67 @@ def return_moves_in_regular_notation(all_moves_by_piece):
 
 # print(45)
 # print(get_num_from_bitboard(get_bitboard_from_num(45)))
+#
+# def main():
+#     print("For the time being empty")
+#
+#
+# fen = "b1r4k/2q3pp/pp2Q3/3N4/1PPbB3/P7/6PP/2R2r1K w - - 0 27"
+#
+# position_to_test = get_position_from_fen(fen)
+# # print(position_to_test.is_checkmate())
+#
+# new_fen = "K3R3/Q5B1/8/8/8/2br4/1q6/5k2 w - - 0 1"
+# position_for_apply_move = get_position_from_fen(new_fen)
+# for piece in position_for_apply_move.generate_all_pseudo_legal_moves():
+#     print(piece)
+# move_detail = {'piece': PieceEnum.BISHOP, 'color': PieceColor.WHITE, 'square': 14, 'move': 42}
+# position_for_apply_move.apply_move(move_detail)  # TODO: correct apply_move
+#
+# print("\n")
+# for piece in position_for_apply_move.generate_all_pseudo_legal_moves():
+#     print(piece)
 
-def main():
-    print("For the time being empty")
+# fen = "r1bqk2r/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQR1K1 b kq - 1 7"
+#
+# position_to_test = get_position_from_fen(fen)
+# move = {
+#              'piece': PieceEnum.KING,
+#              'color': PieceColor.BLACK,
+#              'square': 4,
+#              'move': 6
+#         }
+# print(position_to_test.is_move_legal(move))
+# print(position_to_test.generate_all_pseudo_legal_moves())
+# # print(position_to_test.get_all_moves())
 
+# fen_init = "r1bqk2r/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQR1K1 b kq - 1 7"
+# fen_end = "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQR1K1 w - - 2 8"
+# move_detail = {
+#      'piece': PieceEnum.KING,
+#      'color': PieceColor.BLACK,
+#      'square': 4,
+#      'move': 6
+# }
+# position = get_position_from_fen(fen_init)
+# print(position.castling_rights[CastleEnum.BlackShortCastle])
+# position.apply_move(move_detail)
+# print(position.castling_rights[CastleEnum.BlackShortCastle])
+# print(position.get_all_bitboard().get_8by8_board())
+# position_end = get_position_from_fen(fen_end)
+# print()
+# print(position_end.get_all_bitboard().get_8by8_board())
 
-fen = "b1r4k/2q3pp/pp2Q3/3N4/1PPbB3/P7/6PP/2R2r1K w - - 0 27"
+fen_init = "8/8/3k4/8/4N3/3N4/3K4/8 w - - 0 1"
+move_detail = {
+             'piece': PieceEnum.KING,
+             'color': PieceColor.WHITE,
+             'square': 60,
+             'move': 62
+        }
+position = get_position_from_fen(fen_init)
+print(position.is_king_in_check())
+# print(position.is_move_legal(move_detail))
+#
+# print(position.get_all_bitboard().bitboard.bit_count())
 
-position_to_test = get_position_from_fen(fen)
-# print(position_to_test.is_checkmate())
-
-new_fen = "K3R3/Q5B1/8/8/8/2br4/1q6/5k2 w - - 0 1"
-position_for_apply_move = get_position_from_fen(new_fen)
-for piece in position_for_apply_move.generate_all_pseudo_legal_moves():
-    print(piece)
-move_detail = {'piece': PieceEnum.BISHOP, 'color': PieceColor.WHITE, 'square': 14, 'move': 42}
-position_for_apply_move.apply_move(move_detail)  # TODO: correct apply_move
-
-print("\n")
-for piece in position_for_apply_move.generate_all_pseudo_legal_moves():
-    print(piece)
