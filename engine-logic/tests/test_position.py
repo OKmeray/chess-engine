@@ -1,5 +1,5 @@
 import pytest
-from logic.fen.generator import get_position_from_fen
+from logic.fen.fen_generator import get_position_from_fen
 from data_preparation import test_data_for_is_king_in_check, test_data_for_is_checkmate, \
     test_data_for_is_fifty_move_rule_reached, test_data_for_is_stalemate, test_data_for_apply_move, \
     test_data_for_is_insufficient_material

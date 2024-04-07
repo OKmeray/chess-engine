@@ -1,9 +1,12 @@
+import time
+
 from logic.engine.enums import PieceEnum, PieceColor, CastleEnum
 from logic.evaluation.evaluation import evaluate_position
-from logic.fen.generator import get_position_from_fen
+from logic.fen.fen_generator import get_position_from_fen
 from logic.engine.square_helping_functions import get_square_name_by_num
 from logic.evaluation.evaluation import evaluate_position
-from logic.fen.generator import get_position_from_fen
+from logic.fen.fen_generator import get_position_from_fen
+from logic.mcts.MCTS import MCTS
 
 
 def return_moves_for_UI(all_moves_by_piece):
@@ -154,17 +157,34 @@ def return_moves_in_regular_notation(all_moves_by_piece):
 # position_end = get_position_from_fen(fen_end)
 # print()
 # print(position_end.get_all_bitboard().get_8by8_board())
-
-fen_init = "8/8/3k4/8/4N3/3N4/3K4/8 w - - 0 1"
-move_detail = {
-             'piece': PieceEnum.KING,
-             'color': PieceColor.WHITE,
-             'square': 60,
-             'move': 62
-        }
-position = get_position_from_fen(fen_init)
-print(position.is_king_in_check())
-# print(position.is_move_legal(move_detail))
 #
-# print(position.get_all_bitboard().bitboard.bit_count())
+# fen_init = "8/8/3k4/8/4N3/3N4/3K4/8 w - - 0 1"
+# move_detail = {
+#              'piece': PieceEnum.KING,
+#              'color': PieceColor.WHITE,
+#              'square': 60,
+#              'move': 62
+#         }
+# position = get_position_from_fen(fen_init)
+# print(position.is_king_in_check())
+# # print(position.is_move_legal(move_detail))
+# #
+# # print(position.get_all_bitboard().bitboard.bit_count())
+#
 
+# initial_position = Position()
+# ERROR_FEN = "4r2k/1Bq2rbp/6p1/p1p1n3/P2p2n1/1P1N1N2/6P1/B1Q1RRK1 b - - 0 31"
+fen = "8/8/8/5q2/8/2k5/8/2K5 b - - 10 24"
+initial_position = get_position_from_fen(fen)
+mcts = MCTS(initial_position)
+print("RUN")
+start = time.time()
+mcts.run(1500)
+end = time.time()
+print(end - start, "seconds")
+print("RUN")
+# best_move_node = mcts.best_move()
+# print(best_move_node.move)
+print(len(mcts.root.children))
+for child in mcts.root.children:
+    print(child.move, child.wins, "/", child.visits, "\t[", ["".join([str(i.wins), "/", str(i.visits)]) for i in child.children], "]")

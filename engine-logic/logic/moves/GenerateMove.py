@@ -1,4 +1,4 @@
-from logic.engine.bitboard import Bitboard
+from logic.engine.Bitboard import Bitboard
 from logic.engine.enums import PieceColor
 
 
@@ -61,10 +61,12 @@ class GenerateMove:
 
         if color == PieceColor.WHITE:
             # capture and en passant
-            if ((square >> 9) & enemy_bitboard.bitboard == square >> 9) or (en_passant_square is not None and square >> 9 == en_passant_square):
+            if ((square >> 9) & enemy_bitboard.bitboard == square >> 9) or (en_passant_square is not None and square >> 9 == en_passant_square) and \
+                    not cls.is_a_file(square):
                 moves.append(square >> 9)
             # capture and en passant
-            if ((square >> 7) & enemy_bitboard.bitboard == square >> 7) or (en_passant_square is not None and square >> 7 == en_passant_square):
+            if ((square >> 7) & enemy_bitboard.bitboard == square >> 7) or (en_passant_square is not None and square >> 7 == en_passant_square) and \
+                    not cls.is_h_file(square):
                 moves.append(square >> 7)
             # one square move
             if (square >> 8) & (enemy_bitboard.bitboard | own_bitboard.bitboard) != square >> 8:
@@ -74,12 +76,14 @@ class GenerateMove:
             if cls.is_rank_2(square) and ((square >> 16) & (enemy_bitboard.bitboard | own_bitboard.bitboard) != square >> 16):
                 moves.append(square >> 16)
 
-        else:
+        elif color == PieceColor.BLACK:
             # capture and en passant
-            if ((square << 9) & enemy_bitboard.bitboard == square << 9) or (en_passant_square is not None and square << 9 == en_passant_square):
+            if ((square << 9) & enemy_bitboard.bitboard == square << 9) or (en_passant_square is not None and square << 9 == en_passant_square) and \
+                    not cls.is_h_file(square):
                 moves.append(square << 9)
             # capture and en passant
-            if ((square << 7) & enemy_bitboard.bitboard == square << 7) or (en_passant_square is not None and square << 9 == en_passant_square):
+            if ((square << 7) & enemy_bitboard.bitboard == square << 7) or (en_passant_square is not None and square << 9 == en_passant_square) and \
+                    not cls.is_a_file(square):
                 moves.append(square << 7)
             # one square move
             if (square << 8) & (enemy_bitboard.bitboard | own_bitboard.bitboard) != square << 8:

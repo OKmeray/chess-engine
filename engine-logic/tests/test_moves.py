@@ -1,5 +1,5 @@
 import pytest
-from logic.fen.generator import get_position_from_fen
+from logic.fen.fen_generator import get_position_from_fen
 from data_preparation import test_data_for_is_move_legal
 
 

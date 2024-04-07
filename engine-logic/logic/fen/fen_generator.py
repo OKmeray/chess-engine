@@ -17,7 +17,7 @@
 
 
 from logic.engine.enums import PieceColor, CastleEnum
-from logic.engine.position import Position
+from logic.engine.Position import Position
 from logic.engine.square_helping_functions import get_num_by_square_name
 
 

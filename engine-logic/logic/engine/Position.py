@@ -1,9 +1,9 @@
 import copy
 
-from logic.engine.bitboard import Bitboard
+from logic.engine.Bitboard import Bitboard
 from logic.engine.square_helping_functions import get_bitboard_from_num, get_nums_from_bit_nums
 from logic.evaluation.evaluation import evaluate_position, PieceEnum, PieceColor, CastleEnum
-from logic.moves.generate_move import GenerateMove
+from logic.moves.GenerateMove import GenerateMove
 
 
 def get_num_from_bitboard(bitboard_number):
@@ -234,11 +234,25 @@ class Position:
         else:
             self.half_moves += 1
 
+    def get_all_separate_moves(self):
+        all_moves = self.get_all_moves()
+        separated_moves = []
+
+        for piece in all_moves:
+            for move in piece['possible_moves']:
+                separated_moves.append({
+                    "piece": piece["piece"],
+                    "color": piece["color"],
+                    "square": piece["square"],
+                    "move": move,
+                })
+
+        return separated_moves
+
     def get_all_moves(self):
         pseudo_legal_moves = self.generate_all_pseudo_legal_moves()
-
         legal_moves = self.filter_illegal_moves(pseudo_legal_moves)
-        return legal_moves
+        return list(legal_moves)
 
     def generate_all_pseudo_legal_moves(self):
         result = []
@@ -362,7 +376,6 @@ class Position:
             # you might default to a draw or continue the simulation until a definitive outcome is reached.
             return 'win'
 
-    # accepts:
     def is_king_in_check(self):
         king = self.get_separate_piece(piece=PieceEnum.KING, color=self.side_to_move)
 
@@ -383,7 +396,7 @@ class Position:
         return not self.is_king_in_check() and len(self.get_all_moves()) == 0
 
     def is_draw(self):
-        return self.is_threefold_repetition() or self.is_fifty_move_rule_reached() or self.is_insufficient_material()
+        return self.is_stalemate() or self.is_threefold_repetition() or self.is_fifty_move_rule_reached() or self.is_insufficient_material()
 
     def is_threefold_repetition(self):
         return False  # TODO: implement
@@ -425,3 +438,9 @@ class Position:
             self.side_to_move = PieceColor.BLACK
         else:
             self.side_to_move = PieceColor.WHITE
+
+    def is_game_over(self):
+        # temp_position = self.clone()
+        # temp_position.
+        # checkmate for another side ?!?!
+        return self.is_draw() or self.is_checkmate()
