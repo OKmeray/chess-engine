@@ -1,0 +1,8 @@
+fastapi~=0.110.2
+SQLAlchemy~=2.0.29
+pydantic~=2.7.0
+jose~=1.0.0
+passlib~=1.7.4
+python-dotenv~=1.0.1
+uvicorn~=0.29.0
+alembic~=1.13.1
