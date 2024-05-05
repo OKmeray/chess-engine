@@ -1,130 +1,5 @@
-from enum import IntEnum
-
-
-# # ------------------------
-# WHITE_PAWN = 0b1001  # 9
-# WHITE_KNIGHT = 0b1010  # 10
-# WHITE_BISHOP = 0b1011  # 11
-# WHITE_ROOK = 0b1100  # 12
-# WHITE_QUEEN = 0b1101  # 13
-# WHITE_KING = 0b1110  # 14
-# # ------------------------
-# BLACK_PAWN = 0b0001  # 1
-# BLACK_KNIGHT = 0b0010  # 2
-# BLACK_BISHOP = 0b0011  # 3
-# BLACK_ROOK = 0b0100  # 4
-# BLACK_QUEEN = 0b0101  # 5
-# BLACK_KING = 0b0110  # 6
-# # ------------------------
-# <<  ->  +
-# >>  ->  -
-
-class PieceEnum(IntEnum):
-    NONE = 0
-    PAWN = 1
-    KNIGHT = 2
-    BISHOP = 3
-    ROOK = 4
-    QUEEN = 5
-    KING = 6
-
-
-class PieceColor(IntEnum):
-    BLACK = 0
-    WHITE = 8
-
-
-class CastleEnum:
-    BlackShortCastle = 0
-    BlackLongCastle = 1
-    WhiteShortCastle = 8
-    WhiteLongCastle = 9
-
-
-class Bitboard:
-    def __init__(self, *args):
-        if len(args) == 1:
-            self.bitboard = args[0]
-        else:
-            self.bitboard = 0
-
-    def add_piece(self, square_no):
-        self.bitboard |= 1 << square_no
-
-    def __str__(self):
-        return format(self.bitboard, '064b')
-
-    def get_8by8_board(self):
-        bit_string = format(self.bitboard, '064b')
-        formatted_string = '\n'.join(bit_string[i:i + 8] for i in range(0, 64, 8))
-        return formatted_string
-
-    def __add__(self, other):
-        return Bitboard(self.bitboard | other.bitboard)
-
-
-class Position:
-    def __init__(self):
-        self.bitboard_position = {
-            PieceEnum.PAWN + PieceColor.BLACK: Bitboard(),
-            PieceEnum.KNIGHT + PieceColor.BLACK: Bitboard(),
-            PieceEnum.BISHOP + PieceColor.BLACK: Bitboard(),
-            PieceEnum.ROOK + PieceColor.BLACK: Bitboard(),
-            PieceEnum.QUEEN + PieceColor.BLACK: Bitboard(),
-            PieceEnum.KING + PieceColor.BLACK: Bitboard(),
-            PieceEnum.PAWN + PieceColor.WHITE: Bitboard(),
-            PieceEnum.KNIGHT + PieceColor.WHITE: Bitboard(),
-            PieceEnum.BISHOP + PieceColor.WHITE: Bitboard(),
-            PieceEnum.ROOK + PieceColor.WHITE: Bitboard(),
-            PieceEnum.QUEEN + PieceColor.WHITE: Bitboard(),
-            PieceEnum.KING + PieceColor.WHITE: Bitboard(),
-        }
-
-        self.enpassant_square = None  # for example if e pawn just moved two squares then I should set
-        # self.enpassant_file = 8 * 2 + 4 and then when I am doing check for pawn moves I have to check if
-        # current pawn square +7 or +9 (or for the other color -9 and -7) equals enpassant_square after either
-        # scenario I have to set enpassant_square to either None or to some other file if another color also made
-        # two square pawn move
-
-        self.castle = {
-            CastleEnum.BlackShortCastle: True,
-            CastleEnum.BlackLongCastle: True,
-            CastleEnum.WhiteShortCastle: True,
-            CastleEnum.WhiteLongCastle: True,
-        }  # the castle item should change if:
-        # 1) king moves
-        # 2) rook moves
-        # 3) rook is captured
-        # also you shouldn't forget, that castle squares can be
-        # attacked, should check it while validating for legal moves
-
-    def add_piece(self, piece: PieceEnum, color: PieceColor, square: int):
-        self.bitboard_position[piece + color].add_piece(square)
-
-    def add_piece_by_int(self, int_piece: int, square: int):
-        self.bitboard_position[int_piece].add_piece(square)
-
-    def get_piece_bitboard(self, piece: PieceEnum, color: PieceColor):
-        return self.bitboard_position[piece + color]
-
-    def get_white_bitboard(self):
-        white_bitboard = Bitboard()
-        for i in range(8, 16):
-            if i in self.bitboard_position.keys():
-                white_bitboard += self.bitboard_position[i]
-
-        return white_bitboard
-
-    def get_black_bitboard(self):
-        black_bitboard = Bitboard()
-        for i in range(0, 8):
-            if i in self.bitboard_position.keys():
-                black_bitboard += self.bitboard_position[i]
-
-        return black_bitboard
-
-    def get_all_bitboard(self):
-        return self.get_white_bitboard() + self.get_black_bitboard()
+from core.domain.engine.Bitboard import Bitboard
+from core.domain.engine.enums import PieceColor
 
 
 class GenerateMove:
@@ -138,6 +13,8 @@ class GenerateMove:
     file_g = 4629771061636907072  # 0100000001000000010000000100000001000000010000000100000001000000
     file_h = 9259542123273814144  # 1000000010000000100000001000000010000000100000001000000010000000
 
+    file_e = 1157442765409226768  # 0001000000010000000100000001000000010000000100000001000000010000
+
     @classmethod
     def is_a_file(cls, square):
         return cls.file_a & square == square
@@ -145,6 +22,10 @@ class GenerateMove:
     @classmethod
     def is_b_file(cls, square):
         return cls.file_b & square == square
+
+    @classmethod
+    def is_e_file(cls, square):
+        return cls.file_e & square == square
 
     @classmethod
     def is_g_file(cls, square):
@@ -170,13 +51,51 @@ class GenerateMove:
     def is_rank_8(cls, square):
         return cls.rank_8 & square == square
 
-    # TODO:
     @classmethod
-    def generate_pawn_move(cls):
+    def handle_pawn_promotion(cls):
         pass
 
     @classmethod
-    def generate_knight_move(cls, own_bitboard: Bitboard, square: int) -> list[int]:
+    def generate_pawn_move(cls, square, own_bitboard, enemy_bitboard, color, en_passant_square):
+        moves = []
+
+        if color == PieceColor.WHITE:
+            # capture and en passant
+            if ((square >> 9) & enemy_bitboard.bitboard == square >> 9) or (en_passant_square is not None and square >> 9 == en_passant_square) and \
+                    not cls.is_h_file(square):
+                moves.append(square >> 9)
+            # capture and en passant
+            if ((square >> 7) & enemy_bitboard.bitboard == square >> 7) or (en_passant_square is not None and square >> 7 == en_passant_square) and \
+                    not cls.is_a_file(square):
+                moves.append(square >> 7)
+            # one square move
+            if (square >> 8) & (enemy_bitboard.bitboard | own_bitboard.bitboard) != square >> 8:
+                moves.append(square >> 8)
+
+            # two square move
+            if cls.is_rank_2(square) and ((square >> 16) & (enemy_bitboard.bitboard | own_bitboard.bitboard) != square >> 16):
+                moves.append(square >> 16)
+
+        elif color == PieceColor.BLACK:
+            # capture and en passant
+            if ((square << 9) & enemy_bitboard.bitboard == square << 9) or (en_passant_square is not None and square << 9 == en_passant_square) and \
+                    not cls.is_h_file(square):
+                moves.append(square << 9)
+            # capture and en passant
+            if ((square << 7) & enemy_bitboard.bitboard == square << 7) or (en_passant_square is not None and square << 9 == en_passant_square) and \
+                    not cls.is_a_file(square):
+                moves.append(square << 7)
+            # one square move
+            if (square << 8) & (enemy_bitboard.bitboard | own_bitboard.bitboard) != square << 8:
+                moves.append(square << 8)
+
+            # two square move
+            if cls.is_rank_7(square) and ((square << 16) & (enemy_bitboard.bitboard | own_bitboard.bitboard) != square << 16):
+                moves.append(square << 16)
+        return moves
+
+    @classmethod
+    def generate_knight_move(cls, square: int, own_bitboard: Bitboard) -> list[int]:
         moves = []
         if not (
                 cls.is_a_file(square) or
@@ -250,7 +169,7 @@ class GenerateMove:
                 cls.is_rank_1(square)
         ):
             attack_square = square << 10  # +10
-            
+
             # check for own pieces on target square
             if not own_bitboard.bitboard & attack_square == attack_square:
                 moves.append(attack_square)
@@ -261,7 +180,7 @@ class GenerateMove:
                 cls.is_rank_1(square)
         ):
             attack_square = square << 17  # +17
-            
+
             # check for own pieces on target square
             if not own_bitboard.bitboard & attack_square == attack_square:
                 moves.append(attack_square)
@@ -466,8 +385,28 @@ class GenerateMove:
         ]
 
     @classmethod
-    def generate_king_move(cls, square, own_bitboard, enemy_bitboard):
+    def generate_castle_moves(cls, square, own_bitboard, enemy_bitboard, is_white=True):
+        moves = []
+        if (is_white and cls.is_rank_1(square) and cls.is_e_file(square)) or\
+           (not is_white and cls.is_rank_8(square) and cls.is_e_file(square)):
+
+            # if not ((square << 1 | square << 2) & (own_bitboard.bitboard | enemy_bitboard.bitboard)):
+            #     moves.append(square << 2)
+            # if not ((square >> 1 | square >> 2) & (own_bitboard.bitboard | enemy_bitboard.bitboard)):
+            #     moves.append(square >> 2)
+            if len(cls.generate_horizontal_left(square, own_bitboard, enemy_bitboard, steps=2)):
+                moves.append(square >> 2)
+            if len(cls.generate_horizontal_right(square, own_bitboard, enemy_bitboard, steps=2)):
+                moves.append(square << 2)
+
+        return moves
+
+    @classmethod
+    def generate_king_move(cls, square, own_bitboard, enemy_bitboard, is_white=True):
+        # TODO: catsle moves (check target squares) (if enemy is on g1 then king can't castle)
         return [
+            *cls.generate_castle_moves(square, own_bitboard, enemy_bitboard, is_white),
             *cls.generate_rook_move(square, own_bitboard, enemy_bitboard, steps=1),
             *cls.generate_bishop_move(square, own_bitboard, enemy_bitboard, steps=1)
         ]
+
