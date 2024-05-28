@@ -2,7 +2,7 @@ from core.domain.engine.enums import PiecePrice, CastleEnum, PieceEnum, PieceCol
 from core.domain.engine.square_helping_functions import get_num_from_bitboard
 
 
-pawn_square_table = [
+white_pawn_square_table = [
     0,  0,  0,  0,  0,  0,  0,  0,
     50, 50, 50, 50, 50, 50, 50, 50,
     10, 10, 20, 30, 30, 20, 10, 10,
@@ -12,8 +12,9 @@ pawn_square_table = [
      5, 10, 10,-20,-20, 10, 10,  5,
      0,  0,  0,  0,  0,  0,  0,  0
 ]
+black_pawn_square_table = [i * (-1) for i in white_pawn_square_table[::-1]]
 
-knight_square_table = [
+white_knight_square_table = [
     -50,-40,-30,-30,-30,-30,-40,-50,
     -40,-20,  0,  0,  0,  0,-20,-40,
     -30,  0, 10, 15, 15, 10,  0,-30,
@@ -23,9 +24,10 @@ knight_square_table = [
     -40,-20,  0,  5,  5,  0,-20,-40,
     -50,-40,-30,-30,-30,-30,-40,-50,
 ]
+black_knight_square_table = [i * (-1) for i in white_knight_square_table[::-1]]
 
 
-bishop_square_table = [
+white_bishop_square_table = [
     -20,-10,-10,-10,-10,-10,-10,-20,
     -10,  0,  0,  0,  0,  0,  0,-10,
     -10,  0,  5, 10, 10,  5,  0,-10,
@@ -35,9 +37,10 @@ bishop_square_table = [
     -10,  5,  0,  0,  0,  0,  5,-10,
     -20,-10,-10,-10,-10,-10,-10,-20,
 ]
+black_bishop_square_table = [i * (-1) for i in white_bishop_square_table[::-1]]
 
 
-rook_square_table = [
+white_rook_square_table = [
       0,  0,  0,  0,  0,  0,  0,  0,
       5, 10, 10, 10, 10, 10, 10,  5,
      -5,  0,  0,  0,  0,  0,  0, -5,
@@ -47,9 +50,10 @@ rook_square_table = [
      -5,  0,  0,  0,  0,  0,  0, -5,
       0,  0,  0,  5,  5,  0,  0,  0
 ]
+black_rook_square_table = [i * (-1) for i in white_rook_square_table[::-1]]
 
 
-queen_square_table = [
+white_queen_square_table = [
     -20,-10,-10, -5, -5,-10,-10,-20,
     -10,  0,  0,  0,  0,  0,  0,-10,
     -10,  0,  5,  5,  5,  5,  0,-10,
@@ -59,9 +63,10 @@ queen_square_table = [
     -10,  0,  5,  0,  0,  0,  0,-10,
     -20,-10,-10, -5, -5,-10,-10,-20
 ]
+black_queen_square_table = [i * (-1) for i in white_queen_square_table[::-1]]
 
 
-king_square_middlegame_table = [
+white_king_square_middlegame_table = [
     -30,-40,-40,-50,-50,-40,-40,-30,
     -30,-40,-40,-50,-50,-40,-40,-30,
     -30,-40,-40,-50,-50,-40,-40,-30,
@@ -71,9 +76,10 @@ king_square_middlegame_table = [
      20, 20,  0,  0,  0,  0, 20, 20,
      20, 30, 10,  0,  0, 10, 30, 20
 ]
+black_king_square_middlegame_table = [i * (-1) for i in white_king_square_middlegame_table[::-1]]
 
 
-king_square_endgame_table = [
+white_king_square_endgame_table = [
     -50,-40,-30,-20,-20,-30,-40,-50,
     -30,-20,-10,  0,  0,-10,-20,-30,
     -30,-10, 20, 30, 30, 20,-10,-30,
@@ -83,11 +89,12 @@ king_square_endgame_table = [
     -30,-30,  0,  0,  0,  0,-30,-30,
     -50,-30,-30,-30,-30,-30,-30,-50
 ]
+black_king_square_endgame_table = [i * (-1) for i in white_king_square_endgame_table[::-1]]
 
 
 # TODO: check for mobility of pieces (by checking the amount of squares the can move, but if
 ## if the king is in check it should be calculated in another way)
-def evaluate_position(position, side=PieceColor.WHITE):
+def evaluate_position(position):
     evaluation = 0
 
     for num_color in range(0, 9, 8):
@@ -96,17 +103,15 @@ def evaluate_position(position, side=PieceColor.WHITE):
             separate_pieces_squares = [get_num_from_bitboard(num) for num in separate_bit_pieces]
 
             # TODO: redo material as
-            #  evaluation += int(PiecePrice(num_piece))
-            side_sign = 1 if PieceColor(num_color) == side else -1
+            side_sign = 1 if PieceColor(num_color) == PieceColor.WHITE else -1  # to have evaluation from white side always
             for _ in separate_bit_pieces:
-
                 if PieceEnum(num_piece) == PieceEnum.PAWN:
                     # material
                     evaluation += int(PiecePrice.PAWN) * side_sign
 
                     # piece placement
                     for square in separate_pieces_squares:
-                        evaluation += pawn_square_table[square] * side_sign
+                        evaluation += white_pawn_square_table[square] if side_sign == 1 else black_pawn_square_table[square]
 
                 elif PieceEnum(num_piece) == PieceEnum.KNIGHT:
                     # material
@@ -114,7 +119,7 @@ def evaluate_position(position, side=PieceColor.WHITE):
 
                     # piece placement
                     for square in separate_pieces_squares:
-                        evaluation += knight_square_table[square] * side_sign
+                        evaluation += white_knight_square_table[square] if side_sign == 1 else black_knight_square_table[square]
 
                 elif PieceEnum(num_piece) == PieceEnum.BISHOP:
                     # material
@@ -122,7 +127,7 @@ def evaluate_position(position, side=PieceColor.WHITE):
 
                     # piece placement
                     for square in separate_pieces_squares:
-                        evaluation += bishop_square_table[square] * side_sign
+                        evaluation += white_bishop_square_table[square] if side_sign == 1 else black_bishop_square_table[square]
 
                 elif PieceEnum(num_piece) == PieceEnum.ROOK:
                     # material
@@ -130,7 +135,7 @@ def evaluate_position(position, side=PieceColor.WHITE):
 
                     # piece placement
                     for square in separate_pieces_squares:
-                        evaluation += rook_square_table[square] * side_sign
+                        evaluation += white_rook_square_table[square] if side_sign == 1 else black_rook_square_table[square]
 
                 elif PieceEnum(num_piece) == PieceEnum.QUEEN:
                     # material
@@ -138,7 +143,7 @@ def evaluate_position(position, side=PieceColor.WHITE):
 
                     # piece placement
                     for square in separate_pieces_squares:
-                        evaluation += queen_square_table[square] * side_sign
+                        evaluation += white_queen_square_table[square] if side_sign == 1 else black_queen_square_table[square]
 
                 elif PieceEnum(num_piece) == PieceEnum.KING:
                     # material
@@ -177,10 +182,10 @@ def evaluate_position(position, side=PieceColor.WHITE):
                     # piece placement
                     if is_queen_endgame or is_queenless_endgame:
                         for square in separate_pieces_squares:
-                            evaluation += king_square_endgame_table[square] * side_sign
+                            evaluation += white_king_square_endgame_table[square] if side_sign == 1 else black_king_square_endgame_table[square]
                     else:
                         for square in separate_pieces_squares:
-                            evaluation += king_square_middlegame_table[square] * side_sign
+                            evaluation += white_king_square_middlegame_table[square] if side_sign == 1 else black_king_square_middlegame_table[square]
 
     return evaluation
 

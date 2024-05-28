@@ -1,7 +1,8 @@
 import os
 import xml.etree.ElementTree as ET
-from logic.engine.enums import PieceEnum, PieceColor
-from logic.engine.square_helping_functions import get_num_by_square_name
+from core.domain.engine.enums import PieceEnum, PieceColor
+from core.domain.engine.square_helping_functions import get_num_by_square_name
+
 
 def parse_test_data_from_xml(xml_file_path):
     dir_path = os.path.dirname(os.path.realpath(__file__))

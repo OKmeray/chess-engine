@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import squareSize from '../Assets/variables';
 import Pieces from '../Assets/Pieces';
 
-const ChessBoard = ({fen}) => {
+const ChessBoard = ({fen, onPieceDrop}) => {
 
     const boardWrapperStyles = {
         width: squareSize * 8 + "px",
@@ -50,6 +50,10 @@ const ChessBoard = ({fen}) => {
         
     }
 
+    const handleDrop = (fromIndex, toIndex) => {
+        onPieceDrop(fromIndex, toIndex);
+    };
+
     return (
     <div className='board-image-wrapper' style={boardWrapperStyles}>
         {Array.from({ length: 8 }, (_, row) => (
@@ -64,7 +68,7 @@ const ChessBoard = ({fen}) => {
             </div>
             ))
         ))}
-        <Pieces pieces={pieces}/>
+        <Pieces pieces={pieces} onPieceDrop={handleDrop} />
     </div>
     );
 }

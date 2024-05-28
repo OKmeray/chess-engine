@@ -1,72 +1,47 @@
-import squareSize from '../Assets/variables';
+import React, { useState, useRef } from 'react';
 import Piece from '../Assets/Piece';
-import {useState, useRef} from 'react';
+import squareSize from '../Assets/variables';
 
-
-const Pieces = (initialPieces) => {
-
+const Pieces = ({ pieces, onPieceDrop }) => {
     const ref = useRef();
 
-    const [pieces, setPieces] = useState(initialPieces);
-    
     const piecesWrapperStyles = {
         width: squareSize * 8 + "px",
         height: squareSize * 8 + "px",
         position: "absolute",
-    }
-
-    const updatePieces = (initialSquare, newSquare) => {
-        const initialSquareNum = Number(initialSquare);
-        const newSquareNum = Number(newSquare);
-        
-        const piecesWithoutTarget = pieces["pieces"].filter(piece => {
-            return piece.offset !== newSquareNum || initialSquareNum === newSquareNum;
-        });
-
-        const updatedPieces = piecesWithoutTarget.map(piece => {
-            if (piece.offset === initialSquareNum) {
-                return { ...piece, offset: newSquareNum };
-            }
-            return piece;
-        });
-
-        setPieces(prevPieces => ({
-            ...prevPieces,
-            pieces: updatedPieces
-        }));
     };
 
-    const onDrop = e => {
-        const [p, initialSquare] = e.dataTransfer.getData('text').split(',');
+    // Calculate the board square based on mouse position
+    const calculateSquare = (clientX, clientY) => {
+        const { left, top } = ref.current.getBoundingClientRect();
+        const file = Math.floor((clientX - left) / squareSize);
+        const rank = Math.floor((clientY - top) / squareSize); // Adjust if your board is flipped
+        return rank * 8 + file;
+    };
 
-        const {width, left, top} = ref.current.getBoundingClientRect();
-        const size = width / 8;
+    // Handle the drop event when a piece is dropped
+    const handleDrop = (event) => {
+        event.preventDefault();
+        const data = event.dataTransfer.getData('text/plain');
+        const [piece, fromSquare] = data.split(',');
+        const toSquare = calculateSquare(event.clientX, event.clientY);
 
-        const rank = Math.floor((e.clientY - top) / size);
-        const file = Math.floor((e.clientX - left) / size);
-        const newSquare = file + rank * 8;
+        // Update pieces array and notify parent component
+        onPieceDrop(fromSquare, toSquare);
+    };
 
-        updatePieces(initialSquare, newSquare);
-    }
-
-    const onDragOver = e => {
-        e.preventDefault();
-    }
+    // Allow drag over to enable drop
+    const onDragOver = (event) => {
+        event.preventDefault();
+    };
 
     return (
-        <div 
-            style={piecesWrapperStyles}
-            ref={ref}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-        >
-            {pieces.pieces.map(({ id, piece, offset }, index) => (
-                <Piece piece={piece} square={offset}/>
+        <div ref={ref} style={piecesWrapperStyles} onDrop={handleDrop} onDragOver={onDragOver}>
+            {pieces.map((piece, index) => (
+                <Piece key={index} piece={piece.piece} square={piece.offset} />
             ))}
         </div>
     );
-}
-
-
+};
 
 export default Pieces;
