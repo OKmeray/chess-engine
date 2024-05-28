@@ -18,7 +18,7 @@
 
 from core.domain.engine.enums import PieceColor, CastleEnum
 from core.domain.engine.Position import Position
-from core.domain.engine.square_helping_functions import get_num_by_square_name
+from core.domain.engine.square_helping_functions import get_num_by_square_name, get_bitboard_from_num
 
 
 def set_piece_placement(position: Position, pieces_placement_fen: str):
@@ -111,4 +111,74 @@ def get_position_from_fen(fen: str) -> Position:
     position.current_turn = int(fen_splited[5])
 
     return position
+
+
+def get_fen_from_position(position: Position) -> str:
+    # Convert the board to FEN piece placement
+    fen_rows = []
+    empty_count = 0
+
+    for i in range(64):
+        piece_code = sum([int(i) for i in position.get_piece_and_color_by_square(i)])
+
+        if piece_code == 0:
+            empty_count += 1
+        else:
+            if empty_count > 0:
+                fen_rows.append(str(empty_count))
+                empty_count = 0
+            fen_rows.append(piece_code_to_fen_char(piece_code))
+
+        if (i + 1) % 8 == 0:
+            if empty_count > 0:
+                fen_rows.append(str(empty_count))
+                empty_count = 0
+            if i != 63:
+                fen_rows.append("/")
+
+    # Active color
+    active_color = 'w' if position.side_to_move == PieceColor.WHITE else 'b'
+
+    # Castling availability
+    castling_rights = []
+    if position.castling_rights[CastleEnum.WhiteShortCastle]:
+        castling_rights.append('K')
+    if position.castling_rights[CastleEnum.WhiteLongCastle]:
+        castling_rights.append('Q')
+    if position.castling_rights[CastleEnum.BlackShortCastle]:
+        castling_rights.append('k')
+    if position.castling_rights[CastleEnum.BlackLongCastle]:
+        castling_rights.append('q')
+    castling_rights = ''.join(castling_rights) if castling_rights else '-'
+
+    # En passant target square
+    en_passant = '-' if not position.en_passant_square else square_to_name(position.en_passant_square)
+
+    # Halfmove clock and fullmove number
+    half_moves = str(position.half_moves)
+    full_moves = str(position.current_turn)
+
+    return ' '.join([
+        ''.join(fen_rows),
+        active_color,
+        castling_rights,
+        en_passant,
+        half_moves,
+        full_moves
+    ])
+
+
+def piece_code_to_fen_char(piece_code):
+    # Maps internal piece codes to FEN characters
+    return {
+        0b1001: 'P', 0b1010: 'N', 0b1011: 'B', 0b1100: 'R', 0b1101: 'Q', 0b1110: 'K',
+        0b0001: 'p', 0b0010: 'n', 0b0011: 'b', 0b0100: 'r', 0b0101: 'q', 0b0110: 'k'
+    }.get(piece_code, None)
+
+
+def square_to_name(square):
+    # Convert square index to algebraic notation (e.g., 0 -> a8)
+    file = square % 8
+    rank = 8 - (square // 8)
+    return f"{chr(file + 97)}{rank}"
 

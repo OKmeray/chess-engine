@@ -1,5 +1,5 @@
 import pytest
-from core.domain.fen import get_position_from_fen
+from core.domain.fen.fen_generator import get_position_from_fen
 from data_preparation import test_data_for_is_move_legal
 
 

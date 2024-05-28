@@ -1,8 +1,8 @@
-import pytest
-from core.domain.fen import get_position_from_fen
-from data_preparation import test_data_for_mate_in_one
-from logic.mcts.MCTS import MCTS
-
+# import pytest
+# from core.domain.fen import get_position_from_fen
+# from data_preparation import test_data_for_mate_in_one
+# from logic.mcts.MCTS import MCTS
+#
 
 # @pytest.mark.parametrize("fen, best_move_detail", test_data_for_mate_in_one)
 # def test_best_move_seek(fen, best_move_detail):

@@ -21,7 +21,7 @@ DEBUG_RELOAD = bool(os.getenv("DEBUG_RELOAD", True))
 # EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
 # FRONTEND
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+# FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 # SECRET_KEY
 SECRET_KEY = os.getenv("SECRET_KEY", "FLKJSDIU#I@OJFK")
