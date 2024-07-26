@@ -29,3 +29,18 @@ def login(form_data: UserLoginSchema, user_service: UserService = Depends(get_us
         raise HTTPException(status_code=401, detail="Incorrect username or password")
     return {"access_token": access_token, "token_type": "bearer"}
 
+
+@router.post("/verify-token", response_model=bool)
+def verify_token(token: TokenSchema, user_service: UserService = Depends(get_user_service)):
+    access_token = token.access_token
+    result = user_service.verify_token(access_token)
+    return True
+
+
+@router.post("/verify-token")
+def verify_token(token: TokenSchema, user_service: UserService = Depends(get_user_service)):
+    print(token)
+    is_valid = user_service.verify_token(token.access_token)
+    if not is_valid:
+        raise HTTPException(status_code=403, detail="Invalid token or expired token.")
+    return {"message": "Token is valid."}

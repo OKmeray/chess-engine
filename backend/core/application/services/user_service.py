@@ -1,12 +1,14 @@
 import datetime
 from core.application.repositories.unit_of_work import IUnitOfWork
 from core.application.schemas.user import UserCreateSchema
+from core.application.security.auth_bearer import JWTBearer
 from core.application.security.auth_handler import get_password_hash, encode_jwt, verify_password
 
 
 class UserService:
     def __init__(self, uow: IUnitOfWork):
         self.uow = uow
+        self.jwt_bearer = JWTBearer()
 
     def register_user(self, user: UserCreateSchema):
         with self.uow as uow:
@@ -29,3 +31,7 @@ class UserService:
             if user and verify_password(password, user.hashed_password):
                 return encode_jwt(user.id)
             return None
+
+    def verify_token(self, access_token: str):
+        return self.jwt_bearer.verify_jwt(access_token)
+

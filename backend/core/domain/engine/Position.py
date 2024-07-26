@@ -130,19 +130,19 @@ class Position:
         # handling castles
         if move_detail["piece"] == PieceEnum.KING and abs(move_detail["square"] - move_detail["move"]) == 2:
             if self.side_to_move == PieceColor.WHITE:
-                if move_detail["square"] - move_detail["move"] == -2 and CastleEnum.WhiteShortCastle:  # short castle
+                if move_detail["square"] - move_detail["move"] == -2 and self.castling_rights[CastleEnum.WhiteShortCastle]:  # short castle
                     # rook move (also the side to move changes, half moves, ...)
                     self.apply_move({'piece': PieceEnum.ROOK, 'color': PieceColor.WHITE, 'square': 63, 'move': 61})
                     # king move
                     self.bitboard_position[PieceEnum.KING + PieceColor.WHITE].bitboard = get_bitboard_from_num(move_detail["move"])
 
-                elif move_detail["square"] - move_detail["move"] == 2 and CastleEnum.WhiteLongCastle:  # long castle
+                elif move_detail["square"] - move_detail["move"] == 2 and self.castling_rights[CastleEnum.WhiteLongCastle]:  # long castle
                     # rook move (also the side to move changes, half moves, ...)
                     self.apply_move({'piece': PieceEnum.ROOK, 'color': PieceColor.WHITE, 'square': 56, 'move': 59})
                     # king move
                     self.bitboard_position[PieceEnum.KING + PieceColor.WHITE].bitboard = get_bitboard_from_num(move_detail["move"])
-                    self.castling_rights[CastleEnum.WhiteShortCastle] = False
-                    self.castling_rights[CastleEnum.WhiteLongCastle] = False
+                self.castling_rights[CastleEnum.WhiteShortCastle] = False
+                self.castling_rights[CastleEnum.WhiteLongCastle] = False
 
             elif self.side_to_move == PieceColor.BLACK:
                 if move_detail["square"] - move_detail["move"] == -2 and self.castling_rights[CastleEnum.BlackShortCastle]:  # short castle
@@ -152,13 +152,13 @@ class Position:
                     # king move
                     self.bitboard_position[PieceEnum.KING + PieceColor.BLACK].bitboard = get_bitboard_from_num(move_detail["move"])
 
-                elif move_detail["square"] - move_detail["move"] == 2 and CastleEnum.BlackLongCastle:  # long castle
+                elif move_detail["square"] - move_detail["move"] == 2 and self.castling_rights[CastleEnum.BlackLongCastle]:  # long castle
                     # rook move (also the side to move changes, half moves, ...)
                     self.apply_move({'piece': PieceEnum.ROOK, 'color': PieceColor.BLACK, 'square': 0, 'move': 3})
                     # king move
                     self.bitboard_position[PieceEnum.KING + PieceColor.BLACK].bitboard = get_bitboard_from_num(move_detail["move"])
-                    self.castling_rights[CastleEnum.BlackShortCastle] = False
-                    self.castling_rights[CastleEnum.BlackLongCastle] = False
+                self.castling_rights[CastleEnum.BlackShortCastle] = False
+                self.castling_rights[CastleEnum.BlackLongCastle] = False
             return
 
         if move_detail["piece"] == PieceEnum.PAWN:
@@ -392,7 +392,7 @@ class Position:
             return not position_copy.is_king_in_check()
 
     def determine_outcome(self):
-        evaluation = evaluate_position(position=self, side=self.side_to_move)
+        evaluation = evaluate_position(position=self)
 
         if self.is_checkmate():
             return 'loss'
@@ -475,3 +475,16 @@ class Position:
     def is_game_over(self):
         # checkmate for another side ?!?!
         return self.is_draw() or self.is_checkmate()
+
+    def get_piece_and_color_by_square(self, square):
+        piece = 0
+        color = 0
+
+        bitsquare = get_bitboard_from_num(square)
+        for piece_num in range(1, 7):
+            for color_num in range(0, 9, 8):
+                if self.bitboard_position[piece_num + color_num].bitboard & bitsquare:
+                    piece = PieceEnum(piece_num)
+                    color = PieceColor(color_num)
+
+        return piece, color
