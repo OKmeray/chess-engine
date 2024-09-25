@@ -201,3 +201,22 @@ def convert_file_rank_to_square(file, rank):
 # print(evaluate_position(position1))
 # print(evaluate_position(position2))
 # print(evaluate_position(position_starting))
+
+
+chess_moves_fen = "rnbqkbnr/ppppppp1/7p/8/P7/5N2/1PPPPPPP/RNBQKB1R b KQkq - 1 2"
+chess_moves_fen = "rnbqkbnr/p1ppppp1/7p/1p6/P7/5NP1/1PPPPP1P/RNBQKB1R b KQkq - 0 3"
+chess_moves_fen = "rnb1kbnr/2qpppp1/2p4p/pp5P/P7/5NP1/1PPPPP2/RNBQKB1R b KQkq - 0 6"
+chess_moves_fen = "rn2kbnr/1bqpppp1/2p4p/pp5P/PP6/5NP1/2PPPP2/RNBQKB1R b KQkq - 0 7"
+chess_moves_fen = "rn2kbnr/1b2p1p1/1qpp1p1p/pp5P/PP5N/5PP1/2PPP3/RNBQKB1R w KQkq - 0 10"
+chess_moves_fen = "rn2kbnr/1b4p1/1qpppp1p/pp5P/PP5N/3P1PP1/2P1P3/RNBQKB1R w KQkq - 0 11"
+chess_moves_fen = "rn2kbnr/1b6/1qpppp1p/pp4pP/PP5N/2PP1PP1/4P3/RNBQKB1R w KQkq g6 0 12"
+# chess_moves_fen = "rn3bnr/1b1k4/1qpppp1p/pp4pP/PP3P1N/2PP2P1/4P3/RNBQKB1R w KQ - 1 13"
+position = get_position_from_fen(chess_moves_fen)
+print(position.en_passant_square)
+position.apply_move({'piece': PieceEnum.ROOK, 'color': PieceColor.WHITE, 'square': 56, 'move': 48})
+position.apply_move({'piece': PieceEnum.KING, 'color': PieceColor.BLACK, 'square': 4, 'move': 3})
+print(position.en_passant_square)
+moves = position.get_all_moves()
+
+for move in moves:
+    print(move)
