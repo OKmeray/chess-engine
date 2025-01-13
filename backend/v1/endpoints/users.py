@@ -24,7 +24,7 @@ def register(user: UserCreateSchema, user_service: UserService = Depends(get_use
 
 @router.post("/login", response_model=TokenSchema)
 def login(form_data: UserLoginSchema, user_service: UserService = Depends(get_user_service)):
-    access_token = user_service.authenticate_user(form_data.username, form_data.password)
+    access_token = user_service.authenticate_user(form_data.email, form_data.password)
     if not access_token:
         raise HTTPException(status_code=401, detail="Incorrect username or password")
     return {"access_token": access_token, "token_type": "bearer"}

@@ -9,7 +9,7 @@ class UserCreateSchema(BaseModel):
 
 
 class UserLoginSchema(BaseModel):
-    username: str
+    email: str
     password: str
 
 

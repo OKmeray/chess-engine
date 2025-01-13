@@ -25,9 +25,9 @@ class UserService:
             uow.commit()
             return user_db
 
-    def authenticate_user(self, username: str, password: str):
+    def authenticate_user(self, email: str, password: str):
         with self.uow as uow:
-            user = uow.user.find_by_username(username)
+            user = uow.user.find_by_email(email)
             if user and verify_password(password, user.hashed_password):
                 return encode_jwt(user.id)
             return None
