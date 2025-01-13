@@ -50,10 +50,8 @@ class Position:
         self.current_turn = 1
 
     def clone(self):
-        # Create a new Position object
         cloned_position = Position()
 
-        # Deep copy complex attributes
         cloned_position.bitboard_position = copy.deepcopy(self.bitboard_position)
         cloned_position.side_to_move = self.side_to_move
         cloned_position.castling_rights = copy.deepcopy(self.castling_rights)
@@ -118,7 +116,6 @@ class Position:
 
         return separate_pieces
 
-    # TODO: separate the method
     # {'piece': <PieceEnum.BISHOP: 3>, 'color': <PieceColor.WHITE: 8>, 'square': 49, 'move': 40}
     def apply_move(self, move_detail):
         self.en_passant_square = None
@@ -130,37 +127,46 @@ class Position:
         # handling castles
         if move_detail["piece"] == PieceEnum.KING and abs(move_detail["square"] - move_detail["move"]) == 2:
             if self.side_to_move == PieceColor.WHITE:
-                if move_detail["square"] - move_detail["move"] == -2 and self.castling_rights[CastleEnum.WhiteShortCastle]:  # short castle
+                if move_detail["square"] - move_detail["move"] == -2 and self.castling_rights[
+                    CastleEnum.WhiteShortCastle]:  # short castle
                     # rook move (also the side to move changes, half moves, ...)
                     self.apply_move({'piece': PieceEnum.ROOK, 'color': PieceColor.WHITE, 'square': 63, 'move': 61})
                     # king move
-                    self.bitboard_position[PieceEnum.KING + PieceColor.WHITE].bitboard = get_bitboard_from_num(move_detail["move"])
+                    self.bitboard_position[PieceEnum.KING + PieceColor.WHITE].bitboard = get_bitboard_from_num(
+                        move_detail["move"])
 
-                elif move_detail["square"] - move_detail["move"] == 2 and self.castling_rights[CastleEnum.WhiteLongCastle]:  # long castle
+                elif move_detail["square"] - move_detail["move"] == 2 and self.castling_rights[
+                    CastleEnum.WhiteLongCastle]:  # long castle
                     # rook move (also the side to move changes, half moves, ...)
                     self.apply_move({'piece': PieceEnum.ROOK, 'color': PieceColor.WHITE, 'square': 56, 'move': 59})
                     # king move
-                    self.bitboard_position[PieceEnum.KING + PieceColor.WHITE].bitboard = get_bitboard_from_num(move_detail["move"])
+                    self.bitboard_position[PieceEnum.KING + PieceColor.WHITE].bitboard = get_bitboard_from_num(
+                        move_detail["move"])
                 self.castling_rights[CastleEnum.WhiteShortCastle] = False
                 self.castling_rights[CastleEnum.WhiteLongCastle] = False
 
             elif self.side_to_move == PieceColor.BLACK:
-                if move_detail["square"] - move_detail["move"] == -2 and self.castling_rights[CastleEnum.BlackShortCastle]:  # short castle
+                if move_detail["square"] - move_detail["move"] == -2 and self.castling_rights[
+                    CastleEnum.BlackShortCastle]:  # short castle
                     # rook move (also the side to move changes, half moves, ...)
                     self.apply_move({'piece': PieceEnum.ROOK, 'color': PieceColor.BLACK, 'square': 7, 'move': 5})
 
                     # king move
-                    self.bitboard_position[PieceEnum.KING + PieceColor.BLACK].bitboard = get_bitboard_from_num(move_detail["move"])
+                    self.bitboard_position[PieceEnum.KING + PieceColor.BLACK].bitboard = get_bitboard_from_num(
+                        move_detail["move"])
 
-                elif move_detail["square"] - move_detail["move"] == 2 and self.castling_rights[CastleEnum.BlackLongCastle]:  # long castle
+                elif move_detail["square"] - move_detail["move"] == 2 and self.castling_rights[
+                    CastleEnum.BlackLongCastle]:  # long castle
                     # rook move (also the side to move changes, half moves, ...)
                     self.apply_move({'piece': PieceEnum.ROOK, 'color': PieceColor.BLACK, 'square': 0, 'move': 3})
                     # king move
-                    self.bitboard_position[PieceEnum.KING + PieceColor.BLACK].bitboard = get_bitboard_from_num(move_detail["move"])
+                    self.bitboard_position[PieceEnum.KING + PieceColor.BLACK].bitboard = get_bitboard_from_num(
+                        move_detail["move"])
                 self.castling_rights[CastleEnum.BlackShortCastle] = False
                 self.castling_rights[CastleEnum.BlackLongCastle] = False
             return
 
+        # en passant
         if move_detail["piece"] == PieceEnum.PAWN:
             # set en passant square
             if move_detail["color"] == PieceColor.WHITE and move_detail["square"] - move_detail["move"] == 16:
@@ -182,25 +188,39 @@ class Position:
         for num_color in range(0, 9, 8):  # for all the pieces clear the new_square
             # (only one piece can have this square)
             for num_piece in range(1, 7):
-                if self.bitboard_position[num_piece + num_color].bitboard == self.bitboard_position[num_piece + num_color].bitboard & ~new_square:
-                    pass
-                else:
+                if self.bitboard_position[num_piece + num_color].bitboard != self.bitboard_position[num_piece + num_color].bitboard & ~new_square:
                     self.bitboard_position[num_piece + num_color].bitboard &= ~new_square
                     is_capture = True
+                    if move_detail["move"] == 0:
+                        self.castling_rights[CastleEnum.BlackLongCastle] = False
+                    elif move_detail["move"] == 7:
+                        self.castling_rights[CastleEnum.BlackShortCastle] = False
+                    elif move_detail["move"] == 56:
+                        self.castling_rights[CastleEnum.WhiteLongCastle] = False
+                    elif move_detail["move"] == 63:
+                        self.castling_rights[CastleEnum.WhiteShortCastle] = False
 
         self.bitboard_position[move_detail["piece"] + move_detail["color"]].bitboard = \
             self.bitboard_position[move_detail["piece"] + move_detail["color"]].bitboard & ~old_square | new_square
 
-        # pawn promotion (change to queen) TODO: promotion to knight, bishop, rook
+        # pawn promotion
         if move_detail["piece"] == PieceEnum.PAWN and move_detail["color"] == PieceColor.WHITE and 0 <= move_detail["move"] <= 7:
             promotion_bitboard = get_bitboard_from_num(move_detail["move"])
             self.bitboard_position[PieceEnum.PAWN + PieceColor.WHITE].bitboard &= ~promotion_bitboard
-            self.bitboard_position[PieceEnum.QUEEN + PieceColor.WHITE].bitboard |= promotion_bitboard
+            if "promotion_piece" in move_detail.keys():
+                new_piece = move_detail["promotion_piece"]
+                self.bitboard_position[new_piece + PieceColor.WHITE].bitboard |= promotion_bitboard
+            else:
+                self.bitboard_position[PieceEnum.QUEEN + PieceColor.WHITE].bitboard |= promotion_bitboard
 
         if move_detail["piece"] == PieceEnum.PAWN and move_detail["color"] == PieceColor.BLACK and 56 <= move_detail["move"] <= 63:
             promotion_bitboard = get_bitboard_from_num(move_detail["move"])
             self.bitboard_position[PieceEnum.PAWN + PieceColor.BLACK].bitboard &= ~promotion_bitboard
-            self.bitboard_position[PieceEnum.QUEEN + PieceColor.BLACK].bitboard |= promotion_bitboard
+            if "promotion_piece" in move_detail.keys():
+                new_piece = move_detail["promotion_piece"]
+                self.bitboard_position[new_piece + PieceColor.BLACK].bitboard |= promotion_bitboard
+            else:
+                self.bitboard_position[PieceEnum.QUEEN + PieceColor.BLACK].bitboard |= promotion_bitboard
 
         # if rook moves, rook is capture or king moves then changing the castle rights
         if move_detail["piece"] == PieceEnum.KING:
@@ -239,13 +259,26 @@ class Position:
 
         for piece in all_moves:
             for move in piece['possible_moves']:
-                separated_moves.append({
-                    "piece": piece["piece"],
-                    "color": piece["color"],
-                    "square": piece["square"],
-                    "move": move,
-                })
-
+                if piece["piece"] == PieceEnum.PAWN and \
+                        (
+                            (piece["color"] == PieceColor.WHITE and piece["square"] in [8, 9, 10, 11, 12, 13, 14, 15]) or
+                            (piece["color"] == PieceColor.BLACK and piece["square"] in [48, 49, 50, 51, 52, 53, 54, 55])
+                        ):
+                    for promotion_piece in [PieceEnum.QUEEN, PieceEnum.ROOK, PieceEnum.BISHOP, PieceEnum.KNIGHT]:
+                        separated_moves.append({
+                            "piece": piece["piece"],
+                            "color": piece["color"],
+                            "square": piece["square"],
+                            "move": move,
+                            "promotion_piece": promotion_piece
+                        })
+                else:
+                    separated_moves.append({
+                        "piece": piece["piece"],
+                        "color": piece["color"],
+                        "square": piece["square"],
+                        "move": move,
+                    })
         return separated_moves
 
     def get_all_moves(self):
@@ -262,26 +295,23 @@ class Position:
             position_copy = self.clone()
 
             position_copy.apply_move(move)
-            # position_copy.change_side_to_move()
             is_check = position_copy.is_king_in_check()
-            # if is_check:
-            #     print(is_check)
+
             is_capture = self.get_all_bitboard().bitboard.bit_count() - 1 == position_copy.get_all_bitboard().bitboard.bit_count()
 
-            # TODO: check
+            # TODO: redo to MVVLVA
             if is_check and is_capture:
-                move['priority'] = 14 + int(move['piece'])
+                move['priority'] = 14
                 new_separate_moves.append(move)
             elif is_check:
-                move['priority'] = 10 + int(move['piece'])
+                move['priority'] = 10
                 new_separate_moves.append(move)
             elif is_capture:
-                move['priority'] = 4 + int(move['piece'])
+                move['priority'] = 4
                 new_separate_moves.append(move)
             else:
-                move['priority'] = int(move['piece'])
+                move['priority'] = 0
                 new_separate_moves.append(move)
-
         return sorted(new_separate_moves, key=lambda x: x['priority'], reverse=True)
 
     def generate_all_pseudo_legal_moves(self):
@@ -301,7 +331,9 @@ class Position:
                     bitboard_en_passant_square = None
                     if self.en_passant_square is not None:
                         bitboard_en_passant_square = 2 ** self.en_passant_square
-                    separate_pieces_moves = GenerateMove.generate_pawn_move(bit_piece, own_bitboard, enemy_bitboard, color=num_color, en_passant_square=bitboard_en_passant_square)
+                    separate_pieces_moves = GenerateMove.generate_pawn_move(bit_piece, own_bitboard, enemy_bitboard,
+                                                                            color=num_color,
+                                                                            en_passant_square=bitboard_en_passant_square)
                 elif num_piece == PieceEnum.KNIGHT:
                     separate_pieces_moves = GenerateMove.generate_knight_move(bit_piece, own_bitboard)
                 elif num_piece == PieceEnum.BISHOP:
@@ -312,9 +344,11 @@ class Position:
                     separate_pieces_moves = GenerateMove.generate_queen_move(bit_piece, own_bitboard, enemy_bitboard)
                 elif num_piece == PieceEnum.KING:
                     if PieceColor(num_color) == PieceColor.WHITE:
-                        separate_pieces_moves = GenerateMove.generate_king_move(bit_piece, own_bitboard, enemy_bitboard, True)
+                        separate_pieces_moves = GenerateMove.generate_king_move(bit_piece, own_bitboard, enemy_bitboard,
+                                                                                True)
                     else:
-                        separate_pieces_moves = GenerateMove.generate_king_move(bit_piece, own_bitboard, enemy_bitboard, False)
+                        separate_pieces_moves = GenerateMove.generate_king_move(bit_piece, own_bitboard, enemy_bitboard,
+                                                                                False)
 
                 piece_moves_num = get_nums_from_bit_nums(separate_pieces_moves)
                 local_dictionary = {
@@ -359,31 +393,41 @@ class Position:
         return legal_moves
 
     def is_move_legal(self, move):
-        # if short castle
+        # if castle
         if move["piece"] == PieceEnum.KING and abs(move["square"] - move["move"]) == 2:
-            intermediate_move = round((move["square"] + move["move"]) / 2)
-            intermediate_move_detail = {
-                "piece": move["piece"],
-                "color": move["color"],
-                "square": move["square"],
-                "move": intermediate_move
-            }
+            if (
+                move["color"] == PieceColor.WHITE and move["square"] - move["move"] == -2 and self.castling_rights[CastleEnum.WhiteShortCastle] or
+                move["color"] == PieceColor.WHITE and move["square"] - move["move"] == 2 and self.castling_rights[CastleEnum.WhiteLongCastle] or
+                move["color"] == PieceColor.BLACK and move["square"] - move["move"] == -2 and self.castling_rights[CastleEnum.BlackShortCastle] or
+                move["color"] == PieceColor.BLACK and move["square"] - move["move"] == 2 and self.castling_rights[CastleEnum.BlackLongCastle]
+            ):
+                intermediate_move = round((move["square"] + move["move"]) / 2)
+                intermediate_move_detail = {
+                    "piece": move["piece"],
+                    "color": move["color"],
+                    "square": move["square"],
+                    "move": intermediate_move
+                }
 
-            # checking for empty squares between rook and the king (enemy pieces also can't be standing there)
-            if self.get_all_bitboard().bitboard & (get_bitboard_from_num(intermediate_move) | get_bitboard_from_num(move["move"])):
-                return False
+                # checking for empty squares between rook and the king (enemy pieces also can't be standing there)
+                if self.get_all_bitboard().bitboard & (
+                        get_bitboard_from_num(intermediate_move) | get_bitboard_from_num(move["move"])):
+                    return False
 
-            position_copy = self.clone()
-            position_copy.apply_move(intermediate_move_detail)
-            position_copy.change_side_to_move()
+                position_copy = self.clone()
 
-            position_copy2 = self.clone()
-            position_copy2.apply_move(move)
-            position_copy2.change_side_to_move()
+                position_copy2 = self.clone()
+                position_copy2.apply_move(intermediate_move_detail)
+                position_copy2.change_side_to_move()
 
-            return not position_copy.is_king_in_check() and not position_copy2.is_king_in_check()
+                position_copy3 = self.clone()
+                position_copy3.apply_move(move)
+                position_copy3.change_side_to_move()
 
-        # if all the other moves
+                return not position_copy.is_king_in_check() and not position_copy2.is_king_in_check() and not position_copy3.is_king_in_check()
+            return False
+
+        # all the other moves
         else:
             position_copy = self.clone()
             position_copy.apply_move(move)
@@ -402,7 +446,7 @@ class Position:
         # elif evaluation >= 20:  # TODO: maybe if the evaluation is 20+ then the win for the side
         #     return 'win'
         else:
-           return 'win'
+            return 'win'
 
     def is_king_in_check(self):
         king = self.get_separate_piece(piece=PieceEnum.KING, color=self.side_to_move)
@@ -414,8 +458,6 @@ class Position:
         for piece in all_pseudo_legal_moves:
             for move in piece['possible_moves']:
                 try:
-                    # print(piece, move, king[0])
-                    # print(get_bitboard_from_num(move), "==", king[0], get_bitboard_from_num(move) == king[0], "\n")
                     if get_bitboard_from_num(move) == king[0]:
                         return True
                 except Exception as e:
@@ -445,11 +487,11 @@ class Position:
         # king | - | king + bishop
         elif self.get_all_bitboard().bitboard.bit_count() == 3:
             if (self.get_white_bitboard().bitboard.bit_count() == 2 and
-                    (self.get_piece_bitboard(PieceEnum.KNIGHT, PieceColor.WHITE).bitboard or
-                     self.get_piece_bitboard(PieceEnum.BISHOP, PieceColor.WHITE).bitboard)) or \
-               (self.get_black_bitboard().bitboard.bit_count() == 2 and
-                    (self.get_piece_bitboard(PieceEnum.KNIGHT, PieceColor.BLACK).bitboard or
-                    self.get_piece_bitboard(PieceEnum.BISHOP, PieceColor.BLACK).bitboard)):
+                (self.get_piece_bitboard(PieceEnum.KNIGHT, PieceColor.WHITE).bitboard or
+                 self.get_piece_bitboard(PieceEnum.BISHOP, PieceColor.WHITE).bitboard)) or \
+                    (self.get_black_bitboard().bitboard.bit_count() == 2 and
+                     (self.get_piece_bitboard(PieceEnum.KNIGHT, PieceColor.BLACK).bitboard or
+                      self.get_piece_bitboard(PieceEnum.BISHOP, PieceColor.BLACK).bitboard)):
                 return True
         # king + bishop | - | king + bishop (if the bishops are on the same color)
         elif self.get_all_bitboard().bitboard.bit_count() == 4:
@@ -463,7 +505,8 @@ class Position:
                 white_bishop_num = get_num_from_bitboard(white_bishop_bitboard.bitboard)
                 black_bishop_num = get_num_from_bitboard(black_bishop_bitboard.bitboard)
 
-                return (white_bishop_num // 8 + white_bishop_num % 8) % 2 == (black_bishop_num // 8 + black_bishop_num % 8) % 2
+                return (white_bishop_num // 8 + white_bishop_num % 8) % 2 == (
+                            black_bishop_num // 8 + black_bishop_num % 8) % 2
         return False
 
     def change_side_to_move(self):

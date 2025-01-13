@@ -72,9 +72,9 @@ class GenerateMove:
             if (square >> 8) & (enemy_bitboard.bitboard | own_bitboard.bitboard) != square >> 8:
                 moves.append(square >> 8)
 
-            # two square move
-            if cls.is_rank_2(square) and ((square >> 16) & (enemy_bitboard.bitboard | own_bitboard.bitboard) != square >> 16):
-                moves.append(square >> 16)
+                # two square move
+                if cls.is_rank_2(square) and ((square >> 16) & (enemy_bitboard.bitboard | own_bitboard.bitboard) != square >> 16):
+                    moves.append(square >> 16)
 
         elif color == PieceColor.BLACK:
             # capture and en passant
@@ -89,11 +89,12 @@ class GenerateMove:
             if (square << 8) & (enemy_bitboard.bitboard | own_bitboard.bitboard) != square << 8:
                 moves.append(square << 8)
 
-            # two square move
-            if cls.is_rank_7(square) and ((square << 16) & (enemy_bitboard.bitboard | own_bitboard.bitboard) != square << 16):
-                moves.append(square << 16)
+                # two square move
+                if cls.is_rank_7(square) and ((square << 16) & (enemy_bitboard.bitboard | own_bitboard.bitboard) != square << 16):
+                    moves.append(square << 16)
         return moves
 
+    # TODO: redo with iteration cycle
     @classmethod
     def generate_knight_move(cls, square: int, own_bitboard: Bitboard) -> list[int]:
         moves = []
@@ -387,23 +388,27 @@ class GenerateMove:
     @classmethod
     def generate_castle_moves(cls, square, own_bitboard, enemy_bitboard, is_white=True):
         moves = []
-        if (is_white and cls.is_rank_1(square) and cls.is_e_file(square)) or\
-           (not is_white and cls.is_rank_8(square) and cls.is_e_file(square)):
 
-            # if not ((square << 1 | square << 2) & (own_bitboard.bitboard | enemy_bitboard.bitboard)):
-            #     moves.append(square << 2)
-            # if not ((square >> 1 | square >> 2) & (own_bitboard.bitboard | enemy_bitboard.bitboard)):
-            #     moves.append(square >> 2)
-            if len(cls.generate_horizontal_left(square, own_bitboard, enemy_bitboard, steps=2)):
-                moves.append(square >> 2)
-            if len(cls.generate_horizontal_right(square, own_bitboard, enemy_bitboard, steps=2)):
-                moves.append(square << 2)
+        white_king_start = 0x1000000000000000
+        black_king_start = 0x10
+
+        if (is_white and square != white_king_start) or (not is_white and square != black_king_start):
+            return moves
+
+        kingside_empty_squares = (1 << 61 | 1 << 62) if is_white else (1 << 5 | 1 << 6)
+        if ((own_bitboard.bitboard | enemy_bitboard.bitboard) & kingside_empty_squares) == 0:
+            # Add kingside castling move
+            moves.append((1 << 62) if is_white else (1 << 6))
+
+        queenside_empty_squares = (1 << 59 | 1 << 58 | 1 << 57) if is_white else (1 << 3 | 1 << 2 | 1 << 1)
+        if ((own_bitboard.bitboard | enemy_bitboard.bitboard) & queenside_empty_squares) == 0:
+            # Add queenside castling move
+            moves.append((1 << 58) if is_white else (1 << 2))
 
         return moves
 
     @classmethod
     def generate_king_move(cls, square, own_bitboard, enemy_bitboard, is_white=True):
-        # TODO: catsle moves (check target squares) (if enemy is on g1 then king can't castle)
         return [
             *cls.generate_castle_moves(square, own_bitboard, enemy_bitboard, is_white),
             *cls.generate_rook_move(square, own_bitboard, enemy_bitboard, steps=1),
