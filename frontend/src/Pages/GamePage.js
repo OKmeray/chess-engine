@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import ChessBoard from "../Assets/ChessBoard";
+import { useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import ChessBoard from "../Components/ChessBoard";
 import "./GamePage.css";
-import Header from "../Assets/Header";
-import Footer from "../Assets/Footer";
+import Header from "../Components/Header";
+import Footer from "../Components/Footer";
 import Lenis from "@studio-freight/lenis";
+import { setCanNotDrag, setCanDrag } from "../Store/actions";
 
 const GamePage = () => {
     const [fen, setFen] = useState(
@@ -13,30 +15,19 @@ const GamePage = () => {
     const [possibleMoves, setPossibleMoves] = useState([]);
     const [ws, setWs] = useState(null);
     const [TurnToPlay, setTurnToPlay] = useState("");
-    const [whiteTime, setWhiteTime] = useState(180);
-    const [blackTime, setBlackTime] = useState(180);
-    const [increment, setIncrement] = useState(2);
+    const [whiteTime, setWhiteTime] = useState(15);
+    const [blackTime, setBlackTime] = useState(15);
+    const [increment, setIncrement] = useState(1);
     const [openOpenings, setOpenOpenings] = useState([]);
     const [selectedVariations, setSelectedVariations] = useState([]);
     const [openingsData, setOpeningsData] = useState([]);
     const [showOpenings, setShowOpenings] = useState(false);
+    const [gameOver, setGameOver] = useState(false);
     const timerRef = useRef(null);
-    const navigate = useNavigate();
     const location = useLocation();
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const baseTime = parseInt(params.get("baseTime"), 10);
-        const increment = parseInt(params.get("increment"), 10);
-
-        if (Number.isInteger(baseTime)) {
-            setWhiteTime(baseTime);
-            setBlackTime(baseTime);
-        }
-        if (Number.isInteger(increment)) {
-            setIncrement(increment);
-        }
-
         // Fetch openings data from the backend
         fetch(`${process.env.REACT_APP_BACKEND_URL}games/openings`)
             .then((response) => response.json())
@@ -56,22 +47,19 @@ const GamePage = () => {
 
         websocket.onmessage = (event) => {
             const data = JSON.parse(event.data);
+            console.log("Response from the server: " + data);
 
-            if (data.isUserTurn) {
-                setTurnToPlay("User");
-                clearInterval(timerRef.current);
-                setBlackTime((prevTime) => prevTime + increment);
-                startTimer("white");
-                setPossibleMoves(data.possibleMoves);
-            } else {
-                setTurnToPlay("Computer");
-                clearInterval(timerRef.current);
-                setWhiteTime((prevTime) => prevTime + increment);
-                startTimer("black");
-            }
-
-            console.log(possibleMoves);
+            setTurnToPlay("User");
+            dispatch(setCanDrag());
+            clearInterval(timerRef.current);
+            setBlackTime((prevTime) => prevTime + increment);
+            startTimer("white");
+            setPossibleMoves(data.possibleMoves);
             setFen(data.fen);
+
+            if (!data.isLegal) {
+                alert("Not possible");
+            }
         };
 
         websocket.onerror = (event) => {
@@ -88,7 +76,7 @@ const GamePage = () => {
             websocket.close();
             clearInterval(timerRef.current);
         };
-    }, [location.search]);
+    }, [location.search, increment]);
 
     useEffect(() => {
         const lenis = new Lenis({
@@ -111,6 +99,11 @@ const GamePage = () => {
                 setWhiteTime((prevTime) => {
                     if (prevTime <= 0) {
                         clearInterval(timerRef.current);
+                        setTurnToPlay("None");
+                        setGameOver(true);
+                        dispatch(setCanNotDrag());
+                        alert("Time is up! White loses.");
+
                         return 0;
                     }
                     return prevTime - 1;
@@ -119,6 +112,11 @@ const GamePage = () => {
                 setBlackTime((prevTime) => {
                     if (prevTime <= 0) {
                         clearInterval(timerRef.current);
+                        setTurnToPlay("None");
+                        setGameOver(true);
+                        dispatch(setCanNotDrag());
+                        alert("Time is up! Black loses.");
+
                         return 0;
                     }
                     return prevTime - 1;
@@ -128,19 +126,38 @@ const GamePage = () => {
     };
 
     const handlePieceDrop = (fromSquare, toSquare) => {
-        console.log("Dropping piece...");
-        // TODO: check if the move is available
-        console.log(fromSquare, toSquare);
-        console.log(possibleMoves);
+        // TODO: too many DRY
+        if (gameOver) {
+            alert("Game over! No more moves allowed.");
+            return;
+        }
+
+        if (
+            (TurnToPlay === "User" && whiteTime <= 0) ||
+            (TurnToPlay === "Computer" && blackTime <= 0)
+        ) {
+            setGameOver(true);
+            setTurnToPlay("None");
+            dispatch(setCanNotDrag());
+            alert(`Time is up! ${TurnToPlay} loses.`);
+            return;
+        }
+
+        setTurnToPlay("Computer");
+        dispatch(setCanNotDrag());
+        clearInterval(timerRef.current);
+        setWhiteTime((prevTime) => prevTime + increment);
+        startTimer("black");
+
         const moveData = {
             fen: fen,
             from: fromSquare,
             to: toSquare,
-            selectedVariations: selectedVariations, // Send multiple variations
+            selectedVariations: selectedVariations,
         };
 
         ws.send(JSON.stringify(moveData));
-        console.log("Sending move to server via WebSocket...");
+        console.log("Sending move to server via WebSocket..." + moveData);
     };
 
     const formatTime = (seconds) => {
@@ -264,6 +281,7 @@ const GamePage = () => {
                         <div className="chess-board">
                             <ChessBoard
                                 fen={fen}
+                                possibleMoves={possibleMoves}
                                 onPieceDrop={handlePieceDrop}
                             />
                         </div>

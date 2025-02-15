@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "FB5t7ZM4CPePM6ZQIgoy4FtTzZb4JC8DMa5KSRqGwRWm60tNBDEX+jVNzh27WMK97EFGibKGsFpjYKo0AWo06Q==",
+  "success": true,
+  "projectFilePath": "D:\\LNU\\8 семестр\\Дипломна\\chess-engine\\ChessEngineBackend\\ChessEngine.API\\ChessEngine.API.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\OKmeray\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "C:\\Users\\OKmeray\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\OKmeray\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.19.5\\microsoft.visualstudio.azure.containers.tools.targets.1.19.5.nupkg.sha512",
+    "C:\\Users\\OKmeray\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
+    "C:\\Users\\OKmeray\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.4.0\\swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512",
+    "C:\\Users\\OKmeray\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.4.0\\swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",
+    "C:\\Users\\OKmeray\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.4.0\\swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512"
+  ],
+  "logs": []
+}
