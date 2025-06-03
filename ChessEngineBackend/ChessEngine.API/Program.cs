@@ -6,6 +6,18 @@ using Microsoft.Extensions.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseUrls("http://localhost:5000");
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policyBuilder =>
+    {
+        policyBuilder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
+
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddScoped<IGameService, GameService>();
@@ -53,6 +65,7 @@ app.Use(async (context, next) =>
 
 });
 
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 

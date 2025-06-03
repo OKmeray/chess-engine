@@ -1,7 +1,7 @@
 body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
-    background: url("../Assets/Images/background.webp") no-repeat center center
+    background: url("../assets/images/background.webp") no-repeat center center
         fixed;
     background-size: cover;
 }
@@ -43,6 +43,14 @@ body {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     gap: 20px;
+}
+
+.clocks-container {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .clock {

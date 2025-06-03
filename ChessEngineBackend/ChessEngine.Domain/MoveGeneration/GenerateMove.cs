@@ -174,23 +174,17 @@ namespace ChessEngine.MoveGeneration
         /// <summary>
         /// Generates all possible king moves for a given square.
         /// </summary>
-        public static List<ulong> GenerateKingMove(ulong square, Bitboard ownBitboard, Bitboard enemyBitboard, bool isWhite = true)
+        public static List<ulong> GenerateKingMove(ulong square, Bitboard ownBitboard, Bitboard enemyBitboard, bool isWhite = true, int steps = 1)
         {
             List<ulong> moves = new List<ulong>();
 
-            ulong[] kingOffsets = {
-                square >> 9, square >> 8, square >> 7,
-                square >> 1, square << 1,
-                square << 7, square << 8, square << 9
-            };
-
-            foreach (var move in kingOffsets)
-            {
-                if ((move & ownBitboard.BitboardValue) == 0)
-                {
-                    moves.Add(move);
-                }
-            }
+            //ulong[] kingOffsets = {
+            //    square >> 9, square >> 8, square >> 7,
+            //    square >> 1, square << 1,
+            //    square << 7, square << 8, square << 9
+            //};
+            moves.AddRange(GenerateRookMove(square, ownBitboard, enemyBitboard, steps));
+            moves.AddRange(GenerateBishopMove(square, ownBitboard, enemyBitboard, steps));
 
             moves.AddRange(GenerateCastleMoves(square, ownBitboard, enemyBitboard, isWhite));
 

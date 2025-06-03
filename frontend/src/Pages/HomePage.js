@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./HomePage.css";
-import Header from "../Components/Header";
-import Footer from "../Components/Footer";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const HomePage = () => {
     const navigate = useNavigate();
@@ -16,42 +16,49 @@ const HomePage = () => {
             <Header />
             <div className="content-container">
                 <div className="hero">
-                    <h1>Welcome Back to Our Chess Engine</h1>
+                    <h1>Кинь виклик шаховому рушію!</h1>
                     <p>
-                        Challenge yourself, play against friends, or test your
-                        skills against our advanced AI.
+                        Киньте собі виклик та перевірте свої вміння проти
+                        шахового рушія на основі дерева пошуку Монте-Карло та
+                        згорткової нейромережі.
                     </p>
                 </div>
                 <div className="time-controls">
-                    <h2>Select Time Control</h2>
+                    <h2>Виберіть контроль часу</h2>
                     <div className="time-buttons">
                         <button
                             className="time-button"
                             onClick={() => handleTimeControlClick(180, 2)}
                         >
                             3+2
-                            <span className="time-type">blitz</span>
+                            <span className="time-type">
+                                блискавичний контроль
+                            </span>
                         </button>
                         <button
                             className="time-button"
                             onClick={() => handleTimeControlClick(300, 0)}
                         >
                             5+0
-                            <span className="time-type">blitz</span>
+                            <span className="time-type">
+                                блискавичний контроль
+                            </span>
                         </button>
                         <button
                             className="time-button"
                             onClick={() => handleTimeControlClick(300, 3)}
                         >
                             5+3
-                            <span className="time-type">blitz</span>
+                            <span className="time-type">
+                                блискавичний контроль
+                            </span>
                         </button>
                         <button
                             className="time-button"
                             onClick={() => handleTimeControlClick(600, 0)}
                         >
                             10+0
-                            <span className="time-type">rapid</span>
+                            <span className="time-type">швидкий контроль</span>
                         </button>
                     </div>
                 </div>
@@ -72,7 +79,7 @@ const HomePage = () => {
             </div>
           </div>
         </div> */}
-                <div className="testimonials">
+                {/* <div className="testimonials">
                     <h2>What Our Users Say</h2>
                     <div className="testimonial-list">
                         <div className="testimonial-item">
@@ -91,7 +98,7 @@ const HomePage = () => {
                             <h4>- Maria Gonzalez</h4>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
             <Footer />
         </div>

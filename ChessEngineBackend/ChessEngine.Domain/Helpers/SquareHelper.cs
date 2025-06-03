@@ -1,9 +1,25 @@
-﻿using System;
+﻿using ChessEngine.Domain.Models;
+using System;
 
 namespace ChessEngine.Helpers
 {
     public static class SquareHelper
     {
+        public static int MirrorSquare(int sq) => 63 - sq;
+
+        public static MoveDetail MirrorMove(MoveDetail m)
+        {
+            return new MoveDetail
+            {
+                Piece = m.Piece,
+                Color = m.Color,
+                Square = MirrorSquare(m.Square),
+                Move = MirrorSquare(m.Move),
+                Promotion = m.Promotion,
+                Priority = m.Priority
+            };
+        }
+
         public static string GetSquareNameByNum(int num)
         {
             if (num < 0 || num > 63)

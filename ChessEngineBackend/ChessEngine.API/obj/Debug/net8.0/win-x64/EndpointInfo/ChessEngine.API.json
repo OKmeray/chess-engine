@@ -1,0 +1,32 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "ChessEngine.API",
+    "version": "1.0"
+  },
+  "paths": {
+    "/Game": {
+      "get": {
+        "tags": [
+          "Game"
+        ],
+        "operationId": "possibleMoves",
+        "parameters": [
+          {
+            "name": "fen",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "components": { }
+}

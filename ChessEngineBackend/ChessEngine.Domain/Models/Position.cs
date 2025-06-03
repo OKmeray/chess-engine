@@ -2,6 +2,7 @@
 using ChessEngine.Helpers;
 using ChessEngine.MoveGeneration;
 using ChessEngine.Domain.Models;
+using System.Numerics;
 
 namespace ChessEngine.Domain.Models
 {
@@ -13,6 +14,181 @@ namespace ChessEngine.Domain.Models
         public int? EnPassantSquare { get; set; }
         public int HalfMoves { get; set; }
         public int CurrentTurn { get; set; }
+
+        private static class ZKeys
+        {
+            internal static readonly ulong[,] Piece = new ulong[12, 64];
+            internal static readonly ulong[] Castle = new ulong[4];
+            internal static readonly ulong[] EnPassantFile = new ulong[8];
+            internal static readonly ulong Side;
+
+            static ZKeys()
+            {
+                // Фіксоване зерно → відтворювані ключі
+                var rng = new Random(0x5EED_2025);
+
+                ulong NextU64()
+                {
+                    // Random.NextInt64()  ➜  .NET 6+; якщо у вас старіше, зберіть з власної реалізації
+                    Span<byte> buf = stackalloc byte[8];
+                    rng.NextBytes(buf);
+                    return BitConverter.ToUInt64(buf);
+                }
+
+                for (int p = 0; p < 12; ++p)
+                    for (int sq = 0; sq < 64; ++sq)
+                        Piece[p, sq] = NextU64();
+
+                for (int i = 0; i < 4; ++i) Castle[i] = NextU64();
+                for (int f = 0; f < 8; ++f) EnPassantFile[f] = NextU64();
+                Side = NextU64();
+            }
+        }
+
+        // кешуємо, щоб не рахувати двічі всередині однієї позиції
+        private ulong? _cachedZobrist;
+        public ulong Zobrist
+        {
+            get
+            {
+                if (_cachedZobrist.HasValue) return _cachedZobrist.Value;
+
+                ulong h = 0UL;
+
+                // 1) фігури
+                for (int pieceIdx = 0; pieceIdx < 12; ++pieceIdx)
+                {
+                    ulong bb = Bitboards[pieceIdx].BitboardValue;
+                    while (bb != 0)
+                    {
+                        int sq = BitOperations.TrailingZeroCount(bb);
+                        h ^= ZKeys.Piece[pieceIdx, sq];
+                        bb &= bb - 1;           // скидаємо наймолодший 1-біт
+                    }
+                }
+
+                // 2) side-to-move (тільки якщо чорні)
+                if (SideToMove == PieceColor.BLACK)
+                    h ^= ZKeys.Side;
+
+                // 3) castling rights
+                if (CastlingRights[CastleEnum.WhiteShortCastle]) h ^= ZKeys.Castle[0];
+                if (CastlingRights[CastleEnum.WhiteLongCastle]) h ^= ZKeys.Castle[1];
+                if (CastlingRights[CastleEnum.BlackShortCastle]) h ^= ZKeys.Castle[2];
+                if (CastlingRights[CastleEnum.BlackLongCastle]) h ^= ZKeys.Castle[3];
+
+                // 4) en-passant — зазвичай XORять **файл** (a-h), але тільки якщо існує принаймні
+                //    один ворожий пішак, який реально може бити en-passant. Для простоти можна
+                //    лишити «як є».
+                if (EnPassantSquare is int epSq)
+                {
+                    int file = epSq % 8;
+                    h ^= ZKeys.EnPassantFile[file];
+                }
+
+                _cachedZobrist = h;
+                return h;
+            }
+        }
+
+        // КОЖЕН метод, який модифікує позицію (ApplyMove) — ПОВИНЕН обнулити кеш:
+        private void InvalidateZobrist() => _cachedZobrist = null;
+
+        //public float[][][][] ToTensor()
+        //{
+        //    var planes = new List<float[,]>();
+
+        //    // 1) piece bitboards (12 of them)
+        //    foreach (var bb in Bitboards)
+        //    {
+        //        var mat = new float[8, 8];
+        //        for (int sq = 0; sq < 64; sq++)
+        //        {
+        //            int bit = (int)((bb.BitboardValue >> sq) & 1UL);
+        //            int row = sq / 8;
+        //            int col = sq % 8;
+        //            mat[row, col] = bit;
+        //        }
+        //        planes.Add(mat);
+        //    }
+
+        //    // 2) repetition‐count planes (we don't track repetition here => zeros)
+        //    planes.Add(new float[8, 8]);
+        //    planes.Add(new float[8, 8]);
+
+        //    // 3) castling rights (4 planes)
+        //    foreach (var castle in new[]
+        //    {
+        //        CastleEnum.WhiteShortCastle,
+        //        CastleEnum.WhiteLongCastle,
+        //        CastleEnum.BlackShortCastle,
+        //        CastleEnum.BlackLongCastle
+        //    })
+        //    {
+        //        bool ok = CastlingRights.ContainsKey(castle) && CastlingRights[castle];
+        //        var mat = new float[8, 8];
+        //        if (ok)
+        //        {
+        //            for (int i = 0; i < 8; i++)
+        //                for (int j = 0; j < 8; j++)
+        //                    mat[i, j] = 1f;
+        //        }
+        //        planes.Add(mat);
+        //    }
+
+        //    // 4) fullmove count (not available from Position => zero)
+        //    planes.Add(new float[8, 8]);
+
+        //    // 5) halfmove clock as a bit‐plane
+        //    {
+        //        var mat = new float[8, 8];
+        //        // render HalfMoves into 64‐bit binary string, pad left
+        //        string bits = Convert.ToString(HalfMoves, 2).PadLeft(64, '0');
+        //        // map bit 0..63 → mat[row,col]
+        //        for (int idx = 0; idx < 64; idx++)
+        //        {
+        //            int row = idx / 8, col = idx % 8;
+        //            mat[row, col] = bits[idx] == '1' ? 1f : 0f;
+        //        }
+        //        planes.Add(mat);
+        //    }
+
+        //    // 6) side‐to‐move plane (we always mirror black, so fill zero)
+        //    planes.Add(new float[8, 8]);
+
+        //    // If Black to move, rotate each plane 180° so White is always at the bottom.
+        //    if (SideToMove == PieceColor.BLACK)
+        //    {
+        //        for (int p = 0; p < planes.Count; p++)
+        //        {
+        //            var old = planes[p];
+        //            var flipped = new float[8, 8];
+        //            for (int i = 0; i < 8; i++)
+        //                for (int j = 0; j < 8; j++)
+        //                    flipped[i, j] = old[7 - i, 7 - j];
+        //            planes[p] = flipped;
+        //        }
+        //    }
+
+        //    // Now pack into a jagged 4D array: [1][8][8][21]
+        //    int P = planes.Count;             // should be 21
+        //    var tensor = new float[1][][][];
+        //    tensor[0] = new float[8][][];
+        //    for (int i = 0; i < 8; i++)
+        //    {
+        //        tensor[0][i] = new float[8][];
+        //        for (int j = 0; j < 8; j++)
+        //        {
+        //            tensor[0][i][j] = new float[P];
+        //            for (int p = 0; p < P; p++)
+        //            {
+        //                tensor[0][i][j][p] = planes[p][i, j];
+        //            }
+        //        }
+        //    }
+
+        //    return tensor;
+        //}
 
         public Position()
         {
@@ -195,6 +371,8 @@ namespace ChessEngine.Domain.Models
         /// <param name="moveDetail">Details of the move to apply.</param>
         public void ApplyMove(MoveDetail moveDetail)
         {
+            InvalidateZobrist();
+
             EnPassantSquare = null;
 
             ulong oldSquare = SquareHelper.GetBitboardFromNum(moveDetail.Square);

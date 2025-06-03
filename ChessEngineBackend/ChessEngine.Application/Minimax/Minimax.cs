@@ -5,13 +5,31 @@ using ChessEngine.Domain.Models;
 using ChessEngine.Evaluation;
 using System.Diagnostics;
 using ChessEngine.FEN;
+using ChessEngine.Domain.Interfaces;
 
 
-namespace ChessEngine.Minimax
+namespace ChessEngine.Application.Minimax
 {
-    public static class Minimax
+    public class MinimaxMoveFinder : IMoveFinder
     {
-        public static (int, MoveDetail) RunMinimax(Position position, int alpha, int beta, int depth = 5, int branchesToCheck = 10, bool isRoot = true)
+        public (int evaluation, MoveDetail bestMove) GetBestMove(Position position, int depth)
+        {
+            int alpha, beta;
+            if (position.SideToMove == PieceColor.WHITE)
+            {
+                alpha = int.MaxValue;
+                beta = int.MinValue;
+            }
+            else
+            {
+                alpha = int.MinValue;
+                beta = int.MaxValue;
+            }
+            Console.WriteLine(depth + " " + alpha + " " + beta);
+            return RunMinimax(position, alpha: alpha, beta: beta, depth: depth, isRoot: true);
+        }
+
+        private static (int, MoveDetail) RunMinimax(Position position, int alpha, int beta, int depth = 5, bool isRoot = true)  //  int branchesToCheck = 10
         {
             if (position.IsGameOver())
             {
@@ -73,7 +91,7 @@ namespace ChessEngine.Minimax
                     Position positionCopy = position.Clone();
                     positionCopy.ApplyMove(move);
 
-                    (int eval, _) = RunMinimax(positionCopy, alpha, beta, depth - 1, branchesToCheck - 1, isRoot: false);
+                    (int eval, _) = RunMinimax(positionCopy, alpha, beta, depth - 1, isRoot: false); //branchesToCheck - 1,
                     if (eval > maxEval)
                     {
                         maxEval = eval;
@@ -112,7 +130,7 @@ namespace ChessEngine.Minimax
                     Position positionCopy = position.Clone();
                     positionCopy.ApplyMove(move);
 
-                    (int eval, _) = RunMinimax(positionCopy, alpha, beta, depth - 1, branchesToCheck - 1, isRoot: false);
+                    (int eval, _) = RunMinimax(positionCopy, alpha, beta, depth - 1, isRoot: false); //  branchesToCheck - 1,
                     if (eval < minEval)
                     {
                         minEval = eval;
@@ -130,19 +148,6 @@ namespace ChessEngine.Minimax
                 }
                 return (minEval, bestMove);
             }
-        }
-
-
-        public static string ConvertToAlgebraic(int fromSquare, int toSquare)
-        {
-            // Convert square index to rank and file
-            string fromFile = ((char)('a' + (fromSquare % 8))).ToString();
-            string fromRank = (8 - (fromSquare / 8)).ToString();
-            string toFile = ((char)('a' + (toSquare % 8))).ToString();
-            string toRank = (8 - (toSquare / 8)).ToString();
-
-            // Concatenate file and rank for the move
-            return $"{fromFile}{fromRank}{toFile}{toRank}";
         }
 
         //public static int CountMoves(Position position, int depth = 5, bool isRoot = false)

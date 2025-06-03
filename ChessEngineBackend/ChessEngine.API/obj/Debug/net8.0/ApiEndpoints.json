@@ -1,0 +1,19 @@
+[
+  {
+    "ContainingType": "ChessEngine.API.Controllers.GameController",
+    "Method": "Get",
+    "RelativePath": "Game",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fen",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [],
+    "EndpointName": "possibleMoves"
+  }
+]

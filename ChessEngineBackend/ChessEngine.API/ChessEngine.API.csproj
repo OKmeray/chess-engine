@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -6,7 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
     <UserSecretsId>97165a8a-f349-4089-9418-9be2ca07e5a7</UserSecretsId>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,4 +20,8 @@
     <ProjectReference Include="..\ChessEngine.Infrastructure\ChessEngine.Persistance.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+	  <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.15.1" />
+	  <PackageReference Include="Microsoft.ML.OnnxRuntime.DirectML" Version="1.15.1" />	 
+  </ItemGroup>
 </Project>

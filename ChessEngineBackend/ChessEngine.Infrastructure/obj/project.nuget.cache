@@ -1,8 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "Tx4jMajgeUpadaigYS6dOcqhuRQD6oUpmH2pLSrhal20d6gjgMSpuQoXkMBbG0k7HshtbzWIO1gCTcuhQ+CsCA==",
+  "dgSpecHash": "u9Htc8sFWP8=",
   "success": true,
   "projectFilePath": "D:\\LNU\\8 семестр\\Дипломна\\chess-engine\\ChessEngineBackend\\ChessEngine.Infrastructure\\ChessEngine.Persistance.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\OKmeray\\.nuget\\packages\\microsoft.ai.directml\\1.12.0\\microsoft.ai.directml.1.12.0.nupkg.sha512",
+    "C:\\Users\\OKmeray\\.nuget\\packages\\microsoft.ml.onnxruntime\\1.15.1\\microsoft.ml.onnxruntime.1.15.1.nupkg.sha512",
+    "C:\\Users\\OKmeray\\.nuget\\packages\\microsoft.ml.onnxruntime.directml\\1.15.1\\microsoft.ml.onnxruntime.directml.1.15.1.nupkg.sha512",
+    "C:\\Users\\OKmeray\\.nuget\\packages\\microsoft.ml.onnxruntime.managed\\1.15.1\\microsoft.ml.onnxruntime.managed.1.15.1.nupkg.sha512",
+    "C:\\Users\\OKmeray\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512"
+  ],
   "logs": []
 }

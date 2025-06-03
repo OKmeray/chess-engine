@@ -16,12 +16,14 @@ namespace ChessEngine.API.Controllers
             _gameService = gameService;
         }
 
-        [HttpGet(Name = "move")]
-        public string Get()
+        [HttpGet(Name = "possibleMoves")]
+        public object Get(string fen)
         {
-            // string res = _gameService.ToString();
-            return "Nc6";
-            // return 0;
+            Dictionary<int, List<int>> possibleMoves = _gameService.GetPossibleMovesByFen(fen: fen);
+            return new
+            {
+                possibleMoves = possibleMoves,
+            };
         }
     }
 }

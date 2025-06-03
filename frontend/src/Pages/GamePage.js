@@ -1,191 +1,111 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import ChessBoard from "../Components/ChessBoard";
+import ChessBoard from "../components/board/ChessBoard";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import OpeningsPanel from "../components/OpeningsPanel";
+import useChessWebSocket from "../hooks/useChessWebSocket";
+import { PositionOutcome } from "../utils/outcomeEnum";
+import { setCanNotDrag, setCanDrag } from "../store/actions";
+import Clocks from "../components/clocks/Clock";
+
 import "./GamePage.css";
-import Header from "../Components/Header";
-import Footer from "../Components/Footer";
-import Lenis from "@studio-freight/lenis";
-import { setCanNotDrag, setCanDrag } from "../Store/actions";
 
 const GamePage = () => {
-    const [fen, setFen] = useState(
-        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-    );
+    const [fen, setFen] = useState("4k2r/4ppbp/8/8/1N6/8/5PPP/4K2R w Kk - 0 9");
     const [possibleMoves, setPossibleMoves] = useState([]);
-    const [ws, setWs] = useState(null);
-    const [TurnToPlay, setTurnToPlay] = useState("");
-    const [whiteTime, setWhiteTime] = useState(15);
-    const [blackTime, setBlackTime] = useState(15);
-    const [increment, setIncrement] = useState(1);
-    const [openOpenings, setOpenOpenings] = useState([]);
-    const [selectedVariations, setSelectedVariations] = useState([]);
-    const [openingsData, setOpeningsData] = useState([]);
-    const [showOpenings, setShowOpenings] = useState(false);
+    const [turnToPlay, setTurnToPlay] = useState("");
     const [gameOver, setGameOver] = useState(false);
+    const [selectedVariations, setSelectedVariations] = useState([]);
+
+    // Timers
+    const [whiteTime, setWhiteTime] = useState(160);
+    const [blackTime, setBlackTime] = useState(170);
+    const [increment, setIncrement] = useState(2);
     const timerRef = useRef(null);
+
     const location = useLocation();
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        // Fetch openings data from the backend
-        fetch(`${process.env.REACT_APP_BACKEND_URL}games/openings`)
-            .then((response) => response.json())
-            .then((data) => setOpeningsData(data.openings))
-            .catch((error) =>
-                console.error("Error fetching openings data:", error)
-            );
-
-        // Establish WebSocket connection
-        const websocket = new WebSocket(
-            `${process.env.REACT_APP_SOCKET_URL}move`
-        );
-
-        websocket.onopen = () => {
-            console.log("WebSocket connection opened");
-        };
-
-        websocket.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            console.log("Response from the server: " + data);
-
-            setTurnToPlay("User");
+    const handleMessage = (data) => {
+        console.log(data);
+        if (data.outcome === PositionOutcome.DRAW) {
+            setGameOver(true);
+            console.log("DRAW");
+            alert("Draw");
+        } else if (data.outcome === PositionOutcome.LOSS) {
+            setGameOver(true);
+            console.log("Computer lost, you won!");
+            alert("Computer lost, you won!");
+        } else if (data.outcome === PositionOutcome.WIN) {
+            setGameOver(true);
+            console.log("Computer won, you lost");
+            alert("Computer won, you lost");
+        } else {
             dispatch(setCanDrag());
-            clearInterval(timerRef.current);
-            setBlackTime((prevTime) => prevTime + increment);
-            startTimer("white");
-            setPossibleMoves(data.possibleMoves);
+            setTurnToPlay("User");
+
+            setBlackTime((prev) => prev + increment);
+
+            setPossibleMoves(data.possibleMoves || []);
+
+            // Update the FEN from the server
             setFen(data.fen);
+        }
+    };
 
-            if (!data.isLegal) {
-                alert("Not possible");
-            }
-        };
+    // --- Use the custom WebSocket hook ---
+    const { sendMessage } = useChessWebSocket(
+        `${process.env.REACT_APP_SOCKET_URL}move`,
+        handleMessage
+    );
 
-        websocket.onerror = (event) => {
-            console.error("WebSocket error:", event);
-        };
+    // --- On mount, parse query params, fetch initial data, etc. ---
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const baseTime = parseInt(params.get("baseTime"), 10);
+        const inc = parseInt(params.get("increment"), 10);
 
-        websocket.onclose = () => {
-            console.log("WebSocket is closed now.");
-        };
+        if (Number.isInteger(baseTime)) {
+            setWhiteTime(baseTime);
+            setBlackTime(baseTime);
+        }
+        if (Number.isInteger(inc)) {
+            setIncrement(inc);
+        }
 
-        setWs(websocket);
+        fetch(`${process.env.REACT_APP_BACKEND_URL}Game?fen=${fen}`)
+            .then((res) => {
+                return res.json();
+            })
+            .then((res) => {
+                setPossibleMoves(res["possibleMoves"]);
+            });
 
         return () => {
-            websocket.close();
+            // Clean up
             clearInterval(timerRef.current);
         };
-    }, [location.search, increment]);
+    }, [location, fen]);
 
-    useEffect(() => {
-        const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        });
-
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-
-        requestAnimationFrame(raf);
-        return () => lenis.destroy();
-    }, []);
-
-    const startTimer = (side) => {
-        timerRef.current = setInterval(() => {
-            if (side === "white") {
-                setWhiteTime((prevTime) => {
-                    if (prevTime <= 0) {
-                        clearInterval(timerRef.current);
-                        setTurnToPlay("None");
-                        setGameOver(true);
-                        dispatch(setCanNotDrag());
-                        alert("Time is up! White loses.");
-
-                        return 0;
-                    }
-                    return prevTime - 1;
-                });
-            } else {
-                setBlackTime((prevTime) => {
-                    if (prevTime <= 0) {
-                        clearInterval(timerRef.current);
-                        setTurnToPlay("None");
-                        setGameOver(true);
-                        dispatch(setCanNotDrag());
-                        alert("Time is up! Black loses.");
-
-                        return 0;
-                    }
-                    return prevTime - 1;
-                });
-            }
-        }, 1000);
-    };
-
+    // --- Called when the user drops a piece on the board ---
     const handlePieceDrop = (fromSquare, toSquare) => {
-        // TODO: too many DRY
-        if (gameOver) {
-            alert("Game over! No more moves allowed.");
-            return;
-        }
-
-        if (
-            (TurnToPlay === "User" && whiteTime <= 0) ||
-            (TurnToPlay === "Computer" && blackTime <= 0)
-        ) {
-            setGameOver(true);
-            setTurnToPlay("None");
-            dispatch(setCanNotDrag());
-            alert(`Time is up! ${TurnToPlay} loses.`);
-            return;
-        }
-
-        setTurnToPlay("Computer");
         dispatch(setCanNotDrag());
-        clearInterval(timerRef.current);
-        setWhiteTime((prevTime) => prevTime + increment);
-        startTimer("black");
+        setTurnToPlay("Computer");
 
+        setWhiteTime((prev) => prev + increment);
+
+        // Send the move to the server
         const moveData = {
-            fen: fen,
+            fen,
             from: fromSquare,
             to: toSquare,
-            selectedVariations: selectedVariations,
+            selectedVariations: selectedVariations, // TODO:
+            time: blackTime,
         };
-
-        ws.send(JSON.stringify(moveData));
-        console.log("Sending move to server via WebSocket..." + moveData);
-    };
-
-    const formatTime = (seconds) => {
-        const minutes = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
-    };
-
-    const toggleOpening = (openingName) => {
-        setOpenOpenings((prev) =>
-            prev.includes(openingName)
-                ? prev.filter((name) => name !== openingName)
-                : [...prev, openingName]
-        );
-    };
-
-    const toggleVariation = (variationName) => {
-        setSelectedVariations((prev) =>
-            prev.includes(variationName)
-                ? prev.filter((name) => name !== variationName)
-                : [...prev, variationName]
-        );
-    };
-
-    const isOpeningActive = (opening) => {
-        return opening.variations.some((variation) =>
-            selectedVariations.includes(variation.name)
-        );
+        sendMessage(moveData);
+        console.log("Sending move to server:", moveData);
     };
 
     return (
@@ -193,91 +113,30 @@ const GamePage = () => {
             <Header />
             <section className="game-section">
                 <div className="game-page-content">
-                    <div className="clocks-wrapper">
-                        <div className="openings-toggle-wrapper">
-                            <button
-                                onClick={() => setShowOpenings(!showOpenings)}
-                                className={showOpenings ? "active-opening" : ""}
-                            >
-                                Select Openings
-                            </button>
-                            <button
-                                onClick={() => setShowOpenings(false)}
-                                className={
-                                    !showOpenings ? "active-opening" : ""
-                                }
-                            >
-                                All Openings
-                            </button>
-                        </div>
-                        {showOpenings && (
-                            <div className="openings-wrapper">
-                                <h3>Openings</h3>
-                                {openingsData.length > 0 ? (
-                                    openingsData.map((opening, index) => (
-                                        <div key={index}>
-                                            <button
-                                                onClick={() =>
-                                                    toggleOpening(opening.name)
-                                                }
-                                                className={
-                                                    isOpeningActive(opening)
-                                                        ? "active-opening"
-                                                        : ""
-                                                }
-                                            >
-                                                {opening.name}
-                                            </button>
-                                            {openOpenings.includes(
-                                                opening.name
-                                            ) && (
-                                                <div className="variations-wrapper">
-                                                    {opening.variations.map(
-                                                        (variation, vIndex) => (
-                                                            <button
-                                                                key={vIndex}
-                                                                className={
-                                                                    selectedVariations.includes(
-                                                                        variation.name
-                                                                    )
-                                                                        ? "active-variation"
-                                                                        : ""
-                                                                }
-                                                                onClick={() =>
-                                                                    toggleVariation(
-                                                                        variation.name
-                                                                    )
-                                                                }
-                                                            >
-                                                                {variation.name}
-                                                            </button>
-                                                        )
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p>Loading openings...</p>
-                                )}
-                            </div>
-                        )}
+                    <div className="game-details-wrapper">
+                        {/* <OpeningsPanel
+                            setSelectedVariations={setSelectedVariations}
+                            selectedVariations={selectedVariations}
+                        /> */}
                     </div>
+
                     <div className="chess-board-wrapper">
                         <div className="player-headings-wrapper">
-                            <p className="player-heading">Chess Engine</p>
+                            <p className="player-heading">Шаховий рушій</p>
                             <p
                                 className="player-subheading"
                                 style={{
                                     opacity:
-                                        TurnToPlay === "Computer"
+                                        turnToPlay === "Computer"
                                             ? "100%"
                                             : "0%",
                                 }}
                             >
-                                Computer is thinking ...
+                                Рушій думає ...
                             </p>
                         </div>
+
+                        {/* The board & pieces */}
                         <div className="chess-board">
                             <ChessBoard
                                 fen={fen}
@@ -285,37 +144,37 @@ const GamePage = () => {
                                 onPieceDrop={handlePieceDrop}
                             />
                         </div>
+
                         <div className="player-headings-wrapper">
-                            <p className="player-heading">OKmeray</p>
+                            <p className="player-heading">Гість</p>
                             <p
                                 className="player-subheading"
                                 style={{
                                     opacity:
-                                        TurnToPlay === "User" ? "100%" : "0%",
+                                        turnToPlay === "User" ? "100%" : "0%",
                                 }}
                             >
-                                Your move
+                                Ваш хід
                             </p>
                         </div>
                     </div>
-                    <div className="game-details-wrapper">
-                        <div
-                            className={`clock ${
-                                TurnToPlay === "Computer" ? "active" : ""
-                            }`}
-                        >
-                            <h2>Black</h2>
-                            <p>{formatTime(blackTime)}</p>
-                        </div>
-                        <div
-                            className={`clock ${
-                                TurnToPlay === "User" ? "active" : ""
-                            }`}
-                        >
-                            <h2>White</h2>
-                            <p>{formatTime(whiteTime)}</p>
-                        </div>
-                    </div>
+
+                    <Clocks
+                        whiteTime={whiteTime}
+                        blackTime={blackTime}
+                        turnToPlay={turnToPlay}
+                        gameOver={gameOver}
+                        setWhiteTime={setWhiteTime}
+                        setBlackTime={setBlackTime}
+                        onTimeUpWhite={() => {
+                            setGameOver(true);
+                            alert("Час білих вичерпано!");
+                        }}
+                        onTimeUpBlack={() => {
+                            setGameOver(true);
+                            alert("Час чорних вичерпано!");
+                        }}
+                    />
                 </div>
             </section>
             <Footer />

@@ -112,7 +112,7 @@
 
 import math
 import random
-from logic.engine.Position import Position
+from core.domain.engine.Position import Position
 
 class MCTSNode:
     def __init__(self, position: Position, move=None, parent=None):

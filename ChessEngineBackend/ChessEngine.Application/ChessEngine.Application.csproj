@@ -10,4 +10,13 @@
     <ProjectReference Include="..\ChessEngine.Domain\ChessEngine.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ZobristHashing\" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="Microsoft.ML.OnnxRuntime"          Version="1.15.1" />
+	  <PackageReference Include="Microsoft.ML.OnnxRuntime.DirectML" Version="1.15.1" />
+  </ItemGroup>
+
 </Project>

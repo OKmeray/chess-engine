@@ -1,3 +1,3 @@
-const squareSize = 80;
+const squareSize = 60;
 
 export default squareSize;

@@ -1,12 +1,12 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Signup from "./Pages/SignupPage";
-import Login from "./Pages/LoginPage";
-import GuestPage from "./Pages/GuestPage";
-import HomePage from "./Pages/HomePage";
-import GamePage from "./Pages/GamePage";
-import ProfilePage from "./Pages/ProfilePage";
-import ProtectedRoute from "./Components/ProtectedRoute";
+import Signup from "./pages/SignupPage";
+import Login from "./pages/LoginPage";
+import GuestPage from "./pages/GuestPage";
+import HomePage from "./pages/HomePage";
+import GamePage from "./pages/GamePage";
+import ProfilePage from "./pages/ProfilePage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
     return (
@@ -17,11 +17,12 @@ const App = () => {
                 <Route path="/login" element={<Login />} />
                 <Route
                     path="/home"
-                    element={
-                        <ProtectedRoute>
-                            <HomePage />
-                        </ProtectedRoute>
-                    }
+                    element={<HomePage />}
+                    // element={
+                    //     <ProtectedRoute>
+                    //         <HomePage />
+                    //     </ProtectedRoute>
+                    // }
                 />
                 {/* <Route path="/game" element={<ProtectedRoute><GamePage /></ProtectedRoute>} /> */}
                 <Route path="/game" element={<GamePage />} />

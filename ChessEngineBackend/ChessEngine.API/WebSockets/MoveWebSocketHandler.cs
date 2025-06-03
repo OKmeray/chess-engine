@@ -39,7 +39,7 @@ namespace ChessEngine.API.WebSockets
                         int fromSquare = int.Parse(moveData.from);
                         int toSquare = int.Parse(moveData.to);
 
-                        var responseObject = _gameService.GetMove(moveData.fen, fromSquare, toSquare, moveData.selectedVariations);
+                        var responseObject = _gameService.GetMove(moveData.fen, fromSquare, toSquare, moveData.selectedVariations, moveData.time);
                         string jsonResponse = JsonSerializer.Serialize(responseObject);
                         Console.WriteLine($"Sent: {jsonResponse}");
                         
@@ -74,5 +74,6 @@ namespace ChessEngine.API.WebSockets
         public string from { get; set; } = string.Empty; 
         public string to { get; set; } = string.Empty;
         public List<string> selectedVariations { get; set; } = new();
+        public int time { get; set; } = 0;
     }
 }

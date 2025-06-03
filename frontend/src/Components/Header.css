@@ -34,7 +34,7 @@
 
 .nav-link {
     color: white;
-    text-decoration: none;
+    text-decoration: underline;
     font-size: 20px;
     transition: color 0.3s ease;
 }
@@ -45,7 +45,7 @@
 
 .nav-link:hover,
 .navbar-brand:hover {
-    color: #777;
+    color: #f9973a;
 }
 
 .navbar {
