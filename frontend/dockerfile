@@ -1,10 +1,37 @@
+# FROM node:18-alpine
+
+# WORKDIR /react-app/
+
+# COPY public/ /react-app/public
+# COPY src/ /react-app/src
+# COPY package.json /react-app/
+# RUN npm install
+
+# CMD ["npm", "start"]
+# Stage 1: Build the React app
+
+# frontend/Dockerfile
+FROM node:18-alpine AS builder
+WORKDIR /app
+
+# pull in your .env vars at build time so CRA bakes them into the bundle
+# (must begin with REACT_APP_)
+ARG REACT_APP_BACKEND_URL
+ARG REACT_APP_SOCKET_URL
+ENV REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL
+ENV REACT_APP_SOCKET_URL=$REACT_APP_SOCKET_URL
+
+COPY package.json package-lock.json ./
+RUN npm ci --silent
+COPY . .
+RUN npm run build
+
+# final stage: a tiny static server
 FROM node:18-alpine
+RUN npm install -g serve
+WORKDIR /app
+COPY --from=builder /app/build /app/build
 
-WORKDIR /react-app/
-
-COPY public/ /react-app/public
-COPY src/ /react-app/src
-COPY package.json /react-app/
-RUN npm install
-
-CMD ["npm", "start"]
+# serve on port 3000
+EXPOSE 3000
+CMD ["serve", "-s", "build", "-l", "3000"]

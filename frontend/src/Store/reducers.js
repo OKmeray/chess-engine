@@ -1,19 +1,22 @@
-import { SET_CAN_DRAG } from './types';
-
 const initialState = {
-  isUserTurn: true
+    isUserTurn: true,
 };
 
 const appReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case SET_CAN_DRAG:
-      return {
-        ...state,
-        isUserTurn: action.payload
-      };
-    default:
-      return state;
-  }
+    switch (action.type) {
+        case "CAN_DRAG":
+            return {
+                ...state,
+                isUserTurn: true,
+            };
+        case "CANNOT_DRAG":
+            return {
+                ...state,
+                isUserTurn: false,
+            };
+        default:
+            return state;
+    }
 };
 
 export default appReducer;

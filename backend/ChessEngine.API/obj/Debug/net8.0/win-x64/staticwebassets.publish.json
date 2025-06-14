@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "22P/EzJhH+RaFKyvsginBn750fhwQcXXJwz5I4qWVfc=",
+  "Source": "ChessEngine.API",
+  "BasePath": "_content/ChessEngine.API",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

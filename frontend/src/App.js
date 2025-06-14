@@ -1,27 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Signup from './Pages/SignupPage';
-import Login from './Pages/LoginPage';
-import GuestPage from './Pages/GuestPage';
-import HomePage from './Pages/HomePage';
-import GamePage from './Pages/GamePage';
-import ProfilePage from './Pages/ProfilePage';
-import ProtectedRoute from './Assets/ProtectedRoute'; // Import your custom ProtectedRoute component
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import GamePage from "./pages/GamePage";
+import ModelsPage from "./pages/ModelsPage";
+
+import Modal from "react-modal";
+
+Modal.setAppElement("#root");
 
 const App = () => {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<GuestPage />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/home" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
-        <Route path="/game" element={<ProtectedRoute><GamePage /></ProtectedRoute>} />
-        <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-      </Routes>
-    </Router>
-  );
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/game" element={<GamePage />} />
+                <Route path="/models" element={<ModelsPage />} />
+            </Routes>
+        </Router>
+    );
 };
 
 export default App;

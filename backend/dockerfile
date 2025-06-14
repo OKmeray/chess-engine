@@ -1,19 +1,49 @@
-FROM python:3.10
+## Build stage
+#FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+#WORKDIR /src
+#COPY . .
+#RUN dotnet restore "ChessEngine.API/ChessEngine.API.csproj"
+#RUN dotnet build "ChessEngine.API/ChessEngine.API.csproj" -c Release -o /app/build
+#
+## Publish stage
+#FROM build AS publish
+#RUN dotnet publish "ChessEngine.API/ChessEngine.API.csproj" -c Release -o /app/publish
+#
+## Runtime stage
+#FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+#WORKDIR /app
+#COPY --from=publish /app/publish .
+#
+## Install dependencies for ONNX Runtime
+#RUN apt-get update && \
+    #apt-get install -y --no-install-recommends libgomp1 && \
+    #rm -rf /var/lib/apt/lists/*
+#
+#ENTRYPOINT ["dotnet", "ChessEngine.API.dll"]
 
-RUN mkdir /code
+# backend/Dockerfile
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY . .  
+RUN dotnet restore "ChessEngine.API/ChessEngine.API.csproj"
+RUN dotnet build "ChessEngine.API/ChessEngine.API.csproj" -c Release -o /app/build
 
-WORKDIR /code
+FROM build AS publish
+RUN dotnet publish "ChessEngine.API/ChessEngine.API.csproj" -c Release -o /app/publish
 
-COPY ./requirements.txt /code/requirements.txt
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+COPY ChessEngine.Application/MCTS/AIModels /app/AIModels
 
-COPY . .
+# install your ONNX deps
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends libgomp1 \
+ && rm -rf /var/lib/apt/lists/*
 
-RUN pip install alembic
+# tell Kestrel to listen on 0.0.0.0:80
+ENV ASPNETCORE_URLS=http://+:80  
+ENV ASPNETCORE_ENVIRONMENT=Production
 
-COPY ./alembic.ini /code/alembic.ini
-COPY ./core/migrations /code/core/migrations
-
-# Remove alembic upgrade command from Dockerfile
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8082"]
+ENTRYPOINT ["dotnet", "ChessEngine.API.dll"]
