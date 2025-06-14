@@ -14,7 +14,7 @@ import whiteBishop from "../../assets/images/bishop_white.svg";
 import whiteKnight from "../../assets/images/knight_white.svg";
 import whitePawn from "../../assets/images/pawn_white.svg";
 
-const Piece = ({ index, piece, square }) => {
+const Piece = ({ index, piece, square, isFlipped }) => {
     const isUserTurn = useSelector((state) => state.isUserTurn);
 
     function getImageFromFenSymbol(char) {
@@ -55,22 +55,24 @@ const Piece = ({ index, piece, square }) => {
         setTimeout(() => {
             e.target.style.display = "none";
         }, 0);
-        // e.target.style.visibility = "hidden";
     };
 
     const onDragEnd = (e) => {
         e.target.style.display = "";
-        // e.target.style.visibility = "visible";
     };
 
     const styles = {
         position: "absolute",
-        top: `${Math.floor(square / 8) * squareSize}px`,
-        left: `${(square % 8) * squareSize}px`,
+        top: `${
+            (isFlipped ? 7 - Math.floor(square / 8) : Math.floor(square / 8)) *
+            squareSize
+        }px`,
+        left: `${(isFlipped ? 7 - (square % 8) : square % 8) * squareSize}px`,
     };
 
     return (
         <img
+            className="piece"
             src={getImageFromFenSymbol(piece)}
             width={squareSize}
             height={squareSize}

@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <UserSecretsId>97165a8a-f349-4089-9418-9be2ca07e5a7</UserSecretsId>
+	<!--<RuntimeIdentifier>win-x64</RuntimeIdentifier>-->
+	<RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
+    <PackageReference Include="MongoDB.Driver" Version="3.4.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ChessEngine.Application\ChessEngine.Application.csproj" />
+    <ProjectReference Include="..\ChessEngine.Infrastructure\ChessEngine.Persistance.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.15.1" />
+	  <!--<PackageReference Include="Microsoft.ML.OnnxRuntime.DirectML" Version="1.15.1" />	-->
+	  <!--<PackageReference Include="Microsoft.ML.OnnxRuntime.Gpu" Version="1.15.1" />	-->
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="AIModels\" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<!-- this will pick up everything under AIModels\ and copy it to bin\$(Configuration)\net6.0\AIModels\… -->
+		<None Include="AIModels\**\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+</Project>

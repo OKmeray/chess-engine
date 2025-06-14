@@ -26,9 +26,9 @@
 }
 
 .footer-content {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 3fr 2fr 1fr;
+    gap: 1rem;
 }
 
 .footer-section {

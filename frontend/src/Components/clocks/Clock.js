@@ -9,6 +9,7 @@ const Clocks = ({
     setBlackTime,
     onTimeUpWhite,
     onTimeUpBlack,
+    playerColor,
 }) => {
     const intervalRef = useRef(null);
 
@@ -27,7 +28,7 @@ const Clocks = ({
                 setWhiteTime((prev) => {
                     if (prev <= 1) {
                         clearInterval(intervalRef.current);
-                        onTimeUpWhite?.(); // If you want to handle time-up
+                        onTimeUpWhite?.();
                         return 0;
                     }
                     return prev - 1;
@@ -71,7 +72,7 @@ const Clocks = ({
                     turnToPlay === "Computer" && !gameOver ? "active" : ""
                 }`}
             >
-                <h2>Час чорних</h2>
+                <h2>{playerColor === "white" ? "Час чорних" : "Час білих"}</h2>
                 <p>{formatTime(blackTime)}</p>
             </div>
             <div
@@ -79,7 +80,7 @@ const Clocks = ({
                     turnToPlay === "User" && !gameOver ? "active" : ""
                 }`}
             >
-                <h2>Час білих</h2>
+                <h2>{playerColor === "white" ? "Час білих" : "Час чорних"}</h2>
                 <p>{formatTime(whiteTime)}</p>
             </div>
         </div>

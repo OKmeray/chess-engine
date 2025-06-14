@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import Piece from "./Piece";
 import squareSize from "../variables";
 
-const Pieces = ({ pieces, onPieceDrop }) => {
+const Pieces = ({ pieces, onPieceDrop, isFlipped }) => {
     const ref = useRef();
 
     const piecesWrapperStyles = {
@@ -11,12 +11,16 @@ const Pieces = ({ pieces, onPieceDrop }) => {
         position: "absolute",
     };
 
-    // Calculate the board square based on mouse position
-    // TODO: change is the user plays black
     const calculateSquare = (clientX, clientY) => {
         const { left, top } = ref.current.getBoundingClientRect();
-        const file = Math.floor((clientX - left) / squareSize);
-        const rank = Math.floor((clientY - top) / squareSize);
+        let file = Math.floor((clientX - left) / squareSize);
+        let rank = Math.floor((clientY - top) / squareSize);
+
+        if (isFlipped) {
+            file = 7 - file;
+            rank = 7 - rank;
+        }
+
         return rank * 8 + file;
     };
 
@@ -51,6 +55,7 @@ const Pieces = ({ pieces, onPieceDrop }) => {
                     index={index}
                     piece={piece.piece}
                     square={piece.offset}
+                    isFlipped={isFlipped}
                 />
             ))}
         </div>

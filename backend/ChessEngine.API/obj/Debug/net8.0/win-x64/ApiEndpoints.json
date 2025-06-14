@@ -1,0 +1,118 @@
+[
+  {
+    "ContainingType": "ChessEngine.API.Controllers.GameController",
+    "Method": "Get",
+    "RelativePath": "Game",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fen",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [],
+    "EndpointName": "possibleMoves"
+  },
+  {
+    "ContainingType": "Controllers.EngineConfigsController",
+    "Method": "Get",
+    "RelativePath": "api/EngineConfigs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[ChessEngine.Persistance.Models.EngineConfig, ChessEngine.Persistance, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Controllers.EngineConfigsController",
+    "Method": "Post",
+    "RelativePath": "api/EngineConfigs",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "config",
+        "Type": "ChessEngine.Persistance.Models.EngineConfig",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Controllers.EngineConfigsController",
+    "Method": "Get",
+    "RelativePath": "api/EngineConfigs/{hexId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "hexId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "ChessEngine.Persistance.Models.EngineConfig",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Controllers.EngineConfigsController",
+    "Method": "Update",
+    "RelativePath": "api/EngineConfigs/{hexId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "hexId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "config",
+        "Type": "ChessEngine.Persistance.Models.EngineConfig",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Controllers.EngineConfigsController",
+    "Method": "Delete",
+    "RelativePath": "api/EngineConfigs/{hexId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "hexId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

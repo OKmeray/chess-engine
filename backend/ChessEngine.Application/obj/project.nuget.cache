@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "VTumMB9Tv6U=",
+  "success": true,
+  "projectFilePath": "D:\\LNU\\8 семестр\\Дипломна\\chess-engine\\backend\\ChessEngine.Application\\ChessEngine.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\OKmeray\\.nuget\\packages\\microsoft.ml.onnxruntime\\1.15.1\\microsoft.ml.onnxruntime.1.15.1.nupkg.sha512",
+    "C:\\Users\\OKmeray\\.nuget\\packages\\microsoft.ml.onnxruntime.managed\\1.15.1\\microsoft.ml.onnxruntime.managed.1.15.1.nupkg.sha512",
+    "C:\\Users\\OKmeray\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512"
+  ],
+  "logs": []
+}

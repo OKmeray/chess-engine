@@ -10,16 +10,26 @@ const useChessWebSocket = (url, onMessageReceived) => {
 
         ws.onopen = () => console.log("WebSocket connection opened");
         ws.onmessage = (event) => {
-            onMessageReceived(JSON.parse(event.data));
+            try {
+                const data = JSON.parse(event.data);
+                onMessageReceived(data);
+            } catch (error) {
+                console.error("Error parsing message:", error);
+            }
         };
         ws.onerror = (event) => console.error("WebSocket error:", event);
         ws.onclose = () => console.log("WebSocket closed");
 
         setSocket(ws);
 
+        // return () => {
+        //     console.log("Cleaning up: closing WebSocket");
+        //     ws.close();
+        // };
         return () => {
-            console.log("Cleaning up: closing WebSocket");
-            ws.close();
+            if (ws.readyState === WebSocket.OPEN) {
+                ws.close();
+            }
         };
     }, [url]);
 
@@ -29,7 +39,7 @@ const useChessWebSocket = (url, onMessageReceived) => {
         }
     };
 
-    return { socket, sendMessage };
+    return { sendMessage }; // socket
 };
 
 export default useChessWebSocket;
