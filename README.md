@@ -15,7 +15,7 @@
 ### Клонування репозиторію
 
 ```bash
-git clone https://github.com/your-username/chess-engine.git
+git clone https://github.com/OKmeray/chess-engine.git
 cd chess-engine
 ```
 ###  Запуск
@@ -25,7 +25,8 @@ cd chess-engine
 ```
 docker-compose up -d
 ```
-Ця команда створить і запустить усі необхідні контейнери: бекенд, фронтенд і модель нейронної мережі.
+
+---
 
 ## Перехід до вебінтерфейсу
 Після запуску відкрийте у браузері:
