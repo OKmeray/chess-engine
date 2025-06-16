@@ -1,6 +1,5 @@
 ﻿using ChessEngine.Domain.Models;
 using ChessEngine.Helpers;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public static class MoveEncoder
 {

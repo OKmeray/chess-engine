@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "0TKTSim85jY=",
+  "dgSpecHash": "2lJrOwaZFnM=",
   "success": true,
   "projectFilePath": "D:\\LNU\\8 семестр\\Дипломна\\chess-engine\\backend\\ChessEngine.API\\ChessEngine.API.csproj",
   "expectedPackageFiles": [
@@ -29,8 +29,7 @@
     "C:\\Users\\OKmeray\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\5.0.0\\system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512",
     "C:\\Users\\OKmeray\\.nuget\\packages\\system.security.accesscontrol\\5.0.0\\system.security.accesscontrol.5.0.0.nupkg.sha512",
     "C:\\Users\\OKmeray\\.nuget\\packages\\system.security.principal.windows\\5.0.0\\system.security.principal.windows.5.0.0.nupkg.sha512",
-    "C:\\Users\\OKmeray\\.nuget\\packages\\zstdsharp.port\\0.7.3\\zstdsharp.port.0.7.3.nupkg.sha512",
-    "C:\\Users\\OKmeray\\.nuget\\packages\\microsoft.netcore.app.host.linux-x64\\8.0.13\\microsoft.netcore.app.host.linux-x64.8.0.13.nupkg.sha512"
+    "C:\\Users\\OKmeray\\.nuget\\packages\\zstdsharp.port\\0.7.3\\zstdsharp.port.0.7.3.nupkg.sha512"
   ],
   "logs": []
 }

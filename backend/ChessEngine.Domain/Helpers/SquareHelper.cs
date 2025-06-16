@@ -1,5 +1,4 @@
 ﻿using ChessEngine.Domain.Models;
-using System;
 
 namespace ChessEngine.Helpers
 {

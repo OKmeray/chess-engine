@@ -1,417 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import { useState, useEffect } from "react";
+import Header from "../Components/Header.js";
+import Footer from "../Components/Footer.js";
 import "./ModelsPage.css";
 import Modal from "react-modal";
-
-// Hardcoded data for now (will be fetched from backend later)
-const modelsData = [
-    {
-        HEXID: "0803",
-        ID: 1,
-        Filters: 64,
-        ResBlocks: 6,
-        BatchSize: 128,
-        LabelSmoothing: 0,
-        LR: 0.001,
-        SEBlocks: true,
-        LossWeights: "policy: 0.5; value: 0.5",
-        DropoutRate: 0,
-        L2: 0.0005,
-        Epochs: 5,
-        SimplePositions: 1866000,
-        PuzzlePositions: 375000,
-        test_policy: 2.5954,
-        test_value: 0.3213,
-        mae: 0.4173,
-        test_top1: 0.3059,
-        test_top3: 0.5296,
-        test_top5: 0.6474,
-    },
-    {
-        HEXID: "0f39",
-        ID: 2,
-        Filters: 64,
-        ResBlocks: 6,
-        BatchSize: 128,
-        LabelSmoothing: 0.002,
-        LR: 0.001,
-        SEBlocks: true,
-        LossWeights: "policy: 0.5; value: 0.5",
-        DropoutRate: 0,
-        L2: 0.0005,
-        Epochs: 5,
-        SimplePositions: 1866000,
-        PuzzlePositions: 375000,
-        test_policy: 2.626,
-        test_value: 0.3179,
-        mae: 0.4249,
-        test_top1: 0.2989,
-        test_top3: 0.5229,
-        test_top5: 0.6407,
-    },
-    {
-        HEXID: "110f",
-        ID: 3,
-        Filters: 64,
-        ResBlocks: 6,
-        BatchSize: 128,
-        LabelSmoothing: 0.005,
-        LR: 0.001,
-        SEBlocks: true,
-        LossWeights: "policy: 0.5; value: 0.5",
-        DropoutRate: 0,
-        L2: 0.0005,
-        Epochs: 5,
-        SimplePositions: 1866000,
-        PuzzlePositions: 375000,
-        test_policy: 2.6368,
-        test_value: 0.337,
-        mae: 0.4587,
-        test_top1: 0.3129,
-        test_top3: 0.5429,
-        test_top5: 0.6619,
-    },
-    {
-        HEXID: "1a45",
-        ID: 4,
-        Filters: 64,
-        ResBlocks: 6,
-        BatchSize: 128,
-        LabelSmoothing: 0,
-        LR: 0.001,
-        SEBlocks: true,
-        LossWeights: "policy: 0.7; value: 0.3",
-        DropoutRate: 0,
-        L2: 0.0005,
-        Epochs: 5,
-        SimplePositions: 1866000,
-        PuzzlePositions: 375000,
-        test_policy: 2.5603,
-        test_value: 0.3279,
-        mae: 0.4407,
-        test_top1: 0.3101,
-        test_top3: 0.5429,
-        test_top5: 0.6629,
-    },
-    {
-        HEXID: "21fb",
-        ID: 5,
-        Filters: 64,
-        ResBlocks: 6,
-        BatchSize: 128,
-        LabelSmoothing: 0,
-        LR: 0.001,
-        SEBlocks: true,
-        LossWeights: "policy: 0.8; value: 0.2",
-        DropoutRate: 0,
-        L2: 0.0005,
-        Epochs: 5,
-        SimplePositions: 1866000,
-        PuzzlePositions: 375000,
-        test_policy: 2.5751,
-        test_value: 0.3826,
-        mae: 0.4919,
-        test_top1: 0.309,
-        test_top3: 0.5433,
-        test_top5: 0.6633,
-    },
-    {
-        HEXID: "23a6",
-        ID: 6,
-        Filters: 64,
-        ResBlocks: 6,
-        BatchSize: 128,
-        LabelSmoothing: 0,
-        LR: 0.001,
-        SEBlocks: true,
-        LossWeights: "policy: 0.6; value: 0.4",
-        DropoutRate: 0,
-        L2: 0.0005,
-        Epochs: 5,
-        SimplePositions: 1866000,
-        PuzzlePositions: 375000,
-        test_policy: 2.6528,
-        test_value: 0.3761,
-        mae: 0.4709,
-        test_top1: 0.3063,
-        test_top3: 0.5367,
-        test_top5: 0.6543,
-    },
-    {
-        HEXID: "25ab",
-        ID: 7,
-        Filters: 64,
-        ResBlocks: 6,
-        BatchSize: 128,
-        LabelSmoothing: 0.001,
-        LR: 0.001,
-        SEBlocks: true,
-        LossWeights: "policy: 0.5; value: 0.5",
-        DropoutRate: 0,
-        L2: 0.0005,
-        Epochs: 5,
-        SimplePositions: 1866000,
-        PuzzlePositions: 375000,
-        test_policy: 2.6113,
-        test_value: 0.329,
-        mae: 0.4212,
-        test_top1: 0.3004,
-        test_top3: 0.529,
-        test_top5: 0.6497,
-    },
-    {
-        HEXID: "2b52",
-        ID: 8,
-        Filters: 64,
-        ResBlocks: 6,
-        BatchSize: 128,
-        LabelSmoothing: 0,
-        LR: 0.001,
-        SEBlocks: true,
-        LossWeights: "policy: 0.7; value: 0.3",
-        DropoutRate: 0,
-        L2: 0.0005,
-        Epochs: 5,
-        SimplePositions: 2000000,
-        PuzzlePositions: 2000000,
-        test_policy: 1.5153,
-        test_value: 0.2252,
-        mae: 0.2981,
-        test_top1: 0.5959,
-        test_top3: 0.7617,
-        test_top5: 0.8267,
-    },
-    {
-        HEXID: "2c52",
-        ID: 9,
-        Filters: 64,
-        ResBlocks: 6,
-        BatchSize: 128,
-        LabelSmoothing: 0,
-        LR: 0.001,
-        SEBlocks: true,
-        LossWeights: "policy: 0.7; value: 0.3",
-        DropoutRate: 0,
-        L2: 0.0005,
-        Epochs: 5,
-        SimplePositions: 1000000,
-        PuzzlePositions: 3000000,
-        test_policy: 1.2248,
-        test_value: 0.1639,
-        mae: 0.2469,
-        test_top1: 0.6888,
-        test_top3: 0.8174,
-        test_top5: 0.8618,
-    },
-    {
-        HEXID: "2c6f",
-        ID: 10,
-        Filters: 64,
-        ResBlocks: 6,
-        BatchSize: 128,
-        LabelSmoothing: 0,
-        LR: 0.001,
-        SEBlocks: true,
-        LossWeights: "policy: 0.7; value: 0.3",
-        DropoutRate: 0,
-        L2: 0.0005,
-        Epochs: 5,
-        SimplePositions: 3000000,
-        PuzzlePositions: 1000000,
-        test_policy: 2.1077,
-        test_value: 0.247,
-        mae: 0.3478,
-        test_top1: 0.4331,
-        test_top3: 0.6425,
-        test_top5: 0.7419,
-    },
-    {
-        HEXID: "30fe",
-        ID: 11,
-        Filters: 64,
-        ResBlocks: 6,
-        BatchSize: 128,
-        LabelSmoothing: 0,
-        LR: 0.001,
-        SEBlocks: true,
-        LossWeights: "policy: 0.7; value: 0.3",
-        DropoutRate: 0,
-        L2: 0.0005,
-        Epochs: 5,
-        SimplePositions: 1400000,
-        PuzzlePositions: 2600000,
-        test_policy: 1.567,
-        test_value: 0.2079,
-        mae: 0.3074,
-        test_top1: 0.589,
-        test_top3: 0.75,
-        test_top5: 0.8147,
-    },
-    {
-        HEXID: "3171",
-        ID: 12,
-        Filters: 64,
-        ResBlocks: 6,
-        BatchSize: 128,
-        LabelSmoothing: 0,
-        LR: 0.001,
-        SEBlocks: true,
-        LossWeights: "policy: 0.7; value: 0.3",
-        DropoutRate: 0,
-        L2: 0.0005,
-        Epochs: 5,
-        SimplePositions: 2600000,
-        PuzzlePositions: 1400000,
-        test_policy: 1.8207,
-        test_value: 0.2161,
-        mae: 0.3112,
-        test_top1: 0.5258,
-        test_top3: 0.6943,
-        test_top5: 0.7721,
-    },
-    {
-        HEXID: "4380",
-        ID: 14,
-        Filters: 64,
-        ResBlocks: 6,
-        BatchSize: 128,
-        LabelSmoothing: 0,
-        LR: 0.001,
-        SEBlocks: false,
-        LossWeights: "policy: 0.7; value: 0.3",
-        DropoutRate: 0,
-        L2: 0.0005,
-        Epochs: 5,
-        SimplePositions: 1400000,
-        PuzzlePositions: 2600000,
-        test_policy: 1.4548,
-        test_value: 0.1668,
-        mae: 0.2697,
-        test_top1: 0.6057,
-        test_top3: 0.7668,
-        test_top5: 0.8369,
-    },
-    {
-        HEXID: "4389",
-        ID: 15,
-        Filters: 64,
-        ResBlocks: 6,
-        BatchSize: 128,
-        LabelSmoothing: 0,
-        LR: 0.001,
-        SEBlocks: false,
-        LossWeights: "policy: 0.7; value: 0.3",
-        DropoutRate: 0,
-        L2: 0.0005,
-        Epochs: 5,
-        SimplePositions: 2000000,
-        PuzzlePositions: 2000000,
-        test_policy: 1.6846,
-        test_value: 0.2136,
-        mae: 0.291,
-        test_top1: 0.5443,
-        test_top3: 0.7206,
-        test_top5: 0.8014,
-    },
-    {
-        HEXID: "4d51",
-        ID: 16,
-        Filters: 64,
-        ResBlocks: 6,
-        BatchSize: 128,
-        LabelSmoothing: 0,
-        LR: 0.001,
-        SEBlocks: false,
-        LossWeights: "policy: 0.7; value: 0.3",
-        DropoutRate: 0,
-        L2: 0.0005,
-        Epochs: 5,
-        SimplePositions: 2600000,
-        PuzzlePositions: 1400000,
-        test_policy: 1.7399,
-        test_value: 0.19,
-        mae: 0.2779,
-        test_top1: 0.5216,
-        test_top3: 0.7106,
-        test_top5: 0.7983,
-    },
-    {
-        HEXID: "5d7a",
-        ID: 17,
-        Filters: 64,
-        ResBlocks: 4,
-        BatchSize: 128,
-        LabelSmoothing: 0,
-        LR: 0.001,
-        SEBlocks: true,
-        LossWeights: "policy: 0.7; value: 0.3",
-        DropoutRate: 0,
-        L2: 0.0005,
-        Epochs: 5,
-        SimplePositions: 2000000,
-        PuzzlePositions: 2000000,
-        test_policy: 1.5923,
-        test_value: 0.2299,
-        mae: 0.269,
-        test_top1: 0.58,
-        test_top3: 0.7376,
-        test_top5: 0.8069,
-    },
-    {
-        HEXID: "5da8",
-        ID: 18,
-        Filters: 32,
-        ResBlocks: 4,
-        BatchSize: 128,
-        LabelSmoothing: 0,
-        LR: 0.001,
-        SEBlocks: true,
-        LossWeights: "policy: 0.7; value: 0.3",
-        DropoutRate: 0,
-        L2: 0.0005,
-        Epochs: 5,
-        SimplePositions: 2000000,
-        PuzzlePositions: 2000000,
-        test_policy: 1.6877,
-        test_value: 0.2344,
-        mae: 0.3234,
-        test_top1: 0.5535,
-        test_top3: 0.725,
-        test_top5: 0.7964,
-    },
-    {
-        HEXID: "78fc",
-        ID: 19,
-        Filters: 32,
-        ResBlocks: 2,
-        BatchSize: 128,
-        LabelSmoothing: 0,
-        LR: 0.001,
-        SEBlocks: true,
-        LossWeights: "policy: 0.7; value: 0.3",
-        DropoutRate: 0,
-        L2: 0.0005,
-        Epochs: 5,
-        SimplePositions: 2000000,
-        PuzzlePositions: 2000000,
-        test_policy: 1.7923,
-        test_value: 0.248,
-        mae: 0.3757,
-        test_top1: 0.5267,
-        test_top3: 0.7055,
-        test_top5: 0.7791,
-    },
-];
 
 const ModelsPage = () => {
     const [selectedModel, setSelectedModel] = useState(null);
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [filteredModels, setFilteredModels] = useState(modelsData);
+    const [allModels, setAllModels] = useState([]);
+    const [filteredModels, setFilteredModels] = useState([]);
     const [sortConfig, setSortConfig] = useState({
         key: null,
-        direction: "asc",
+        direction: "за зростанням",
     });
     const [filters, setFilters] = useState({
         minTop1: 0,
@@ -419,16 +19,39 @@ const ModelsPage = () => {
         hasSEBlocks: false,
     });
 
+    useEffect(() => {
+        const fetchModels = async () => {
+            try {
+                const response = await fetch(
+                    `${process.env.REACT_APP_BACKEND_URL}api/EngineConfigs`
+                );
+                if (!response.ok) throw new Error("Failed to fetch");
+                const data = await response.json();
+                setAllModels(data);
+                setFilteredModels(data);
+            } catch (error) {
+                console.error("Error fetching models:", error);
+                // Optionally set some error state here
+            }
+            // finally {
+            //     setIsLoading(false);
+            // }
+        };
+
+        fetchModels();
+    }, []);
+
     // whenever filters or sortConfig changes
     useEffect(() => {
-        let result = [...modelsData];
+        if (allModels.length === 0) return;
+        let result = [...allModels];
 
         // Apply filters
         result = result.filter((model) => {
             return (
                 model.test_top1 * 100 >= filters.minTop1 &&
                 model.mae <= filters.maxMAE &&
-                (!filters.hasSEBlocks || model.SEBlocks)
+                (!filters.hasSEBlocks || model.seBlocks)
             );
         });
 
@@ -436,17 +59,17 @@ const ModelsPage = () => {
         if (sortConfig.key) {
             result.sort((a, b) => {
                 if (a[sortConfig.key] < b[sortConfig.key]) {
-                    return sortConfig.direction === "asc" ? -1 : 1;
+                    return sortConfig.direction === "за зростанням" ? -1 : 1;
                 }
                 if (a[sortConfig.key] > b[sortConfig.key]) {
-                    return sortConfig.direction === "asc" ? 1 : -1;
+                    return sortConfig.direction === "за зростанням" ? 1 : -1;
                 }
                 return 0;
             });
         }
 
         setFilteredModels(result);
-    }, [filters, sortConfig]);
+    }, [filters, sortConfig, allModels]);
 
     useEffect(() => {
         if (modalIsOpen) {
@@ -477,11 +100,23 @@ const ModelsPage = () => {
     };
 
     const handleSort = (key) => {
-        let direction = "asc";
-        if (sortConfig.key === key && sortConfig.direction === "asc") {
-            direction = "desc";
+        const backendKeyMap = {
+            test_top1: "test_top1",
+            mae: "mae",
+            ID: "configId",
+        };
+
+        const backendKey = backendKeyMap[key] || key;
+
+        let direction = "за зростанням";
+        if (
+            sortConfig.key === key &&
+            sortConfig.direction === "за зростанням"
+        ) {
+            direction = "за спаданням";
         }
-        setSortConfig({ key, direction });
+
+        setSortConfig({ key: backendKey, direction });
     };
 
     const handleFilterChange = (e) => {
@@ -498,7 +133,7 @@ const ModelsPage = () => {
             maxMAE: 1.0,
             hasSEBlocks: false,
         });
-        setSortConfig({ key: null, direction: "asc" });
+        setSortConfig({ key: null, direction: "за зростанням" });
     };
 
     return (
@@ -565,11 +200,6 @@ const ModelsPage = () => {
                             {sortConfig.key === "mae" &&
                                 `(${sortConfig.direction})`}
                         </button>
-                        <button onClick={() => handleSort("ID")}>
-                            ID{" "}
-                            {sortConfig.key === "ID" &&
-                                `(${sortConfig.direction})`}
-                        </button>
                         <button onClick={resetFilters}>Скинути фільтри</button>
                     </div>
                 </div>
@@ -578,14 +208,14 @@ const ModelsPage = () => {
                     {filteredModels.length > 0 ? (
                         filteredModels.map((model) => (
                             <div
-                                key={model.HEXID}
+                                key={model.hexid}
                                 className="model-card"
                                 onClick={() => openModal(model)}
                             >
                                 <div className="model-card-header">
-                                    <h3>Модель #{model.ID}</h3>
+                                    <h3>Модель #{model.configId}</h3>
                                     <span className="model-hexid">
-                                        {model.HEXID}
+                                        {model.hexid}
                                     </span>
                                 </div>
                                 <div className="model-card-body">
@@ -624,11 +254,11 @@ const ModelsPage = () => {
                                 </div>
                                 <div className="model-card-footer">
                                     <span className="model-config">
-                                        Фільтри: {model.Filters} | Залишкові
-                                        блоки: {model.ResBlocks}
+                                        Фільтри: {model.filters} | Залишкові
+                                        блоки: {model.resBlocks}
                                     </span>
                                     <a
-                                        href={`/game?model=${model.HEXID}`}
+                                        href={`/game?model=${model.hexid}`}
                                         className="play-button"
                                         onClick={(e) => {
                                             e.stopPropagation();
@@ -684,7 +314,7 @@ const ModelsPage = () => {
                 {selectedModel && (
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h2>Модель #{selectedModel.ID}</h2>
+                            <h2>Модель #{selectedModel.configId}</h2>
                             <button
                                 onClick={closeModal}
                                 className="close-button"
@@ -729,9 +359,9 @@ const ModelsPage = () => {
                                                         системі.
                                                     </span>
                                                 </div>
-                                                <strong>ID:</strong>
+                                                <strong>Ідентифікатор:</strong>
                                             </div>
-                                            {selectedModel.HEXID}
+                                            {selectedModel.hexid}
                                         </li>
                                         <li>
                                             <div className="parameter-name-wrapper">
@@ -765,7 +395,7 @@ const ModelsPage = () => {
                                                 </div>
                                                 <strong>Фільтри:</strong>
                                             </div>
-                                            {selectedModel.Filters}
+                                            {selectedModel.filters}
                                         </li>
                                         <li>
                                             <div className="parameter-name-wrapper">
@@ -801,7 +431,7 @@ const ModelsPage = () => {
                                                     Залишкові блоки:
                                                 </strong>
                                             </div>
-                                            {selectedModel.ResBlocks}
+                                            {selectedModel.resBlocks}
                                         </li>
                                         <li>
                                             <div className="parameter-name-wrapper">
@@ -835,7 +465,7 @@ const ModelsPage = () => {
                                                 </div>
                                                 <strong>Розмір пакетів:</strong>
                                             </div>
-                                            {selectedModel.BatchSize}
+                                            {selectedModel.batchSize}
                                         </li>
                                         <li>
                                             <div className="parameter-name-wrapper">
@@ -870,7 +500,7 @@ const ModelsPage = () => {
                                                     Коефіцієнт навчання:
                                                 </strong>
                                             </div>
-                                            {selectedModel.LR}
+                                            {selectedModel.lr}
                                         </li>
                                         <li>
                                             <div className="parameter-name-wrapper">
@@ -908,7 +538,7 @@ const ModelsPage = () => {
                                                     Наявність SE-блоків:
                                                 </strong>
                                             </div>
-                                            {selectedModel.SEBlocks
+                                            {selectedModel.seBlocks
                                                 ? "Так"
                                                 : "Ні"}
                                         </li>
@@ -944,7 +574,7 @@ const ModelsPage = () => {
                                                 </div>
                                                 <strong>Рівень dropout:</strong>
                                             </div>
-                                            {selectedModel.DropoutRate}
+                                            {selectedModel.dropoutRate}
                                         </li>
                                         <li>
                                             <div className="parameter-name-wrapper">
@@ -979,7 +609,7 @@ const ModelsPage = () => {
                                                     L2 регуляризація:
                                                 </strong>
                                             </div>
-                                            {selectedModel.L2}
+                                            {selectedModel.l2}
                                         </li>
                                         <li>
                                             <div className="parameter-name-wrapper">
@@ -1013,7 +643,7 @@ const ModelsPage = () => {
                                                 </div>
                                                 <strong>Кількість епох:</strong>
                                             </div>
-                                            {selectedModel.Epochs}
+                                            {selectedModel.epochs}
                                         </li>
                                     </ul>
                                 </div>
@@ -1279,7 +909,7 @@ const ModelsPage = () => {
                                                 </strong>
                                             </div>
                                             {formatNumber(
-                                                selectedModel.SimplePositions
+                                                selectedModel.simplePositions
                                             )}
                                         </li>
                                         <li>
@@ -1317,7 +947,7 @@ const ModelsPage = () => {
                                                 </strong>
                                             </div>
                                             {formatNumber(
-                                                selectedModel.PuzzlePositions
+                                                selectedModel.puzzlePositions
                                             )}
                                         </li>
                                         <li>
@@ -1327,8 +957,8 @@ const ModelsPage = () => {
                                                 </strong>
                                             </div>
                                             {formatNumber(
-                                                selectedModel.SimplePositions +
-                                                    selectedModel.PuzzlePositions
+                                                selectedModel.simplePositions +
+                                                    selectedModel.puzzlePositions
                                             )}
                                         </li>
                                     </ul>
@@ -1337,8 +967,8 @@ const ModelsPage = () => {
                         </div>
                         <div className="modal-footer">
                             <a
-                                href={`/architecture_images/${selectedModel.HEXID}.png`}
-                                download={`architecture_${selectedModel.HEXID}.png`}
+                                href={`/architecture_images/${selectedModel.hexid}.png`}
+                                download={`architecture_${selectedModel.hexid}.png`}
                                 className="base-button hover-selected"
                             >
                                 Завантажити архітектуру

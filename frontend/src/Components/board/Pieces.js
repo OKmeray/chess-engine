@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import Piece from "./Piece";
 import squareSize from "../variables";
 
-const Pieces = ({ pieces, onPieceDrop, isFlipped }) => {
+const Pieces = ({ pieces, onPieceDrop, isFlipped, isDraggable }) => {
     const ref = useRef();
 
     const piecesWrapperStyles = {
@@ -25,6 +25,7 @@ const Pieces = ({ pieces, onPieceDrop, isFlipped }) => {
     };
 
     const handleDrop = (event) => {
+        if (!isDraggable) return;
         event.preventDefault();
         const data = event.dataTransfer.getData("text/plain");
         const [fromSquare, index] = data.split(",");
@@ -56,6 +57,7 @@ const Pieces = ({ pieces, onPieceDrop, isFlipped }) => {
                     piece={piece.piece}
                     square={piece.offset}
                     isFlipped={isFlipped}
+                    isDraggable={isDraggable}
                 />
             ))}
         </div>

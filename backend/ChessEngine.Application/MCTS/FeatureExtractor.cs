@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using ChessEngine.Domain.Models;
+﻿using ChessEngine.Domain.Models;
 using ChessEngine.Enums;
 
 namespace ChessEngine.Application.MCTS

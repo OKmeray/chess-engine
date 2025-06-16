@@ -1,7 +1,7 @@
 body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
-    background: url("../assets/images/background.webp") no-repeat center center
+    background: url("../Assets/Images/background.webp") no-repeat center center
         fixed;
     background-size: cover;
 }
@@ -188,6 +188,17 @@ button.active-opening {
     cursor: grab;
 }
 
+/* Disable pointer events when not draggable */
+.piece:not([draggable="true"]) {
+    cursor: default;
+    opacity: 0.9;
+}
+
+/* Or disable the whole board when game hasn't started */
+.game-section:not(.game-started) .chess-board {
+    pointer-events: none;
+}
+
 .promotion-dialog {
     position: absolute;
     top: 50%;
@@ -297,6 +308,12 @@ button.active-opening {
     transition: opacity 0.3s ease;
 }
 
+.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
 .game-control-buttons {
     display: flex;
     gap: 0.5rem;
@@ -388,4 +405,36 @@ button.active-opening {
 
 .start-game-button {
     margin-left: 0.5rem;
+}
+
+.clarification-icon {
+    position: relative;
+    display: inline-flex;
+    cursor: help;
+    margin-right: 0.25rem;
+    vertical-align: middle;
+}
+
+.clarification-icon .tooltip-text {
+    visibility: hidden;
+    width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1000;
+    bottom: 125%;
+    left: 100%;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 14px;
+    font-weight: normal;
+    pointer-events: none;
+}
+
+.clarification-icon:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
 }

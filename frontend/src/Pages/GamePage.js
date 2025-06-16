@@ -1,14 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import ChessBoard from "../components/board/ChessBoard";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import ChessBoard from "../Components/board/ChessBoard";
+import Header from "../Components/Header";
+import Footer from "../Components/Footer";
 import useChessWebSocket from "../hooks/useChessWebSocket";
 import { PositionOutcome } from "../utils/outcomeEnum";
-import { setCanNotDrag, setCanDrag } from "../store/actions";
-import Clocks from "../components/clocks/Clock";
-import GameResultPopup from "../components/GameResultPopup";
+import { setCanNotDrag, setCanDrag } from "../Store/actions";
+import Clocks from "../Components/clocks/Clock";
+import GameResultPopup from "../Components/GameResultPopup";
 
 import "./GamePage.css";
 
@@ -30,22 +30,27 @@ const GamePage = () => {
     const [blackTime, setBlackTime] = useState(180);
     const [increment, setIncrement] = useState(2);
     const timerRef = useRef(null);
+    const incrementRef = useRef(increment);
 
     const [timeControlType, setTimeControlType] = useState("fisher"); // 'fisher' or 'standard'
     const [baseTime, setBaseTime] = useState(180);
-    const [timeIncrement, setTimeIncrement] = useState(2);
-    const [selectedPreset, setSelectedPreset] = useState("rapid");
+    const [selectedPreset, setSelectedPreset] = useState("custom");
+    const [areTimeInputsDisabled, setAreTimeInputsDisabled] = useState(false);
 
     const timeControls = {
         bullet: { base: 60, increment: 1, name: "(1+1) Куля" },
         blitz: { base: 180, increment: 2, name: "(3+2) Блискавичний контроль" },
         rapid: { base: 600, increment: 5, name: "(10+5) Швидкий контроль" },
         classical: {
-            base: 1800,
-            increment: 10,
-            name: "Класичний контроль (30+10)",
+            base: 2100,
+            increment: 30,
+            name: "(35+30) Класичний контроль",
         },
-        custom: { base: 180, increment: 2, name: "Custom" },
+        custom: {
+            base: baseTime,
+            increment: increment,
+            name: "Індивідуальне налаштування",
+        },
     };
 
     const location = useLocation();
@@ -54,21 +59,38 @@ const GamePage = () => {
     const handleMessage = (data) => {
         console.log(data);
         if (data.outcome === PositionOutcome.DRAW) {
-            setGameOver(true);
-            setGameResult("draw");
+            if (data.fen) setFen(data.fen);
+            setFen(data.fen); // Update the board first
+            setTimeout(() => {
+                setGameOver(true);
+                setGameResult("draw");
+            }, 500);
         } else if (data.outcome === PositionOutcome.LOSS) {
-            setGameOver(true);
-            setGameResult("loss");
+            setFen(data.fen); // Update the board first
+            setTimeout(() => {
+                setGameOver(true);
+                setGameResult("loss");
+            }, 500);
         } else if (data.outcome === PositionOutcome.WIN) {
-            setGameOver(true);
-            setGameResult("win");
+            setFen(data.fen); // Update the board first
+            setTimeout(() => {
+                setGameOver(true);
+                setGameResult("win");
+            }, 500);
         } else {
             dispatch(setCanDrag());
             setTurnToPlay("User");
-            setBlackTime((prev) => prev + increment);
+            if (timeControlType === "fisher" && incrementRef.current > 0) {
+                setBlackTime((prev) => prev + incrementRef.current);
+            }
             setPossibleMoves(data.possibleMoves || []);
             setFen(data.fen);
         }
+    };
+
+    const handleTimeOut = (result) => {
+        setGameOver(true);
+        setGameResult(result === "loss" ? "timeoutWin" : "timeoutLoss"); // This will trigger the GameResultPopup
     };
 
     const resetGame = () => {
@@ -97,7 +119,20 @@ const GamePage = () => {
         if (Number.isInteger(baseTime)) {
             setWhiteTime(baseTime);
             setBlackTime(baseTime);
+            setBaseTime(baseTime);
+
+            const matchedPreset = Object.keys(timeControls).find((key) => {
+                return (
+                    key !== "custom" &&
+                    timeControls[key].base === baseTime &&
+                    timeControls[key].increment === inc
+                );
+            });
+
+            setSelectedPreset(matchedPreset || "custom");
+            setAreTimeInputsDisabled(!!matchedPreset);
         }
+
         if (Number.isInteger(inc)) {
             setIncrement(inc);
         }
@@ -105,7 +140,6 @@ const GamePage = () => {
             setSelectedModel(model);
         }
         return () => {
-            // Clean up
             clearInterval(timerRef.current);
         };
     }, []);
@@ -130,6 +164,7 @@ const GamePage = () => {
                 time: whiteTime,
                 promotion: null,
                 requestFirstMove: true,
+                model: selectedModel,
             };
             sendMessage(engineMove);
         }
@@ -137,10 +172,15 @@ const GamePage = () => {
 
     // --- Called when the user drops a piece on the board ---
     const handlePieceDrop = (fromSquare, toSquare, promotion = null) => {
+        if (!gameStarted) return; // Prevent moves if game hasn't started
+
         dispatch(setCanNotDrag());
         setTurnToPlay("Computer");
 
-        setWhiteTime((prev) => prev + increment);
+        // setWhiteTime((prev) => prev + increment);
+        if (timeControlType === "fisher" && incrementRef.current > 0) {
+            setWhiteTime((prev) => prev + incrementRef.current);
+        }
 
         const moveData = {
             fen,
@@ -154,22 +194,30 @@ const GamePage = () => {
         console.log("Sending move to server:", moveData);
     };
 
+    useEffect(() => {
+        incrementRef.current = timeControlType === "fisher" ? increment : 0;
+    }, [timeControlType, increment]);
+
     const handlePresetSelect = (presetKey) => {
         const preset = timeControls[presetKey];
         setBaseTime(preset.base);
-        setTimeIncrement(preset.increment);
+        setIncrement(preset.increment);
         setSelectedPreset(presetKey);
+        setAreTimeInputsDisabled(presetKey !== "custom");
         if (!gameStarted) {
             setWhiteTime(preset.base);
             setBlackTime(preset.base);
         }
+
+        incrementRef.current =
+            timeControlType === "fisher" ? preset.increment : 0;
     };
 
     const startGame = () => {
         setGameStarted(true);
         setWhiteTime(baseTime);
         setBlackTime(baseTime);
-        setIncrement(timeIncrement);
+        setIncrement(increment);
         setTurnToPlay(playerColor === "white" ? "User" : "Computer");
 
         if (playerColor === "black") {
@@ -196,6 +244,10 @@ const GamePage = () => {
             setIsBoardFlipped(color === "black");
         }
     };
+
+    useEffect(() => {
+        incrementRef.current = increment; // Keep ref in sync with state
+    }, [increment]);
 
     return (
         <div>
@@ -230,7 +282,13 @@ const GamePage = () => {
                                         )}
                                     </div>
 
-                                    <div className="time-control-options">
+                                    <div
+                                        className={`time-control-options ${
+                                            areTimeInputsDisabled
+                                                ? "disabled"
+                                                : ""
+                                        }`}
+                                    >
                                         <div className="time-control-type">
                                             <label>
                                                 <input
@@ -240,11 +298,12 @@ const GamePage = () => {
                                                         timeControlType ===
                                                         "standard"
                                                     }
-                                                    onChange={() =>
+                                                    onChange={() => {
                                                         setTimeControlType(
                                                             "standard"
-                                                        )
-                                                    }
+                                                        );
+                                                        incrementRef.current = 0;
+                                                    }}
                                                 />
                                                 Стандартний
                                             </label>
@@ -256,11 +315,13 @@ const GamePage = () => {
                                                         timeControlType ===
                                                         "fisher"
                                                     }
-                                                    onChange={() =>
+                                                    onChange={() => {
                                                         setTimeControlType(
                                                             "fisher"
-                                                        )
-                                                    }
+                                                        );
+                                                        incrementRef.current =
+                                                            increment;
+                                                    }}
                                                 />
                                                 Фішера (з додаванням)
                                             </label>
@@ -283,6 +344,20 @@ const GamePage = () => {
                                                         }
                                                     }}
                                                     min="30"
+                                                    onBlur={(e) => {
+                                                        // Ensure value is at least 30 when input loses focus
+                                                        if (baseTime < 30) {
+                                                            setBaseTime(30);
+                                                            if (!gameStarted) {
+                                                                setWhiteTime(
+                                                                    30
+                                                                );
+                                                                setBlackTime(
+                                                                    30
+                                                                );
+                                                            }
+                                                        }
+                                                    }}
                                                 />
                                             </div>
                                             {timeControlType === "fisher" && (
@@ -292,9 +367,9 @@ const GamePage = () => {
                                                     </label>
                                                     <input
                                                         type="number"
-                                                        value={timeIncrement}
+                                                        value={increment}
                                                         onChange={(e) =>
-                                                            setTimeIncrement(
+                                                            setIncrement(
                                                                 parseInt(
                                                                     e.target
                                                                         .value
@@ -378,7 +453,33 @@ const GamePage = () => {
                                                     : "0%",
                                         }}
                                     >
-                                        (думає ...)
+                                        (
+                                        <div className="clarification-icon">
+                                            <svg
+                                                width="14"
+                                                height="14"
+                                                viewBox="0 0 18 18"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    d="M8.22727 15V6.27273H9.56818V15H8.22727ZM8.90909 4.81818C8.64773 4.81818 8.42235 4.72917 8.23295 4.55114C8.04735 4.37311 7.95455 4.15909 7.95455 3.90909C7.95455 3.65909 8.04735 3.44508 8.23295 3.26705C8.42235 3.08902 8.64773 3 8.90909 3C9.17045 3 9.39394 3.08902 9.57955 3.26705C9.76894 3.44508 9.86364 3.65909 9.86364 3.90909C9.86364 4.15909 9.76894 4.37311 9.57955 4.55114C9.39394 4.72917 9.17045 4.81818 8.90909 4.81818Z"
+                                                    fill="black"
+                                                />
+                                                <circle
+                                                    cx="9"
+                                                    cy="9"
+                                                    r="8.5"
+                                                    stroke="black"
+                                                />
+                                            </svg>
+                                            <span className="tooltip-text">
+                                                Шаховий рушій думаю 5% від часу,
+                                                який був після останнього
+                                                зробленого ходу
+                                            </span>
+                                        </div>
+                                        думає ...)
                                     </span>
                                 </p>
                             </div>
@@ -390,6 +491,7 @@ const GamePage = () => {
                                     possibleMoves={possibleMoves}
                                     onPieceDrop={handlePieceDrop}
                                     isFlipped={isBoardFlipped}
+                                    isDraggable={gameStarted}
                                 />
                             </div>
 
@@ -418,14 +520,7 @@ const GamePage = () => {
                                 gameOver={gameOver}
                                 setWhiteTime={setWhiteTime}
                                 setBlackTime={setBlackTime}
-                                onTimeUpWhite={() => {
-                                    setGameOver(true);
-                                    alert("Час білих вичерпано!");
-                                }}
-                                onTimeUpBlack={() => {
-                                    setGameOver(true);
-                                    alert("Час чорних вичерпано!");
-                                }}
+                                onTimeOut={handleTimeOut}
                                 playerColor={playerColor}
                             />
                             <button

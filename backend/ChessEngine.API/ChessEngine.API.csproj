@@ -7,7 +7,7 @@
     <InvariantGlobalization>true</InvariantGlobalization>
     <UserSecretsId>97165a8a-f349-4089-9418-9be2ca07e5a7</UserSecretsId>
 	<!--<RuntimeIdentifier>win-x64</RuntimeIdentifier>-->
-	<RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+	<!--<RuntimeIdentifier>linux-x64</RuntimeIdentifier>-->
 	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 

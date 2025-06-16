@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using ChessEngine.Application.Fen;
+﻿using System.Diagnostics;
 using ChessEngine.Domain.Interfaces;
 using ChessEngine.Domain.Models;
 using ChessEngine.Enums;

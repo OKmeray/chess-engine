@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from "react";
 import squareSize from "../variables";
 import Pieces from "./Pieces";
-import queenWhite from "../../assets/images/queen_white.svg";
-import rookWhite from "../../assets/images/rook_white.svg";
-import bishopWhite from "../../assets/images/bishop_white.svg";
-import knightWhite from "../../assets/images/knight_white.svg";
-import queenBlack from "../../assets/images/queen_black.svg";
-import rookBlack from "../../assets/images/rook_black.svg";
-import bishopBlack from "../../assets/images/bishop_black.svg";
-import knightBlack from "../../assets/images/knight_black.svg";
+import queenWhite from "../../Assets/Images/queen_white.svg";
+import rookWhite from "../../Assets/Images/rook_white.svg";
+import bishopWhite from "../../Assets/Images/bishop_white.svg";
+import knightWhite from "../../Assets/Images/knight_white.svg";
+import queenBlack from "../../Assets/Images/queen_black.svg";
+import rookBlack from "../../Assets/Images/rook_black.svg";
+import bishopBlack from "../../Assets/Images/bishop_black.svg";
+import knightBlack from "../../Assets/Images/knight_black.svg";
 
-const ChessBoard = ({ fen, possibleMoves, onPieceDrop, isFlipped }) => {
+const ChessBoard = ({
+    fen,
+    possibleMoves,
+    onPieceDrop,
+    isFlipped,
+    isDraggable,
+}) => {
     const [pieces, setPieces] = useState([]);
     const [promotionPending, setPromotionPending] = useState(null);
     const [promotionMovingPiece, setPromotionMovingPiece] = useState(null);
@@ -40,6 +46,8 @@ const ChessBoard = ({ fen, possibleMoves, onPieceDrop, isFlipped }) => {
     }
 
     useEffect(() => {
+        if (!fen) return;
+
         if (justPromoted && fen === promotionPending?.previousFen) {
             // setJustPromoted(false); // Reset flag and skip update
             return;
@@ -215,6 +223,7 @@ const ChessBoard = ({ fen, possibleMoves, onPieceDrop, isFlipped }) => {
                 pieces={pieces}
                 onPieceDrop={handleDrop}
                 isFlipped={isFlipped}
+                isDraggable={isDraggable}
             />
             {promotionPending && (
                 <div className="promotion-dialog">

@@ -7,8 +7,7 @@ const Clocks = ({
     gameOver,
     setWhiteTime,
     setBlackTime,
-    onTimeUpWhite,
-    onTimeUpBlack,
+    onTimeOut,
     playerColor,
 }) => {
     const intervalRef = useRef(null);
@@ -28,7 +27,7 @@ const Clocks = ({
                 setWhiteTime((prev) => {
                     if (prev <= 1) {
                         clearInterval(intervalRef.current);
-                        onTimeUpWhite?.();
+                        onTimeOut(playerColor === "white" ? "loss" : "win"); // Call with result
                         return 0;
                     }
                     return prev - 1;
@@ -40,7 +39,7 @@ const Clocks = ({
                 setBlackTime((prev) => {
                     if (prev <= 1) {
                         clearInterval(intervalRef.current);
-                        onTimeUpBlack?.();
+                        onTimeOut(playerColor === "white" ? "win" : "loss"); // Call with result
                         return 0;
                     }
                     return prev - 1;
@@ -55,8 +54,8 @@ const Clocks = ({
         gameOver,
         setWhiteTime,
         setBlackTime,
-        onTimeUpWhite,
-        onTimeUpBlack,
+        onTimeOut,
+        playerColor,
     ]);
 
     const formatTime = (seconds) => {

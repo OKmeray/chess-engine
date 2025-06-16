@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using ChessEngine.Application.MCTS;         // your MCTSMoveFinder
-using Microsoft.Extensions.Hosting;          // IHostEnvironment
-using ChessEngine.Domain.Interfaces;    // IMoveFinder
+﻿using ChessEngine.Application.MCTS;
+using ChessEngine.Domain.Interfaces;
 
 namespace ChessEngine.API.Services
 {

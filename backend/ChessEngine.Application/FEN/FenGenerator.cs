@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using ChessEngine.Enums;
+﻿using ChessEngine.Enums;
 using ChessEngine.Helpers;
 using ChessEngine.Domain.Models;
 
