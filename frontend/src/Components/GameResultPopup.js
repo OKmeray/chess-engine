@@ -10,6 +10,10 @@ const GameResultPopup = ({ result, onClose }) => {
                 return "Ви перемогли!";
             case "draw":
                 return "Нічия!";
+            case "timeoutWin":
+                return "Час комп'ютера вичерпано. Ви виграли!";
+            case "timeoutLoss":
+                return "Ваш час вичерпано. Ви програли.";
             default:
                 return "";
         }

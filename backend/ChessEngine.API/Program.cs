@@ -1,9 +1,8 @@
 using ChessEngine.API.WebSockets;
 using ChessEngine.Application.Interfaces;
 using ChessEngine.Application.Services;
-using Microsoft.Extensions.DependencyInjection;
-using ChessEngine.API.Services;
 using ChessEngine.Persistance.Services;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 //builder.WebHost.UseUrls("http://localhost:5000");
@@ -30,9 +29,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<MongoDBSettings>(
-    builder.Configuration.GetSection("MongoDBSettings"));
-
+    builder.Configuration.GetSection("MongoDB"));
 builder.Services.AddSingleton<MongoDBService>();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+    });
 
 //builder.Services.AddSingleton<IMoveFinderProvider, MoveFinderProvider>();
 

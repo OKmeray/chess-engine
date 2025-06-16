@@ -3,112 +3,40 @@
   "WorkspaceRootPath": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.application\\fen\\moveparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|solutionrelative:chessengine.application\\fen\\moveparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{66509190-3203-46EE-92FA-12418CEC682C}|ChessEngine.API\\ChessEngine.API.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{66509190-3203-46EE-92FA-12418CEC682C}|ChessEngine.API\\ChessEngine.API.csproj|solutionrelative:chessengine.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.domain\\enums\\positionoutcome.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|solutionrelative:chessengine.domain\\enums\\positionoutcome.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.domain\\enums\\pieceenum.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|solutionrelative:chessengine.domain\\enums\\pieceenum.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.domain\\enums\\piececolor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|solutionrelative:chessengine.domain\\enums\\piececolor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.domain\\enums\\castleenum.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|solutionrelative:chessengine.domain\\enums\\castleenum.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.domain\\helpers\\squarehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|solutionrelative:chessengine.domain\\helpers\\squarehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.domain\\helpers\\bithelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|solutionrelative:chessengine.domain\\helpers\\bithelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.domain\\interfaces\\imovefinder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|solutionrelative:chessengine.domain\\interfaces\\imovefinder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.domain\\models\\bitboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|solutionrelative:chessengine.domain\\models\\bitboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.domain\\models\\movedetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|solutionrelative:chessengine.domain\\models\\movedetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.domain\\models\\position.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|solutionrelative:chessengine.domain\\models\\position.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.domain\\movegeneration\\generatemove.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{75AC87C4-B507-435A-8CDD-C71C77F215D7}|ChessEngine.Domain\\ChessEngine.Domain.csproj|solutionrelative:chessengine.domain\\movegeneration\\generatemove.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6985BD16-B875-4EDC-BB39-C616469D54C0}|ChessEngine.Infrastructure\\ChessEngine.Persistance.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.infrastructure\\services\\mongodbservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6985BD16-B875-4EDC-BB39-C616469D54C0}|ChessEngine.Infrastructure\\ChessEngine.Persistance.csproj|solutionrelative:chessengine.infrastructure\\services\\mongodbservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6985BD16-B875-4EDC-BB39-C616469D54C0}|ChessEngine.Infrastructure\\ChessEngine.Persistance.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.infrastructure\\models\\engineconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6985BD16-B875-4EDC-BB39-C616469D54C0}|ChessEngine.Infrastructure\\ChessEngine.Persistance.csproj|solutionrelative:chessengine.infrastructure\\models\\engineconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.application\\services\\gameservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|solutionrelative:chessengine.application\\services\\gameservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.application\\mcts\\movetype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|solutionrelative:chessengine.application\\mcts\\movetype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.application\\mcts\\moveencoder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|solutionrelative:chessengine.application\\mcts\\moveencoder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{66509190-3203-46EE-92FA-12418CEC682C}|ChessEngine.API\\ChessEngine.API.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.api\\chessengine.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{66509190-3203-46EE-92FA-12418CEC682C}|ChessEngine.API\\ChessEngine.API.csproj|solutionrelative:chessengine.api\\chessengine.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.application\\mcts\\mctsmovefinder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|solutionrelative:chessengine.application\\mcts\\mctsmovefinder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.application\\mcts\\featureextractor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|solutionrelative:chessengine.application\\mcts\\featureextractor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.application\\services\\gameservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|solutionrelative:chessengine.application\\services\\gameservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.application\\interfaces\\igameservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|solutionrelative:chessengine.application\\interfaces\\igameservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.application\\fen\\fengenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|solutionrelative:chessengine.application\\fen\\fengenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.application\\evaluation\\evaluation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2310E4A-EFE0-4AC5-924B-7B16E1920E83}|ChessEngine.Application\\ChessEngine.Application.csproj|solutionrelative:chessengine.application\\evaluation\\evaluation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{6985BD16-B875-4EDC-BB39-C616469D54C0}|ChessEngine.Infrastructure\\ChessEngine.Persistance.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.infrastructure\\models\\engineconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6985BD16-B875-4EDC-BB39-C616469D54C0}|ChessEngine.Infrastructure\\ChessEngine.Persistance.csproj|solutionrelative:chessengine.infrastructure\\models\\engineconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{66509190-3203-46EE-92FA-12418CEC682C}|ChessEngine.API\\ChessEngine.API.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{66509190-3203-46EE-92FA-12418CEC682C}|ChessEngine.API\\ChessEngine.API.csproj|solutionrelative:chessengine.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{66509190-3203-46EE-92FA-12418CEC682C}|ChessEngine.API\\ChessEngine.API.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.api\\websockets\\movewebsockethandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{66509190-3203-46EE-92FA-12418CEC682C}|ChessEngine.API\\ChessEngine.API.csproj|solutionrelative:chessengine.api\\websockets\\movewebsockethandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{66509190-3203-46EE-92FA-12418CEC682C}|ChessEngine.API\\ChessEngine.API.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.api\\services\\imovefinderprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{66509190-3203-46EE-92FA-12418CEC682C}|ChessEngine.API\\ChessEngine.API.csproj|solutionrelative:chessengine.api\\services\\imovefinderprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{66509190-3203-46EE-92FA-12418CEC682C}|ChessEngine.API\\ChessEngine.API.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.api\\controllers\\gamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{66509190-3203-46EE-92FA-12418CEC682C}|ChessEngine.API\\ChessEngine.API.csproj|solutionrelative:chessengine.api\\controllers\\gamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{66509190-3203-46EE-92FA-12418CEC682C}|ChessEngine.API\\ChessEngine.API.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.api\\controllers\\engineconfigscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{66509190-3203-46EE-92FA-12418CEC682C}|ChessEngine.API\\ChessEngine.API.csproj|solutionrelative:chessengine.api\\controllers\\engineconfigscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66509190-3203-46EE-92FA-12418CEC682C}|ChessEngine.API\\ChessEngine.API.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.api\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{66509190-3203-46EE-92FA-12418CEC682C}|ChessEngine.API\\ChessEngine.API.csproj|solutionrelative:chessengine.api\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6985BD16-B875-4EDC-BB39-C616469D54C0}|ChessEngine.Infrastructure\\ChessEngine.Persistance.csproj|d:\\lnu\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0434\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\chessengine.infrastructure\\services\\mongodbservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6985BD16-B875-4EDC-BB39-C616469D54C0}|ChessEngine.Infrastructure\\ChessEngine.Persistance.csproj|solutionrelative:chessengine.infrastructure\\services\\mongodbservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -118,7 +46,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 782,
-          "SelectedChildIndex": 21,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -130,339 +58,120 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PositionOutcome.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Enums\\PositionOutcome.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Domain\\Enums\\PositionOutcome.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Enums\\PositionOutcome.cs",
-              "RelativeToolTip": "ChessEngine.Domain\\Enums\\PositionOutcome.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:12:36.572Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "PieceEnum.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Enums\\PieceEnum.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Domain\\Enums\\PieceEnum.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Enums\\PieceEnum.cs",
-              "RelativeToolTip": "ChessEngine.Domain\\Enums\\PieceEnum.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:12:36.002Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "PieceColor.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Enums\\PieceColor.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Domain\\Enums\\PieceColor.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Enums\\PieceColor.cs",
-              "RelativeToolTip": "ChessEngine.Domain\\Enums\\PieceColor.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:12:35.467Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "CastleEnum.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Enums\\CastleEnum.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Domain\\Enums\\CastleEnum.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Enums\\CastleEnum.cs",
-              "RelativeToolTip": "ChessEngine.Domain\\Enums\\CastleEnum.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:12:34.849Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "SquareHelper.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Helpers\\SquareHelper.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Domain\\Helpers\\SquareHelper.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Helpers\\SquareHelper.cs",
-              "RelativeToolTip": "ChessEngine.Domain\\Helpers\\SquareHelper.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:12:32.653Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "BitHelper.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Helpers\\BitHelper.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Domain\\Helpers\\BitHelper.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Helpers\\BitHelper.cs",
-              "RelativeToolTip": "ChessEngine.Domain\\Helpers\\BitHelper.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:12:31.669Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "IMoveFinder.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Interfaces\\IMoveFinder.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Domain\\Interfaces\\IMoveFinder.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Interfaces\\IMoveFinder.cs",
-              "RelativeToolTip": "ChessEngine.Domain\\Interfaces\\IMoveFinder.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:12:29.677Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "Position.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Models\\Position.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Domain\\Models\\Position.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Models\\Position.cs",
-              "RelativeToolTip": "ChessEngine.Domain\\Models\\Position.cs",
-              "ViewState": "AgIAAOQDAAAAAAAAAAAAAFgAAABZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:11:13.724Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "MoveDetail.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Models\\MoveDetail.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Domain\\Models\\MoveDetail.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Models\\MoveDetail.cs",
-              "RelativeToolTip": "ChessEngine.Domain\\Models\\MoveDetail.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:11:11.209Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Bitboard.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Models\\Bitboard.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Domain\\Models\\Bitboard.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\Models\\Bitboard.cs",
-              "RelativeToolTip": "ChessEngine.Domain\\Models\\Bitboard.cs",
-              "ViewState": "AgIAADQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:11:08.445Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "GenerateMove.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\MoveGeneration\\GenerateMove.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Domain\\MoveGeneration\\GenerateMove.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Domain\\MoveGeneration\\GenerateMove.cs",
-              "RelativeToolTip": "ChessEngine.Domain\\MoveGeneration\\GenerateMove.cs",
-              "ViewState": "AgIAANMBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:11:02.268Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "MongoDBService.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Infrastructure\\Services\\MongoDBService.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Infrastructure\\Services\\MongoDBService.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Infrastructure\\Services\\MongoDBService.cs",
-              "RelativeToolTip": "ChessEngine.Infrastructure\\Services\\MongoDBService.cs",
-              "ViewState": "AgIAACYAAAAAAAAAAAAiwCoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:10:56.118Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "EngineConfig.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Infrastructure\\Models\\EngineConfig.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Infrastructure\\Models\\EngineConfig.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Infrastructure\\Models\\EngineConfig.cs",
-              "RelativeToolTip": "ChessEngine.Infrastructure\\Models\\EngineConfig.cs",
-              "ViewState": "AgIAAB0AAAAAAAAAAABAwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:10:52.114Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "GameService.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\Services\\GameService.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Application\\Services\\GameService.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\Services\\GameService.cs",
-              "RelativeToolTip": "ChessEngine.Application\\Services\\GameService.cs",
-              "ViewState": "AgIAAKsAAAAAAAAAAAAAAEkAAAB8AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:10:12.483Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "MoveType.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\MCTS\\MoveType.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Application\\MCTS\\MoveType.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\MCTS\\MoveType.cs",
-              "RelativeToolTip": "ChessEngine.Application\\MCTS\\MoveType.cs",
-              "ViewState": "AgIAAFIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:10:06.167Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "MoveEncoder.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\MCTS\\MoveEncoder.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Application\\MCTS\\MoveEncoder.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\MCTS\\MoveEncoder.cs",
-              "RelativeToolTip": "ChessEngine.Application\\MCTS\\MoveEncoder.cs",
-              "ViewState": "AgIAADMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:10:02.713Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
               "Title": "MCTSMoveFinder.cs",
               "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\MCTS\\MCTSMoveFinder.cs",
               "RelativeDocumentMoniker": "ChessEngine.Application\\MCTS\\MCTSMoveFinder.cs",
               "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\MCTS\\MCTSMoveFinder.cs",
               "RelativeToolTip": "ChessEngine.Application\\MCTS\\MCTSMoveFinder.cs",
-              "ViewState": "AgIAAOUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAMYAAAAAAAAAAAAkwOEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:09:57.688Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "FeatureExtractor.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\MCTS\\FeatureExtractor.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Application\\MCTS\\FeatureExtractor.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\MCTS\\FeatureExtractor.cs",
-              "RelativeToolTip": "ChessEngine.Application\\MCTS\\FeatureExtractor.cs",
-              "ViewState": "AgIAAKEAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:09:52.067Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "IGameService.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\Interfaces\\IGameService.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Application\\Interfaces\\IGameService.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\Interfaces\\IGameService.cs",
-              "RelativeToolTip": "ChessEngine.Application\\Interfaces\\IGameService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:09:48.78Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MoveParser.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\FEN\\MoveParser.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Application\\FEN\\MoveParser.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\FEN\\MoveParser.cs",
-              "RelativeToolTip": "ChessEngine.Application\\FEN\\MoveParser.cs",
-              "ViewState": "AgIAAFQAAAAAAAAAAAAAwGoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:09:20.413Z",
+              "WhenOpened": "2025-06-16T06:35:38.245Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "FenGenerator.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\FEN\\FenGenerator.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Application\\FEN\\FenGenerator.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\FEN\\FenGenerator.cs",
-              "RelativeToolTip": "ChessEngine.Application\\FEN\\FenGenerator.cs",
-              "ViewState": "AgIAAEgBAAAAAAAAAAAAABcAAABEAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "GameService.cs",
+              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\Services\\GameService.cs",
+              "RelativeDocumentMoniker": "ChessEngine.Application\\Services\\GameService.cs",
+              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\Services\\GameService.cs",
+              "RelativeToolTip": "ChessEngine.Application\\Services\\GameService.cs",
+              "ViewState": "AgIAAJAAAAAAAAAAAAAkwKsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:09:05.511Z"
+              "WhenOpened": "2025-06-16T06:35:28.546Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "Evaluation.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\Evaluation\\Evaluation.cs",
-              "RelativeDocumentMoniker": "ChessEngine.Application\\Evaluation\\Evaluation.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Application\\Evaluation\\Evaluation.cs",
-              "RelativeToolTip": "ChessEngine.Application\\Evaluation\\Evaluation.cs",
-              "ViewState": "AgIAAKoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:08:57.11Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.API\\Program.cs",
-              "RelativeDocumentMoniker": "ChessEngine.API\\Program.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.API\\Program.cs",
-              "RelativeToolTip": "ChessEngine.API\\Program.cs",
-              "ViewState": "AgIAAEEAAAAAAAAAAAAAAFAAAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:08:27.103Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "MoveWebSocketHandler.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.API\\WebSockets\\MoveWebSocketHandler.cs",
-              "RelativeDocumentMoniker": "ChessEngine.API\\WebSockets\\MoveWebSocketHandler.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.API\\WebSockets\\MoveWebSocketHandler.cs",
-              "RelativeToolTip": "ChessEngine.API\\WebSockets\\MoveWebSocketHandler.cs",
-              "ViewState": "AgIAAFEAAAAAAAAAAAAQwAwAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:08:00.472Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
-              "Title": "IMoveFinderProvider.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.API\\Services\\IMoveFinderProvider.cs",
-              "RelativeDocumentMoniker": "ChessEngine.API\\Services\\IMoveFinderProvider.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.API\\Services\\IMoveFinderProvider.cs",
-              "RelativeToolTip": "ChessEngine.API\\Services\\IMoveFinderProvider.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAUwBoAAABDAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:07:46.649Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 25,
-              "Title": "GameController.cs",
-              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.API\\Controllers\\GameController.cs",
-              "RelativeDocumentMoniker": "ChessEngine.API\\Controllers\\GameController.cs",
-              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.API\\Controllers\\GameController.cs",
-              "RelativeToolTip": "ChessEngine.API\\Controllers\\GameController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:07:40.775Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 6,
               "Title": "EngineConfigsController.cs",
               "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.API\\Controllers\\EngineConfigsController.cs",
               "RelativeDocumentMoniker": "ChessEngine.API\\Controllers\\EngineConfigsController.cs",
               "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.API\\Controllers\\EngineConfigsController.cs",
               "RelativeToolTip": "ChessEngine.API\\Controllers\\EngineConfigsController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACEAAAAAAAAAAAAQwD0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-14T08:07:35.681Z"
-            }
-          ]
-        },
-        {
-          "DockedWidth": 100,
-          "SelectedChildIndex": -1,
-          "Children": [
+              "WhenOpened": "2025-06-16T05:43:38.459Z",
+              "EditorCaption": ""
+            },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{004be353-6879-467c-9d1e-9ac23cdf6d49}"
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Dockerfile",
+              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.API\\Dockerfile",
+              "RelativeDocumentMoniker": "ChessEngine.API\\Dockerfile",
+              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.API\\Dockerfile",
+              "RelativeToolTip": "ChessEngine.API\\Dockerfile",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-06-16T05:25:04.873Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.API\\appsettings.json",
+              "RelativeDocumentMoniker": "ChessEngine.API\\appsettings.json",
+              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.API\\appsettings.json",
+              "RelativeToolTip": "ChessEngine.API\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-06-16T05:22:21.901Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "MongoDBService.cs",
+              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Infrastructure\\Services\\MongoDBService.cs",
+              "RelativeDocumentMoniker": "ChessEngine.Infrastructure\\Services\\MongoDBService.cs",
+              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Infrastructure\\Services\\MongoDBService.cs",
+              "RelativeToolTip": "ChessEngine.Infrastructure\\Services\\MongoDBService.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAA/wCoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-15T08:19:20.583Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "EngineConfig.cs",
+              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Infrastructure\\Models\\EngineConfig.cs",
+              "RelativeDocumentMoniker": "ChessEngine.Infrastructure\\Models\\EngineConfig.cs",
+              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.Infrastructure\\Models\\EngineConfig.cs",
+              "RelativeToolTip": "ChessEngine.Infrastructure\\Models\\EngineConfig.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAADwvwsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-15T08:19:19.308Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.API\\Program.cs",
+              "RelativeDocumentMoniker": "ChessEngine.API\\Program.cs",
+              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.API\\Program.cs",
+              "RelativeToolTip": "ChessEngine.API\\Program.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAAACEAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-15T08:15:51.769Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ChessEngine.API.csproj",
+              "DocumentMoniker": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.API\\ChessEngine.API.csproj",
+              "RelativeDocumentMoniker": "ChessEngine.API\\ChessEngine.API.csproj",
+              "ToolTip": "D:\\LNU\\8 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430\\chess-engine\\backend\\ChessEngine.API\\ChessEngine.API.csproj",
+              "RelativeToolTip": "ChessEngine.API\\ChessEngine.API.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-06-15T08:12:53.323Z",
+              "EditorCaption": ""
             }
           ]
         }

@@ -199,12 +199,16 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "nullable": true
           },
           "hexid": {
             "type": "string",
             "nullable": true
+          },
+          "configId": {
+            "type": "integer",
+            "format": "int32"
           },
           "filters": {
             "type": "integer",

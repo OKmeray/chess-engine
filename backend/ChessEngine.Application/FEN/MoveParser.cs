@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using ChessEngine.Enums;
 using ChessEngine.Helpers;
 using ChessEngine.Domain.Models;
-using ChessEngine.FEN;
 using ChessEngine.Application.Fen;
-using ChessEngine.Domain.Models;
+
 
 namespace ChessEngine.FEN
 {

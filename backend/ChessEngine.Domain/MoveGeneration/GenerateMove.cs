@@ -1,6 +1,4 @@
-﻿using ChessEngine.Helpers;
-using System.Collections.Generic;
-using ChessEngine.Enums;
+﻿using ChessEngine.Enums;
 using ChessEngine.Domain.Models;
 
 namespace ChessEngine.MoveGeneration

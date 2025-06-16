@@ -1,5 +1,4 @@
 ﻿using ChessEngine.Domain.Models;
-
 using ChessEngine.Enums;
 
 /// <summary>

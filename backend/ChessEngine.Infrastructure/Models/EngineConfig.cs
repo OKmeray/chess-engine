@@ -1,10 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace ChessEngine.Persistance.Models
 {
@@ -15,6 +11,7 @@ namespace ChessEngine.Persistance.Models
         public string? Id { get; set; }
 
         public string HEXID { get; set; }
+        [JsonPropertyName("configId")]
         public int ID { get; set; }
         public int Filters { get; set; }
         public int ResBlocks { get; set; }

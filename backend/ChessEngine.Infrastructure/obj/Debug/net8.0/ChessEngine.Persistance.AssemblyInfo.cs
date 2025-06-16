@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ChessEngine.Persistance")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2f22fc50eff0b3f9c2aa05c34b9767fb8b4940e7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f7e5473878f8e0d333b9f5ff897c98e5c3303386")]
 [assembly: System.Reflection.AssemblyProductAttribute("ChessEngine.Persistance")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ChessEngine.Persistance")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

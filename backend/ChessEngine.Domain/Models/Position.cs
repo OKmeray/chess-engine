@@ -1,7 +1,6 @@
 ﻿using ChessEngine.Enums;
 using ChessEngine.Helpers;
 using ChessEngine.MoveGeneration;
-using ChessEngine.Domain.Models;
 using System.Numerics;
 
 namespace ChessEngine.Domain.Models

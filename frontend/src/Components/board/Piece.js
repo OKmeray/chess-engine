@@ -1,20 +1,20 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import squareSize from "../variables";
-import blackKing from "../../assets/images/king_black.svg";
-import blackQueen from "../../assets/images/queen_black.svg";
-import blackRook from "../../assets/images/rook_black.svg";
-import blackBishop from "../../assets/images/bishop_black.svg";
-import blackKnight from "../../assets/images/knight_black.svg";
-import blackPawn from "../../assets/images/pawn_black.svg";
-import whiteKing from "../../assets/images/king_white.svg";
-import whiteQueen from "../../assets/images/queen_white.svg";
-import whiteRook from "../../assets/images/rook_white.svg";
-import whiteBishop from "../../assets/images/bishop_white.svg";
-import whiteKnight from "../../assets/images/knight_white.svg";
-import whitePawn from "../../assets/images/pawn_white.svg";
+import blackKing from "../../Assets/Images/king_black.svg";
+import blackQueen from "../../Assets/Images/queen_black.svg";
+import blackRook from "../../Assets/Images/rook_black.svg";
+import blackBishop from "../../Assets/Images/bishop_black.svg";
+import blackKnight from "../../Assets/Images/knight_black.svg";
+import blackPawn from "../../Assets/Images/pawn_black.svg";
+import whiteKing from "../../Assets/Images/king_white.svg";
+import whiteQueen from "../../Assets/Images/queen_white.svg";
+import whiteRook from "../../Assets/Images/rook_white.svg";
+import whiteBishop from "../../Assets/Images/bishop_white.svg";
+import whiteKnight from "../../Assets/Images/knight_white.svg";
+import whitePawn from "../../Assets/Images/pawn_white.svg";
 
-const Piece = ({ index, piece, square, isFlipped }) => {
+const Piece = ({ index, piece, square, isFlipped, isDraggable }) => {
     const isUserTurn = useSelector((state) => state.isUserTurn);
 
     function getImageFromFenSymbol(char) {
@@ -49,7 +49,10 @@ const Piece = ({ index, piece, square, isFlipped }) => {
     }
 
     const onDragStart = (e) => {
-        if (!isUserTurn) return; // Prevent drag if not user's turn
+        if (!isUserTurn || !isDraggable) {
+            e.preventDefault();
+            return;
+        }
         e.dataTransfer.effectAllowed = "move";
         e.dataTransfer.setData("text/plain", `${square},${index}`);
         setTimeout(() => {
@@ -77,7 +80,7 @@ const Piece = ({ index, piece, square, isFlipped }) => {
             width={squareSize}
             height={squareSize}
             style={styles}
-            draggable={isUserTurn}
+            draggable={isUserTurn && isDraggable}
             onDragStart={onDragStart}
             onDragEnd={onDragEnd}
             alt="piece"

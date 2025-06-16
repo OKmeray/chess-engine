@@ -1,8 +1,4 @@
-﻿using ChessEngine.API.Controllers;
-using ChessEngine.API.Services;
-using ChessEngine.Application.Interfaces;
-using ChessEngine.Application.Services;
-using Microsoft.AspNetCore.Identity.Data;
+﻿using ChessEngine.Application.Interfaces;
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;

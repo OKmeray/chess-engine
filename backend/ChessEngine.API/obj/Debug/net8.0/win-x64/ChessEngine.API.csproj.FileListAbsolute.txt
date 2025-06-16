@@ -75,10 +75,6 @@ D:\LNU\8 семестр\Дипломна\chess-engine\ChessEngineBackend\ChessEn
 D:\LNU\8 семестр\Дипломна\chess-engine\ChessEngineBackend\ChessEngine.API\bin\Debug\net8.0\win-x64\AIModels\8138.onnx
 D:\LNU\8 семестр\Дипломна\chess-engine\ChessEngineBackend\ChessEngine.API\bin\Debug\net8.0\win-x64\AIModels\8172.onnx
 D:\LNU\8 семестр\Дипломна\chess-engine\backend\ChessEngine.API\bin\Debug\net8.0\win-x64\appsettings.Development.json
-D:\LNU\8 семестр\Дипломна\chess-engine\backend\ChessEngine.API\bin\Debug\net8.0\win-x64\DirectML.dll
-D:\LNU\8 семестр\Дипломна\chess-engine\backend\ChessEngine.API\bin\Debug\net8.0\win-x64\DirectML.pdb
-D:\LNU\8 семестр\Дипломна\chess-engine\backend\ChessEngine.API\bin\Debug\net8.0\win-x64\DirectML.Debug.dll
-D:\LNU\8 семестр\Дипломна\chess-engine\backend\ChessEngine.API\bin\Debug\net8.0\win-x64\DirectML.Debug.pdb
 D:\LNU\8 семестр\Дипломна\chess-engine\backend\ChessEngine.API\bin\Debug\net8.0\win-x64\ChessEngine.API.staticwebassets.endpoints.json
 D:\LNU\8 семестр\Дипломна\chess-engine\backend\ChessEngine.API\bin\Debug\net8.0\win-x64\onnxruntime.dll
 D:\LNU\8 семестр\Дипломна\chess-engine\backend\ChessEngine.API\bin\Debug\net8.0\win-x64\onnxruntime_providers_shared.dll

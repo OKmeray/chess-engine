@@ -1,8 +1,8 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import GamePage from "./pages/GamePage";
-import ModelsPage from "./pages/ModelsPage";
+import HomePage from "./Pages/HomePage";
+import GamePage from "./Pages/GamePage";
+import ModelsPage from "./Pages/ModelsPage";
 
 import Modal from "react-modal";
 

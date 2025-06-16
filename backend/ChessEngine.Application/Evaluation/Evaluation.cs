@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using ChessEngine.Enums;
+﻿using ChessEngine.Enums;
 using ChessEngine.Domain.Models;
-using ChessEngine.Helpers;
-using System.Linq;
+
 
 namespace ChessEngine.Evaluation
 {
