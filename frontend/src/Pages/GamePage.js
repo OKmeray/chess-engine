@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import ChessBoard from "../Components/board/ChessBoard";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
-import useChessWebSocket from "../Hooks/useChessWebSocket";
+import useChessWebSocket from "../hooks/useChessWebSocket";
 import { PositionOutcome } from "../utils/outcomeEnum";
 import { setCanNotDrag, setCanDrag } from "../Store/actions";
 import Clocks from "../Components/clocks/Clock";
@@ -194,6 +194,10 @@ const GamePage = () => {
         console.log("Sending move to server:", moveData);
     };
 
+    useEffect(() => {
+        incrementRef.current = timeControlType === "fisher" ? increment : 0;
+    }, [timeControlType, increment]);
+
     const handlePresetSelect = (presetKey) => {
         const preset = timeControls[presetKey];
         setBaseTime(preset.base);
@@ -204,6 +208,9 @@ const GamePage = () => {
             setWhiteTime(preset.base);
             setBlackTime(preset.base);
         }
+
+        incrementRef.current =
+            timeControlType === "fisher" ? preset.increment : 0;
     };
 
     const startGame = () => {
@@ -291,11 +298,12 @@ const GamePage = () => {
                                                         timeControlType ===
                                                         "standard"
                                                     }
-                                                    onChange={() =>
+                                                    onChange={() => {
                                                         setTimeControlType(
                                                             "standard"
-                                                        )
-                                                    }
+                                                        );
+                                                        incrementRef.current = 0;
+                                                    }}
                                                 />
                                                 Стандартний
                                             </label>
@@ -307,11 +315,13 @@ const GamePage = () => {
                                                         timeControlType ===
                                                         "fisher"
                                                     }
-                                                    onChange={() =>
+                                                    onChange={() => {
                                                         setTimeControlType(
                                                             "fisher"
-                                                        )
-                                                    }
+                                                        );
+                                                        incrementRef.current =
+                                                            increment;
+                                                    }}
                                                 />
                                                 Фішера (з додаванням)
                                             </label>
