@@ -58,6 +58,10 @@ func (m *Minimax) searchDepth(ctx context.Context, pos *engine.Position, depth i
 	var bestMove engine.Move
 	bestScore := float32(math.Inf(-1))
 
+	if pos.IsFiftyMoveRule() || pos.IsInsufficientMaterial() {
+		return 0, 0, false // Draw
+	}
+
 	movesBuf := make([]engine.Move, 0, 256)
 	moves := pos.GenerateMoves(movesBuf)
 
@@ -110,6 +114,10 @@ func (m *Minimax) alphaBeta(ctx context.Context, pos *engine.Position, depth int
 			score = -score
 		}
 		return score, false
+	}
+
+	if pos.IsFiftyMoveRule() || pos.IsInsufficientMaterial() {
+		return 0.0, false // Draw
 	}
 
 	var movesBuf [256]engine.Move

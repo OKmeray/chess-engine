@@ -101,6 +101,16 @@ func TestMinimax_Search_GameOver(t *testing.T) {
 			fen:           "rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3",
 			expectedScore: -10002.0,
 		},
+		{
+			name:          "50-Move Rule",
+			fen:           "k7/2q5/8/8/8/8/4Q3/K7 w - - 100 150",
+			expectedScore: 0.0,
+		},
+		{
+			name:          "Insufficient Material",
+			fen:           "k7/8/8/8/8/8/8/KN6 w - - 0 150",
+			expectedScore: 0.0,
+		},
 	}
 
 	for _, tt := range tests {
@@ -122,6 +132,45 @@ func TestMinimax_Search_GameOver(t *testing.T) {
 			}
 			if score != tt.expectedScore {
 				t.Errorf("Search() score = %f, want %f", score, tt.expectedScore)
+			}
+		})
+	}
+}
+
+// TestMinimax_Search_DeepDraws verify that alphaBeta catches draws deep in the search tree (after a move is made)
+func TestMinimax_Search_DeepDraws(t *testing.T) {
+	tests := []struct {
+		name          string
+		fen           string
+		expectedScore float32
+	}{
+		{
+			name:          "Capture leads to Insufficient Material",
+			fen:           "8/8/8/8/1K6/p7/8/1k6 w - - 1 103",
+			expectedScore: 0.0,
+		},
+		{
+			name:          "Any move leads to 50-Move Rule",
+			fen:           "k6r/8/8/8/8/8/8/K7 w - - 99 105",
+			expectedScore: 0.0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			pos, err := engine.ParseFEN(tt.fen)
+			if err != nil {
+				t.Fatalf("Failed to parse FEN: %v", err)
+			}
+
+			searcher := NewMinimax(2)
+			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+			defer cancel()
+
+			_, score := searcher.Search(ctx, pos)
+
+			if score != tt.expectedScore {
+				t.Errorf("Search() score = %v, want %v", score, tt.expectedScore)
 			}
 		})
 	}
