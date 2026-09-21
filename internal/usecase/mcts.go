@@ -77,6 +77,7 @@ type MCTSSearcher struct {
 	nodeCount  int32
 	numWorkers int
 	evalReqCh  chan EvalRequest
+	evalCache  sync.Map // Caches NN evaluations to prevent redundant work
 }
 
 // NewMCTSSearcher initializes a concurrent Monte Carlo Tree Search engine.
@@ -97,6 +98,9 @@ func (m *MCTSSearcher) Search(ctx context.Context, pos *engine.Position) (engine
 	m.nodes[0] = MCTSNode{
 		State: StateUnexpanded,
 	}
+
+	// Clear the evaluation cache to prevent memory leaks across multiple turns
+	m.evalCache = sync.Map{}
 
 	var fatalErr atomic.Pointer[error]
 	ctx, cancel := context.WithCancel(ctx)
@@ -210,6 +214,15 @@ func (m *MCTSSearcher) treeWorker(ctx context.Context, rootPos *engine.Position,
 
 		node := &m.nodes[currIdx]
 
+		if pos.IsFiftyMoveRule() || pos.IsInsufficientMaterial() || pos.IsThreeFoldRepetition() {
+			m.applyVirtualLoss(currIdx)
+			history = append(history, currIdx)
+			atomic.StoreInt32(&node.State, StateExpanded) // Mark terminal
+			m.revertVirtualLoss(history)
+			m.backpropagate(history, 0.0) // Draw
+			continue
+		}
+
 		if atomic.LoadInt32(&node.State) == StateExpanded && node.NumChildren == 0 {
 			// Apply virtual loss for the terminal leaf itself
 			m.applyVirtualLoss(currIdx)
@@ -232,32 +245,39 @@ func (m *MCTSSearcher) treeWorker(ctx context.Context, rootPos *engine.Position,
 			m.applyVirtualLoss(currIdx)
 			history = append(history, currIdx)
 
-			// NN Batch Request
-			respCh := make(chan EvalResponse, 1)
-
-			select {
-			case m.evalReqCh <- EvalRequest{
-				Pos:    *pos,
-				RespCh: respCh,
-			}:
-			case <-ctx.Done():
-				m.revertVirtualLoss(history)
-				return
-			}
-
-			// Wait for NN response
 			var resp EvalResponse
-			select {
-			case resp = <-respCh:
-				if resp.Err != nil {
+
+			if cached, ok := m.evalCache.Load(pos.Hash); ok {
+				resp = cached.(EvalResponse)
+			} else {
+				// NN Batch Request
+				respCh := make(chan EvalResponse, 1)
+
+				select {
+				case m.evalReqCh <- EvalRequest{
+					Pos:    *pos,
+					RespCh: respCh,
+				}:
+				case <-ctx.Done():
 					m.revertVirtualLoss(history)
-					fatalErr.CompareAndSwap(nil, &resp.Err)
-					cancel()
 					return
 				}
-			case <-ctx.Done():
-				m.revertVirtualLoss(history)
-				return
+
+				// Wait for NN response
+				select {
+				case resp = <-respCh:
+					if resp.Err != nil {
+						m.revertVirtualLoss(history)
+						fatalErr.CompareAndSwap(nil, &resp.Err)
+						cancel()
+						return
+					}
+					// Cache the successful evaluation
+					m.evalCache.Store(pos.Hash, resp)
+				case <-ctx.Done():
+					m.revertVirtualLoss(history)
+					return
+				}
 			}
 
 			// Terminal Node check

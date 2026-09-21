@@ -8,16 +8,39 @@ import (
 	"github.com/OKmeray/chess-engine/internal/domain/engine"
 )
 
+// TTFlag represents the type of score bound stored in the Transposition Table.
+type TTFlag uint8
+
+const (
+	// TTExact indicates the stored score is an exact minimax value.
+	TTExact TTFlag = iota
+	// TTAlpha indicates the stored score is an upper bound.
+	TTAlpha
+	// TTBeta indicates the stored score is a lower bound.
+	TTBeta
+)
+
+// TTEntry represents a cached search result in the Transposition Table.
+type TTEntry struct {
+	Hash  uint64
+	Move  engine.Move
+	Score float32
+	Depth int8
+	Flag  TTFlag
+}
+
 // Minimax represents the Minimax search algorithm with Alpha-Beta pruning.
 type Minimax struct {
 	maxDepth      int
 	nodesSearched int
+	tt            []TTEntry
 }
 
 // NewMinimax creates a new Minimax searcher.
 func NewMinimax(maxDepth int) *Minimax {
 	return &Minimax{
 		maxDepth: maxDepth,
+		tt:       make([]TTEntry, 8*1024*1024), // ~8*24MB Transposition Table (8M entries)
 	}
 }
 
@@ -58,7 +81,7 @@ func (m *Minimax) searchDepth(ctx context.Context, pos *engine.Position, depth i
 	var bestMove engine.Move
 	bestScore := float32(math.Inf(-1))
 
-	if pos.IsFiftyMoveRule() || pos.IsInsufficientMaterial() {
+	if pos.IsFiftyMoveRule() || pos.IsInsufficientMaterial() || pos.IsThreeFoldRepetition() {
 		return 0, 0, false // Draw
 	}
 
@@ -72,10 +95,18 @@ func (m *Minimax) searchDepth(ctx context.Context, pos *engine.Position, depth i
 		return 0, 0, false
 	}
 
-	sortMoves(pos, moves)
+	// Check TT for root move ordering
+	var ttMove engine.Move
+	ttIndex := pos.Hash & uint64(len(m.tt)-1)
+	if m.tt[ttIndex].Hash == pos.Hash {
+		ttMove = m.tt[ttIndex].Move
+	}
+
+	sortMoves(pos, moves, ttMove)
 
 	alpha := float32(math.Inf(-1))
 	beta := float32(math.Inf(1))
+	originalAlpha := alpha
 
 	for _, move := range moves {
 		undo := pos.MakeMove(move)
@@ -96,6 +127,18 @@ func (m *Minimax) searchDepth(ctx context.Context, pos *engine.Position, depth i
 		}
 	}
 
+	flag := TTAlpha
+	if bestScore > originalAlpha {
+		flag = TTExact
+	}
+	m.tt[ttIndex] = TTEntry{
+		Hash:  pos.Hash,
+		Move:  bestMove,
+		Score: bestScore,
+		Depth: int8(depth),
+		Flag:  flag,
+	}
+
 	return bestMove, bestScore, false
 }
 
@@ -108,16 +151,37 @@ func (m *Minimax) alphaBeta(ctx context.Context, pos *engine.Position, depth int
 		return 0, true
 	}
 
+	if pos.IsFiftyMoveRule() || pos.IsInsufficientMaterial() || pos.IsThreeFoldRepetition() {
+		return 0.0, false // Draw
+	}
+
+	// Check TT
+	originalAlpha := alpha
+	ttIndex := pos.Hash & uint64(len(m.tt)-1)
+	entry := m.tt[ttIndex]
+	var ttMove engine.Move
+
+	if entry.Hash == pos.Hash {
+		ttMove = entry.Move
+		if int(entry.Depth) >= depth {
+			if entry.Flag == TTExact {
+				return entry.Score, false
+			}
+			if entry.Flag == TTAlpha && entry.Score <= alpha {
+				return alpha, false
+			}
+			if entry.Flag == TTBeta && entry.Score >= beta {
+				return beta, false
+			}
+		}
+	}
+
 	if depth == 0 {
 		score := evaluate(pos)
 		if pos.SideToMove == engine.Black {
 			score = -score
 		}
 		return score, false
-	}
-
-	if pos.IsFiftyMoveRule() || pos.IsInsufficientMaterial() {
-		return 0.0, false // Draw
 	}
 
 	var movesBuf [256]engine.Move
@@ -130,9 +194,11 @@ func (m *Minimax) alphaBeta(ctx context.Context, pos *engine.Position, depth int
 		return 0.0, false // Stalemate
 	}
 
-	sortMoves(pos, moves)
+	sortMoves(pos, moves, ttMove)
 
 	bestScore := float32(math.Inf(-1))
+	var bestMove engine.Move
+
 	for _, move := range moves {
 		undo := pos.MakeMove(move)
 		score, aborted := m.alphaBeta(ctx, pos, depth-1, -beta, -alpha)
@@ -145,6 +211,7 @@ func (m *Minimax) alphaBeta(ctx context.Context, pos *engine.Position, depth int
 
 		if score > bestScore {
 			bestScore = score
+			bestMove = move
 		}
 		if score > alpha {
 			alpha = score
@@ -152,6 +219,21 @@ func (m *Minimax) alphaBeta(ctx context.Context, pos *engine.Position, depth int
 		if alpha >= beta {
 			break
 		}
+	}
+
+	flag := TTAlpha
+	if bestScore >= beta {
+		flag = TTBeta
+	} else if bestScore > originalAlpha {
+		flag = TTExact
+	}
+
+	m.tt[ttIndex] = TTEntry{
+		Hash:  pos.Hash,
+		Move:  bestMove,
+		Score: bestScore,
+		Depth: int8(depth),
+		Flag:  flag,
 	}
 
 	return bestScore, false
@@ -166,8 +248,8 @@ var piecePrices = [6]int{
 	int(engine.KingPrice),
 }
 
-// sortMoves sorts moves in place using MVV-LVA and Check detection.
-func sortMoves(pos *engine.Position, moves []engine.Move) {
+// sortMoves sorts moves in place using MVV-LVA, Check detection, and TT Move.
+func sortMoves(pos *engine.Position, moves []engine.Move, ttMove engine.Move) {
 	type moveScore struct {
 		move  engine.Move
 		score int
@@ -179,6 +261,11 @@ func sortMoves(pos *engine.Position, moves []engine.Move) {
 
 	for i, move := range moves {
 		score := 0
+
+		if move == ttMove {
+			score += 1000000 // TT Move gets absolute highest priority
+		}
+
 		flags := move.Flags()
 
 		if flags&engine.FlagCapture != 0 || flags == engine.FlagEnPassant {

@@ -115,3 +115,99 @@ func TestPosition_IsInsufficientMaterial(t *testing.T) {
 		})
 	}
 }
+
+func TestPosition_IsThreeFoldRepetition(t *testing.T) {
+	tests := []struct {
+		name     string
+		startFen string
+		moves    []Move
+		want     bool
+	}{
+		{
+			name:     "No repetition",
+			startFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+			moves: []Move{
+				NewMove(GetNumBySquareName("e2"), GetNumBySquareName("e4"), FlagDoublePawn),
+				NewMove(GetNumBySquareName("e7"), GetNumBySquareName("e5"), FlagDoublePawn),
+			},
+			want: false,
+		},
+		{
+			name:     "Two-fold repetition is not enough",
+			startFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+			moves: []Move{
+				NewMove(GetNumBySquareName("e2"), GetNumBySquareName("e3"), FlagQuiet), // Clear start
+				NewMove(GetNumBySquareName("g8"), GetNumBySquareName("f6"), FlagQuiet),
+				NewMove(GetNumBySquareName("g1"), GetNumBySquareName("f3"), FlagQuiet),
+				NewMove(GetNumBySquareName("f6"), GetNumBySquareName("g8"), FlagQuiet),
+				NewMove(GetNumBySquareName("f3"), GetNumBySquareName("g1"), FlagQuiet), // Reaches position 2nd time
+			},
+			want: false,
+		},
+		{
+			name:     "Three-fold repetition is detected",
+			startFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+			moves: []Move{
+				NewMove(GetNumBySquareName("e2"), GetNumBySquareName("e3"), FlagQuiet), // Clear start
+				// 1st loop
+				NewMove(GetNumBySquareName("g8"), GetNumBySquareName("f6"), FlagQuiet),
+				NewMove(GetNumBySquareName("g1"), GetNumBySquareName("f3"), FlagQuiet),
+				NewMove(GetNumBySquareName("f6"), GetNumBySquareName("g8"), FlagQuiet),
+				NewMove(GetNumBySquareName("f3"), GetNumBySquareName("g1"), FlagQuiet), // Reaches position 2nd time
+				// 2nd loop
+				NewMove(GetNumBySquareName("g8"), GetNumBySquareName("f6"), FlagQuiet),
+				NewMove(GetNumBySquareName("g1"), GetNumBySquareName("f3"), FlagQuiet),
+				NewMove(GetNumBySquareName("f6"), GetNumBySquareName("g8"), FlagQuiet),
+				NewMove(GetNumBySquareName("f3"), GetNumBySquareName("g1"), FlagQuiet), // Reaches position 3rd time
+			},
+			want: true,
+		},
+		{
+			name:     "Repetition broken by pawn move",
+			startFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+			moves: []Move{
+				NewMove(GetNumBySquareName("e2"), GetNumBySquareName("e3"), FlagQuiet),
+				// 1st loop
+				NewMove(GetNumBySquareName("g8"), GetNumBySquareName("f6"), FlagQuiet),
+				NewMove(GetNumBySquareName("g1"), GetNumBySquareName("f3"), FlagQuiet),
+				NewMove(GetNumBySquareName("f6"), GetNumBySquareName("g8"), FlagQuiet),
+				NewMove(GetNumBySquareName("f3"), GetNumBySquareName("g1"), FlagQuiet), // Reaches position 2nd time
+				// Pawn move permanently changes state and resets HalfMoves
+				NewMove(GetNumBySquareName("a7"), GetNumBySquareName("a6"), FlagQuiet),
+				// Next sequence
+				NewMove(GetNumBySquareName("g1"), GetNumBySquareName("f3"), FlagQuiet),
+				NewMove(GetNumBySquareName("g8"), GetNumBySquareName("f6"), FlagQuiet),
+				NewMove(GetNumBySquareName("f3"), GetNumBySquareName("g1"), FlagQuiet),
+				NewMove(GetNumBySquareName("f6"), GetNumBySquareName("g8"), FlagQuiet),
+			},
+			want: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			pos, err := ParseFEN(tt.startFen)
+			if err != nil {
+				t.Fatalf("failed to parse FEN: %v", err)
+			}
+
+			undos := make([]UndoInfo, 0, len(tt.moves))
+			for _, m := range tt.moves {
+				undos = append(undos, pos.MakeMove(m))
+			}
+
+			if got := pos.IsThreeFoldRepetition(); got != tt.want {
+				t.Errorf("IsThreeFoldRepetition() = %v, want %v", got, tt.want)
+			}
+
+			// Verify unmaking cleanly restores state and drops repetition count
+			for i := len(tt.moves) - 1; i >= 0; i-- {
+				pos.UnmakeMove(tt.moves[i], undos[i])
+			}
+
+			if got := pos.IsThreeFoldRepetition(); got != false {
+				t.Errorf("IsThreeFoldRepetition() after unmake = %v, want false", got)
+			}
+		})
+	}
+}

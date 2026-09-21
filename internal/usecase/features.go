@@ -39,6 +39,21 @@ func ExtractTransformerFeatures(pos *engine.Position, out []float32) {
 
 	halfMoves := uint64(pos.HalfMoves)
 
+	// Count position repetition
+	repCount := 0
+	for i := 0; i < pos.HalfMoves; i++ {
+		if pos.RepetitionHistory[i] == pos.Hash {
+			repCount++
+		}
+	}
+	f12 := float32(0.0)
+	f13 := float32(0.0)
+	if repCount == 1 {
+		f12 = 1.0
+	} else if repCount >= 2 {
+		f13 = 1.0
+	}
+
 	for sq := 0; sq < 64; sq++ {
 		srcSq := sq
 		if mirror {
@@ -62,10 +77,9 @@ func ExtractTransformerFeatures(pos *engine.Position, out []float32) {
 			}
 		}
 
-		// TODO: add position repetition after Zobrist hashing
 		// features 12-13: position repetition
-		out[offset+12] = 0.0
-		out[offset+13] = 0.0
+		out[offset+12] = f12
+		out[offset+13] = f13
 
 		// features 14-17: castling
 		out[offset+14] = wsc

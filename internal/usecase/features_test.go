@@ -174,15 +174,70 @@ func TestExtractTransformerFeatures_Halfmoves_Zero(t *testing.T) {
 	}
 }
 
-func TestExtractTransformerFeatures_RepetitionFeaturesAreZero(t *testing.T) {
-	// Features 12-13 (repetition) are TODO.
-	// Ensure they output 0.0 to prevent buffer garbage leakage.
-	out := extract(t, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
-	for sq := 0; sq < 64; sq++ {
-		for _, f := range []int{12, 13} {
-			if got := out[sq*20+f]; got != 0.0 {
-				t.Errorf("ExtractTransformerFeatures() repetition out[sq=%d, feature=%d] = %f, want 0.0", sq, f, got)
+func TestExtractTransformerFeatures_Repetitions(t *testing.T) {
+	tests := []struct {
+		name     string
+		startFen string
+		moves    []engine.Move
+		wantF12  float32 // 1 repetition
+		wantF13  float32 // 2 repetitions
+	}{
+		{
+			name:     "0 repetitions",
+			startFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+			moves:    []engine.Move{},
+			wantF12:  0.0,
+			wantF13:  0.0,
+		},
+		{
+			name:     "1 repetition (2 occurrences)",
+			startFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+			moves: []engine.Move{
+				engine.NewMove(engine.GetNumBySquareName("g1"), engine.GetNumBySquareName("f3"), engine.FlagQuiet),
+				engine.NewMove(engine.GetNumBySquareName("g8"), engine.GetNumBySquareName("f6"), engine.FlagQuiet),
+				engine.NewMove(engine.GetNumBySquareName("f3"), engine.GetNumBySquareName("g1"), engine.FlagQuiet),
+				engine.NewMove(engine.GetNumBySquareName("f6"), engine.GetNumBySquareName("g8"), engine.FlagQuiet),
+			},
+			wantF12: 1.0,
+			wantF13: 0.0,
+		},
+		{
+			name:     "2 repetitions (3 occurrences = draw)",
+			startFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+			moves: []engine.Move{
+				// 1st cycle
+				engine.NewMove(engine.GetNumBySquareName("g1"), engine.GetNumBySquareName("f3"), engine.FlagQuiet),
+				engine.NewMove(engine.GetNumBySquareName("g8"), engine.GetNumBySquareName("f6"), engine.FlagQuiet),
+				engine.NewMove(engine.GetNumBySquareName("f3"), engine.GetNumBySquareName("g1"), engine.FlagQuiet),
+				engine.NewMove(engine.GetNumBySquareName("f6"), engine.GetNumBySquareName("g8"), engine.FlagQuiet),
+				// 2nd cycle
+				engine.NewMove(engine.GetNumBySquareName("g1"), engine.GetNumBySquareName("f3"), engine.FlagQuiet),
+				engine.NewMove(engine.GetNumBySquareName("g8"), engine.GetNumBySquareName("f6"), engine.FlagQuiet),
+				engine.NewMove(engine.GetNumBySquareName("f3"), engine.GetNumBySquareName("g1"), engine.FlagQuiet),
+				engine.NewMove(engine.GetNumBySquareName("f6"), engine.GetNumBySquareName("g8"), engine.FlagQuiet),
+			},
+			wantF12: 0.0,
+			wantF13: 1.0,
+		},
+	}
+
+	out := make([]float32, 1280)
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			pos, err := engine.ParseFEN(tt.startFen)
+			if err != nil {
+				t.Fatalf("failed to parse FEN: %v", err)
 			}
-		}
+
+			for _, m := range tt.moves {
+				pos.MakeMove(m)
+			}
+
+			ExtractTransformerFeatures(pos, out)
+
+			assertGlobalFeature(t, out, 12, tt.wantF12, "rep1 (f12)")
+			assertGlobalFeature(t, out, 13, tt.wantF13, "rep2 (f13)")
+		})
 	}
 }

@@ -6,13 +6,15 @@ const bitboardCount = 12
 
 // Position represents the state of a chess board and game.
 type Position struct {
-	Pieces          [bitboardCount]Bitboard
-	ByColor         [2]Bitboard
-	SideToMove      PieceColor
-	CastlingRights  CastlingRights
-	EnPassantSquare Square
-	HalfMoves       int
-	CurrentTurn     int
+	Pieces            [bitboardCount]Bitboard
+	ByColor           [2]Bitboard
+	SideToMove        PieceColor
+	CastlingRights    CastlingRights
+	EnPassantSquare   Square
+	HalfMoves         int
+	CurrentTurn       int
+	Hash              uint64
+	RepetitionHistory [100]uint64
 }
 
 // NewPosition creates and returns a new chess position with default starting values.
@@ -75,6 +77,8 @@ type UndoInfo struct {
 	CastlingRights  CastlingRights
 	EnPassantSquare Square
 	HalfMoves       int
+	Hash            uint64
+	RepetitionHash  uint64
 }
 
 // MakeMove applies a move to the position and returns UndoInfo required to unmake it.
@@ -84,7 +88,11 @@ func (p *Position) MakeMove(move Move) UndoInfo {
 		CastlingRights:  p.CastlingRights,
 		EnPassantSquare: p.EnPassantSquare,
 		HalfMoves:       p.HalfMoves,
+		Hash:            p.Hash,
+		RepetitionHash:  p.RepetitionHistory[p.HalfMoves],
 	}
+
+	p.RepetitionHistory[p.HalfMoves] = p.Hash
 
 	from := move.From()
 	to := move.To()
@@ -93,12 +101,19 @@ func (p *Position) MakeMove(move Move) UndoInfo {
 	piece, color := p.GetPieceAndColorBySquare(from)
 	cIdx := color / 6
 
+	// XOR out old castling and en passant
+	p.Hash ^= ZobristCastling[p.CastlingRights]
+	if p.EnPassantSquare != NoSquare {
+		p.Hash ^= ZobristEnPassant[p.EnPassantSquare%8]
+	}
+
 	// Handle capture
 	if flags == FlagCapture || flags >= FlagPromoKnightCapture {
 		capturedPiece, capturedColor := p.GetPieceAndColorBySquare(to)
 		undo.CapturedPiece = capturedPiece
 		p.Pieces[int(capturedPiece)+int(capturedColor)] &^= Bitboard(1 << to)
 		p.ByColor[capturedColor/6] &^= Bitboard(1 << to) // /6 converts White(6)->1, Black(0)->0
+		p.Hash ^= ZobristTable[capturedColor/6][capturedPiece][to]
 
 		// If a rook is captured on its starting square, revoke its owner's castling right
 		if capturedPiece == Rook {
@@ -123,6 +138,7 @@ func (p *Position) MakeMove(move Move) UndoInfo {
 		}
 		p.Pieces[int(Pawn)+int(6-color)] &^= Bitboard(1 << capSq)
 		p.ByColor[(6-color)/6] &^= Bitboard(1 << capSq)
+		p.Hash ^= ZobristTable[(6-color)/6][Pawn][capSq]
 	}
 
 	// Move the piece
@@ -130,6 +146,9 @@ func (p *Position) MakeMove(move Move) UndoInfo {
 	p.Pieces[int(piece)+int(color)] |= Bitboard(1 << to)
 	p.ByColor[cIdx] &^= Bitboard(1 << from)
 	p.ByColor[cIdx] |= Bitboard(1 << to)
+
+	p.Hash ^= ZobristTable[cIdx][piece][from]
+	p.Hash ^= ZobristTable[cIdx][piece][to]
 
 	// Handle Castling moves
 	switch flags {
@@ -139,18 +158,28 @@ func (p *Position) MakeMove(move Move) UndoInfo {
 		p.Pieces[int(Rook)+int(color)] |= Bitboard(1 << rookTo)
 		p.ByColor[cIdx] &^= Bitboard(1 << rookFrom)
 		p.ByColor[cIdx] |= Bitboard(1 << rookTo)
+
+		p.Hash ^= ZobristTable[cIdx][Rook][rookFrom]
+		p.Hash ^= ZobristTable[cIdx][Rook][rookTo]
+
 	case FlagQueenCastle:
 		rookFrom, rookTo := Square(from-4), Square(to+1)
 		p.Pieces[int(Rook)+int(color)] &^= Bitboard(1 << rookFrom)
 		p.Pieces[int(Rook)+int(color)] |= Bitboard(1 << rookTo)
 		p.ByColor[cIdx] &^= Bitboard(1 << rookFrom)
 		p.ByColor[cIdx] |= Bitboard(1 << rookTo)
+
+		p.Hash ^= ZobristTable[cIdx][Rook][rookFrom]
+		p.Hash ^= ZobristTable[cIdx][Rook][rookTo]
 	}
 
 	// Handle Promotion
 	if promoType := move.Promotion(); promoType != None {
 		p.Pieces[int(Pawn)+int(color)] &^= Bitboard(1 << to)
 		p.Pieces[int(promoType)+int(color)] |= Bitboard(1 << to)
+
+		p.Hash ^= ZobristTable[cIdx][Pawn][to]
+		p.Hash ^= ZobristTable[cIdx][promoType][to]
 	}
 
 	// Update Castling Rights
@@ -198,11 +227,20 @@ func (p *Position) MakeMove(move Move) UndoInfo {
 	}
 	p.SideToMove = 6 - p.SideToMove // Switch color
 
+	// XOR in new castling, en passant, and side to move
+	p.Hash ^= ZobristCastling[p.CastlingRights]
+	if p.EnPassantSquare != NoSquare {
+		p.Hash ^= ZobristEnPassant[p.EnPassantSquare%8]
+	}
+	p.Hash ^= ZobristSideToMove
+
 	return undo
 }
 
 // UnmakeMove reverts the state of the position using UndoInfo.
 func (p *Position) UnmakeMove(move Move, undo UndoInfo) {
+	p.RepetitionHistory[undo.HalfMoves] = undo.RepetitionHash
+	p.Hash = undo.Hash
 	p.SideToMove = 6 - p.SideToMove
 	if p.SideToMove == Black {
 		p.CurrentTurn--

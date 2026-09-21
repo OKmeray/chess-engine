@@ -62,3 +62,19 @@ func (p *Position) IsInsufficientMaterial() bool {
 
 	return false
 }
+
+// IsThreeFoldRepetition returns true if the current position has occurred 2+ times before.
+func (p *Position) IsThreeFoldRepetition() bool {
+	// We only need to search up to p.HalfMoves, because any capture or pawn push
+	// irrevocably changes the board and resets HalfMoves to 0.
+	count := 0
+	for i := range p.HalfMoves {
+		if p.RepetitionHistory[i] == p.Hash {
+			count++
+			if count >= 2 {
+				return true
+			}
+		}
+	}
+	return false
+}

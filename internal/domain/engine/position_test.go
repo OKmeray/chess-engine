@@ -453,3 +453,133 @@ func TestPosition_GetKingSq(t *testing.T) {
 		})
 	}
 }
+
+func TestPosition_HalfMoves(t *testing.T) {
+	startFen := "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+	pos, err := ParseFEN(startFen)
+	if err != nil {
+		t.Fatalf("failed to parse FEN: %v", err)
+	}
+
+	tests := []struct {
+		name          string
+		move          Move
+		wantHalfMoves int
+	}{
+		{
+			name:          "White Knight makes quite move",
+			move:          NewMove(GetNumBySquareName("g1"), GetNumBySquareName("f3"), FlagQuiet),
+			wantHalfMoves: 1,
+		},
+		{
+			name:          "Black Knight makes quite move",
+			move:          NewMove(GetNumBySquareName("g8"), GetNumBySquareName("f6"), FlagQuiet),
+			wantHalfMoves: 2,
+		},
+		{
+			name:          "White Knight makes quite move",
+			move:          NewMove(GetNumBySquareName("b1"), GetNumBySquareName("c3"), FlagQuiet),
+			wantHalfMoves: 3,
+		},
+		{
+			name:          "Black Knight makes quite move",
+			move:          NewMove(GetNumBySquareName("b8"), GetNumBySquareName("c6"), FlagQuiet),
+			wantHalfMoves: 4,
+		},
+		{
+			name:          "White Double Pawn Push",
+			move:          NewMove(GetNumBySquareName("e2"), GetNumBySquareName("e4"), FlagDoublePawn),
+			wantHalfMoves: 0,
+		},
+		{
+			name:          "Black Double Pawn Push",
+			move:          NewMove(GetNumBySquareName("e7"), GetNumBySquareName("e5"), FlagDoublePawn),
+			wantHalfMoves: 0,
+		},
+		{
+			name:          "White Bishop makes quite move",
+			move:          NewMove(GetNumBySquareName("f1"), GetNumBySquareName("c4"), FlagQuiet),
+			wantHalfMoves: 1,
+		},
+		{
+			name:          "Black Bishop makes quite move",
+			move:          NewMove(GetNumBySquareName("f8"), GetNumBySquareName("c5"), FlagQuiet),
+			wantHalfMoves: 2,
+		},
+		{
+			name:          "Castling (White King side)",
+			move:          NewMove(GetNumBySquareName("e1"), GetNumBySquareName("g1"), FlagKingCastle),
+			wantHalfMoves: 3,
+		},
+		{
+			name:          "Black Knight makes quite move",
+			move:          NewMove(GetNumBySquareName("c6"), GetNumBySquareName("d4"), FlagQuiet),
+			wantHalfMoves: 4,
+		},
+		{
+			name:          "White Knight captures Black Knight",
+			move:          NewMove(GetNumBySquareName("f3"), GetNumBySquareName("d4"), FlagCapture),
+			wantHalfMoves: 0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			pos.MakeMove(tt.move)
+			if pos.HalfMoves != tt.wantHalfMoves {
+				t.Errorf("MakeMove() HalfMoves = %d, want %d", pos.HalfMoves, tt.wantHalfMoves)
+			}
+		})
+	}
+}
+
+func TestPosition_RepetitionHistory(t *testing.T) {
+	startFen := "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+	pos, err := ParseFEN(startFen)
+	if err != nil {
+		t.Fatalf("failed to parse FEN: %v", err)
+	}
+
+	// moves for the test
+	// 5 quiet moves, then pawn move which resets the history, then 2 more
+	// quiet moves, then we undo 3 moves and test if the repetition history
+	// contains correct hashes for the first 5 moves
+	m1 := NewMove(GetNumBySquareName("g1"), GetNumBySquareName("f3"), FlagQuiet)
+	m2 := NewMove(GetNumBySquareName("b8"), GetNumBySquareName("c6"), FlagQuiet)
+	m3 := NewMove(GetNumBySquareName("f1"), GetNumBySquareName("c4"), FlagQuiet)
+	m4 := NewMove(GetNumBySquareName("f8"), GetNumBySquareName("c5"), FlagQuiet)
+	m5 := NewMove(GetNumBySquareName("b1"), GetNumBySquareName("c3"), FlagQuiet)
+	m6 := NewMove(GetNumBySquareName("d7"), GetNumBySquareName("d6"), FlagQuiet)
+	m7 := NewMove(GetNumBySquareName("e1"), GetNumBySquareName("g1"), FlagKingCastle)
+	m8 := NewMove(GetNumBySquareName("g8"), GetNumBySquareName("f6"), FlagQuiet)
+
+	moves := []Move{m1, m2, m3, m4, m5, m6, m7, m8}
+	undos := make([]UndoInfo, 8)
+	expectedHashes := make([]uint64, 8)
+
+	for i, m := range moves {
+		expectedHashes[i] = pos.Hash
+		undos[i] = pos.MakeMove(m)
+	}
+
+	// Now unmake 3 moves (m8, m7, m6) to get back to the state after move 5
+	for i := 7; i >= 5; i-- {
+		pos.UnmakeMove(moves[i], undos[i])
+	}
+
+	// Verify the RepetitionHistory is restored correctly for the first 5 moves
+	for i := 0; i < 5; i++ {
+		if pos.RepetitionHistory[i] != expectedHashes[i] {
+			t.Errorf("after unmaking back to move 5, RepetitionHistory[%d] = %d, want %d", i, pos.RepetitionHistory[i], expectedHashes[i])
+		}
+	}
+
+	// Verify unmaking the rest works
+	for i := 4; i >= 0; i-- {
+		pos.UnmakeMove(moves[i], undos[i])
+	}
+
+	if pos.FEN() != startFen {
+		t.Errorf("FEN after fully unmaking = %q, want %q", pos.FEN(), startFen)
+	}
+}
