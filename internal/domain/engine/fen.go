@@ -67,6 +67,8 @@ func ParseFEN(fen string) (*Position, error) {
 		return nil, ErrMissingKing
 	}
 
+	pos.Hash = pos.ComputeHash()
+
 	return pos, nil
 }
 
