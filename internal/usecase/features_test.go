@@ -10,7 +10,7 @@ import (
 func assertGlobalFeature(t *testing.T, out []float32, feature int, want float32, label string) {
 	t.Helper()
 
-	for sq := 0; sq < 64; sq++ {
+	for sq := range 64 {
 		if got := out[sq*20+feature]; got != want {
 			t.Errorf("ExtractTransformerFeatures() %s out[sq=%d, feature=%d] = %f, want %f",
 				label, sq, feature, got, want)
@@ -22,7 +22,7 @@ func assertGlobalFeature(t *testing.T, out []float32, feature int, want float32,
 func assertOnlyOneHot(t *testing.T, out []float32, feature int, onSquares map[int]bool, label string) {
 	t.Helper()
 
-	for sq := 0; sq < 64; sq++ {
+	for sq := range 64 {
 		want := float32(0.0)
 		if onSquares[sq] {
 			want = 1.0
@@ -96,8 +96,8 @@ func TestExtractTransformerFeatures_StartingPosition_Pieces(t *testing.T) {
 	set(62, 7)  // g1 White Knight
 	set(63, 9)  // h1 White Rook
 
-	for sq := 0; sq < 64; sq++ {
-		for f := 0; f < 12; f++ {
+	for sq := range 64 {
+		for f := range 12 {
 			expectedVal := expectedPieces[sq*12+f]
 
 			gotWhite := outWhite[sq*20+f]
@@ -154,7 +154,7 @@ func TestExtractTransformerFeatures_EnPassant_None(t *testing.T) {
 func TestExtractTransformerFeatures_Halfmoves_FullBitPattern(t *testing.T) {
 	out := extract(t, "4k3/8/8/3p4/8/4P3/8/4K3 w - - 5 61") // 5 in binary is ...00000101
 	expectedOnes := map[int]bool{61: true, 63: true}        // inclusive bits in number 5
-	for sq := 0; sq < 64; sq++ {
+	for sq := range 64 {
 		want := float32(0.0)
 		if expectedOnes[sq] {
 			want = 1.0
@@ -167,7 +167,7 @@ func TestExtractTransformerFeatures_Halfmoves_FullBitPattern(t *testing.T) {
 
 func TestExtractTransformerFeatures_Halfmoves_Zero(t *testing.T) {
 	out := extract(t, "4k3/8/8/3p4/8/4P3/8/4K3 w - - 0 61")
-	for sq := 0; sq < 64; sq++ {
+	for sq := range 64 {
 		if got := out[sq*20+19]; got != 0.0 {
 			t.Errorf("ExtractTransformerFeatures() halfmoves out[sq=%d] = %f, want 0.0", sq, got)
 		}

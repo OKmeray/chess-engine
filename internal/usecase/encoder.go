@@ -10,9 +10,7 @@ const (
 	PolicySize = 64 * TypesCount // 4864
 )
 
-var (
-	typeToIndex map[string]int
-)
+var typeToIndex map[string]int
 
 func init() {
 	typeToIndex = make(map[string]int)
@@ -29,8 +27,14 @@ func init() {
 
 	// knights
 	knightDirs := []struct{ d2, d1 string }{
-		{"N", "E"}, {"N", "W"}, {"S", "E"}, {"S", "W"},
-		{"E", "N"}, {"E", "S"}, {"W", "N"}, {"W", "S"},
+		{"N", "E"},
+		{"N", "W"},
+		{"S", "E"},
+		{"S", "W"},
+		{"E", "N"},
+		{"E", "S"},
+		{"W", "N"},
+		{"W", "S"},
 	}
 	for _, k := range knightDirs {
 		key := makeKnightKey(k.d2, k.d1[0])
