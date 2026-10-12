@@ -1,0 +1,81 @@
+version: "2"
+linters:
+  enable:
+    # Bug Catchers
+    - govet
+    - errcheck
+    - staticcheck
+    - ineffassign
+    - unused
+    - bodyclose
+    - nilerr
+    - nilnesserr
+
+    # Code Quality, Errors & Security
+    - errorlint
+    - revive
+    - gosec
+    - noctx
+    - testifylint
+    - usestdlibvars 
+
+    # Performance & Formatting
+    - prealloc
+    - misspell
+    - perfsprint    
+    - fatcontext
+    - modernize
+
+  settings:
+    govet:
+      enable:
+        - fieldalignment
+    revive:
+      rules:
+        - name: exported
+          severity: warning
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+      - node_modules
+    rules:
+      - linters:
+          - errcheck
+        path: _test\.go
+      - linters:
+          - bodyclose
+        path: _test\.go
+      - linters:
+          - errcheck
+        text: "Error return value of .*(Close|Flush).* is not checked"
+      - linters:
+          - govet
+        text: "fieldalignment:"
+        path: "(_test\\.go|internal/(transport|infrastructure|app|config)|internal/domain/model\\.go)"
+      - linters:
+          - gosec
+        text: "G115:"
+      - linters:
+          - gosec
+        text: "G404:"
+        path: "zobrist\\.go"
+      - linters:
+          - gosec
+        text: "G602:"
+        path: "internal/infrastructure/onnx/evaluator\\.go"
+      - linters:
+          - gosec
+        path: _test\.go
+formatters:
+  enable:
+    - gofumpt
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+      - node_modules
