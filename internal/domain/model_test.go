@@ -34,7 +34,7 @@ func TestNNModelDetails_Value(t *testing.T) {
 func TestNNModelDetails_Scan(t *testing.T) {
 	tests := []struct {
 		name    string
-		input   interface{}
+		input   any
 		want    NNModelDetails
 		wantErr bool
 	}{

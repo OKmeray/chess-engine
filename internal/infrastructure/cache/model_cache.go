@@ -93,7 +93,7 @@ func (c *ModelCache) GetByID(ctx context.Context, id int) (domain.NNModel, error
 
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	
+
 	c.models[id] = cacheItem{
 		model:     model,
 		fetchedAt: time.Now(),

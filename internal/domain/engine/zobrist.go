@@ -25,9 +25,9 @@ func InitZobrist() {
 	rng := rand.New(rand.NewSource(21212121))
 
 	// Pieces
-	for c := 0; c < 2; c++ {
-		for p := 0; p < 6; p++ {
-			for sq := 0; sq < 64; sq++ {
+	for c := range 2 {
+		for p := range 6 {
+			for sq := range 64 {
 				ZobristTable[c][p][sq] = rng.Uint64()
 			}
 		}
@@ -37,12 +37,12 @@ func InitZobrist() {
 	ZobristSideToMove = rng.Uint64()
 
 	// Castling rights (4 bits = 16 combinations)
-	for i := 0; i < 16; i++ {
+	for i := range 16 {
 		ZobristCastling[i] = rng.Uint64()
 	}
 
 	// En Passant files (8 files)
-	for i := 0; i < 8; i++ {
+	for i := range 8 {
 		ZobristEnPassant[i] = rng.Uint64()
 	}
 }
@@ -52,7 +52,7 @@ func InitZobrist() {
 func (p *Position) ComputeHash() uint64 {
 	var hash uint64
 
-	for sq := Square(0); sq < 64; sq++ {
+	for sq := range Square(64) {
 		pt, color := p.GetPieceAndColorBySquare(sq)
 		if pt != None {
 			cIdx := color / 6 // Convert White(6)->1, Black(0)->0

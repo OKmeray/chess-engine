@@ -23,17 +23,17 @@ const (
 // TTEntry represents a cached search result in the Transposition Table.
 type TTEntry struct {
 	Hash  uint64
-	Move  engine.Move
 	Score float32
+	Move  engine.Move
 	Depth int8
 	Flag  TTFlag
 }
 
 // Minimax represents the Minimax search algorithm with Alpha-Beta pruning.
 type Minimax struct {
+	tt            []TTEntry
 	maxDepth      int
 	nodesSearched int
-	tt            []TTEntry
 }
 
 // NewMinimax creates a new Minimax searcher.
@@ -305,7 +305,7 @@ func sortMoves(pos *engine.Position, moves []engine.Move, ttMove engine.Move) {
 // evaluate is a basic material-based heuristic evaluation.
 func evaluate(pos *engine.Position) float32 {
 	var score float32
-	for i := 0; i < 64; i++ {
+	for i := range 64 {
 		pt, color := pos.GetPieceAndColorBySquare(engine.Square(i))
 		if pt != engine.None {
 			val := float32(piecePrices[pt])

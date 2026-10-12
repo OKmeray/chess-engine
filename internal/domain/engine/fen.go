@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// FEN parsing errors.
 var (
 	ErrEmptyFEN            = errors.New("FEN string cannot be empty")
 	ErrInvalidFENFormat    = errors.New("invalid FEN string format")
@@ -82,7 +83,7 @@ func (p *Position) FEN() string {
 	sb.Grow(80)
 	emptyCount := 0
 
-	for i := 0; i < 64; i++ {
+	for i := range 64 {
 		piece, color := p.GetPieceAndColorBySquare(Square(i))
 
 		if piece == None {

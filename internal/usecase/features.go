@@ -54,7 +54,7 @@ func ExtractTransformerFeatures(pos *engine.Position, out []float32) {
 		f13 = 1.0
 	}
 
-	for sq := 0; sq < 64; sq++ {
+	for sq := range 64 {
 		srcSq := sq
 		if mirror {
 			srcSq = (7-sq/8)*8 + sq%8
@@ -63,7 +63,7 @@ func ExtractTransformerFeatures(pos *engine.Position, out []float32) {
 		offset := sq * 20
 
 		// features 0-11: pieces
-		for bi := 0; bi < 12; bi++ {
+		for bi := range 12 {
 			srcBi := bi
 			if mirror {
 				srcBi = (bi + 6) % 12

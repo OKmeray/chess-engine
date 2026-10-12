@@ -17,7 +17,7 @@ func TestMCTSNode_AddValue(t *testing.T) {
 	var wg sync.WaitGroup
 
 	numGoroutines := 100
-	for i := 0; i < numGoroutines; i++ {
+	for range numGoroutines {
 		wg.Go(func() {
 			node.addValue(1.5)
 		})
@@ -55,7 +55,7 @@ func TestMCTSSearcher_Backpropagate(t *testing.T) {
 		t.Errorf("nodes[0].getValue() = %f, want -1.0", got)
 	}
 
-	for i := 0; i < 4; i++ {
+	for i := range 4 {
 		if got := m.nodes[i].Visits; got != 1 {
 			t.Errorf("nodes[%d].Visits = %d, want 1", i, got)
 		}

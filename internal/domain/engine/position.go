@@ -28,7 +28,7 @@ func NewPosition() *Position {
 		byColor[i] = NewBitboard(0)
 	}
 
-	var sideToMove PieceColor = White
+	sideToMove := White
 
 	var castlingRights CastlingRights
 	castlingRights |= ^WhiteShort

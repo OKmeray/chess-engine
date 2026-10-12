@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"slices"
 	"testing"
 )
 
@@ -201,8 +202,8 @@ func TestPosition_IsThreeFoldRepetition(t *testing.T) {
 			}
 
 			// Verify unmaking cleanly restores state and drops repetition count
-			for i := len(tt.moves) - 1; i >= 0; i-- {
-				pos.UnmakeMove(tt.moves[i], undos[i])
+			for i, v := range slices.Backward(tt.moves) {
+				pos.UnmakeMove(v, undos[i])
 			}
 
 			if got := pos.IsThreeFoldRepetition(); got != false {

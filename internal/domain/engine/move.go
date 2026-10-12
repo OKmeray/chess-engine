@@ -6,6 +6,7 @@ import (
 	"math/bits"
 )
 
+// SAN parsing and move generation errors.
 var (
 	ErrNilPosition                 = errors.New("position cannot be nil")
 	ErrSANTooShort                 = errors.New("SAN string too short")
@@ -118,7 +119,7 @@ func ParseSAN(pos *Position, san string) (Move, error) {
 		return Move(0), fmt.Errorf("%w: %s", ErrInvalidSANFormat, originalSan)
 	}
 
-	var promotion PieceType = None
+	promotion := None
 	if san[len(san)-2] == '=' {
 		p, _, valid := pieceFromFenChar(san[len(san)-1])
 		if !valid {
@@ -146,7 +147,7 @@ func ParseSAN(pos *Position, san string) (Move, error) {
 	toSquare := getNumBySquareName(destFile, destRank)
 	san = san[:len(san)-2]
 
-	var flags uint16 = FlagQuiet
+	flags := FlagQuiet
 
 	if len(san) > 0 && san[len(san)-1] == 'x' {
 		flags = FlagCapture

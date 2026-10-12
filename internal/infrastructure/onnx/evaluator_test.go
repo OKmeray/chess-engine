@@ -90,7 +90,7 @@ func TestNewEvaluator_BadPath(t *testing.T) {
 func TestNewEvaluator_CorruptFile(t *testing.T) {
 	initTestEnvironment(t)
 	corruptModelPath := filepath.Join(t.TempDir(), "bad.onnx")
-	_ = os.WriteFile(corruptModelPath, []byte("this is not a real onnx model"), 0644)
+	_ = os.WriteFile(corruptModelPath, []byte("this is not a real onnx model"), 0o644)
 
 	_, err := NewEvaluator(corruptModelPath)
 	if err == nil {
@@ -145,7 +145,7 @@ func TestEvaluator_EvaluateBatch_OutputLengths(t *testing.T) {
 
 	batchSize := 2
 	positions := make([]engine.Position, batchSize)
-	for i := 0; i < batchSize; i++ {
+	for i := range batchSize {
 		positions[i] = *engine.NewPosition()
 	}
 

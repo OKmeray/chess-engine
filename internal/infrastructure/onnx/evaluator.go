@@ -127,7 +127,7 @@ func (e *Evaluator) EvaluateBatch(positions []engine.Position) (policies [][]flo
 	inputSize := batchSize * inputDim1 * inputDim2
 	inputData := make([]float32, inputSize)
 
-	for i := 0; i < batchSize; i++ {
+	for i := range batchSize {
 		offset := i * inputDim1 * inputDim2
 		usecase.ExtractTransformerFeatures(&positions[i], inputData[offset:offset+(inputDim1*inputDim2)])
 	}
@@ -173,7 +173,7 @@ func (e *Evaluator) EvaluateBatch(positions []engine.Position) (policies [][]flo
 
 	// Reshape output slices
 	policies = make([][]float32, batchSize)
-	for i := 0; i < batchSize; i++ {
+	for i := range batchSize {
 		policies[i] = policyData[i*policyDim : (i+1)*policyDim]
 	}
 

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"math"
 	"runtime"
+	"slices"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -58,26 +59,26 @@ func (n *MCTSNode) getValue() float32 {
 
 // EvalRequest packages a board position and a return channel for the NN batcher.
 type EvalRequest struct {
-	NodeIdx int32
-	Pos     engine.Position
 	RespCh  chan EvalResponse
+	Pos     engine.Position
+	NodeIdx int32
 }
 
 // EvalResponse carries the evaluated policy and value back to a waiting worker.
 type EvalResponse struct {
+	Err    error
 	Policy []float32
 	Value  float32
-	Err    error
 }
 
 // MCTSSearcher manages the state and workers for a concurrent Monte Carlo Tree Search.
 type MCTSSearcher struct {
 	evaluator  Evaluator
-	nodes      []MCTSNode
-	nodeCount  int32
-	numWorkers int
 	evalReqCh  chan EvalRequest
-	evalCache  sync.Map // Caches NN evaluations to prevent redundant work
+	evalCache  sync.Map
+	nodes      []MCTSNode
+	numWorkers int
+	nodeCount  int32
 }
 
 // NewMCTSSearcher initializes a concurrent Monte Carlo Tree Search engine.
@@ -481,8 +482,8 @@ func (m *MCTSSearcher) backpropagate(history []int32, value float32) {
 	// Value should negate at each step upwards.
 	currentVal := -value
 
-	for i := len(history) - 1; i >= 0; i-- {
-		idx := history[i]
+	for _, idx := range slices.Backward(history) {
+
 		node := &m.nodes[idx]
 
 		atomic.AddInt32(&node.Visits, 1)

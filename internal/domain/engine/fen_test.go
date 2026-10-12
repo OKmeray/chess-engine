@@ -121,20 +121,20 @@ func TestParseFEN_State(t *testing.T) {
 
 		verifyPieces(t, pos, White,
 			makeBitboard("a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2"), // Pawns
-			makeBitboard("b1", "g1"),                                     // Knights
-			makeBitboard("c1", "f1"),                                     // Bishops
-			makeBitboard("a1", "h1"),                                     // Rooks
-			makeBitboard("d1"),                                           // Queens
-			makeBitboard("e1"),                                           // King
+			makeBitboard("b1", "g1"), // Knights
+			makeBitboard("c1", "f1"), // Bishops
+			makeBitboard("a1", "h1"), // Rooks
+			makeBitboard("d1"),       // Queens
+			makeBitboard("e1"),       // King
 		)
 
 		verifyPieces(t, pos, Black,
 			makeBitboard("a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7"), // Pawns
-			makeBitboard("b8", "g8"),                                     // Knights
-			makeBitboard("c8", "f8"),                                     // Bishops
-			makeBitboard("a8", "h8"),                                     // Rooks
-			makeBitboard("d8"),                                           // Queens
-			makeBitboard("e8"),                                           // King
+			makeBitboard("b8", "g8"), // Knights
+			makeBitboard("c8", "f8"), // Bishops
+			makeBitboard("a8", "h8"), // Rooks
+			makeBitboard("d8"),       // Queens
+			makeBitboard("e8"),       // King
 		)
 
 		if pos.SideToMove != White {
@@ -171,11 +171,11 @@ func TestParseFEN_State(t *testing.T) {
 
 		verifyPieces(t, pos, Black,
 			makeBitboard("b7", "c7", "f7", "g7", "h7", "a6", "e6", "e4"), // Pawns
-			makeBitboard("c6", "f6"),                                     // Knights
-			makeBitboard("e7"),                                           // Bishops
-			makeBitboard("a8", "f8"),                                     // Rooks
-			makeBitboard("d8"),                                           // Queens
-			makeBitboard("g8"),                                           // King
+			makeBitboard("c6", "f6"), // Knights
+			makeBitboard("e7"),       // Bishops
+			makeBitboard("a8", "f8"), // Rooks
+			makeBitboard("d8"),       // Queens
+			makeBitboard("g8"),       // King
 		)
 
 		if pos.SideToMove != Black {
