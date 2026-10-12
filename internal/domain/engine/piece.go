@@ -1,16 +1,18 @@
 package engine
 
-// PieceColor
+// PieceColor represents the color of a chess piece or side to move.
 type PieceColor int
 
+// Side to move and piece colors.
 const (
 	Black PieceColor = 0
 	White PieceColor = 6
 )
 
-// Piece
+// PieceType represents a piece type on the board.
 type PieceType int
 
+// Piece type identifiers.
 const (
 	None   PieceType = -1
 	Pawn   PieceType = 0
@@ -21,9 +23,10 @@ const (
 	King   PieceType = 5
 )
 
-// PiecePrice
+// PiecePrice represents the relative material value of a piece in centipawns.
 type PiecePrice int
 
+// Piece values in centipawns.
 const (
 	PawnPrice   PiecePrice = 100
 	KnightPrice PiecePrice = 300

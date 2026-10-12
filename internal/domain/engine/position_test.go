@@ -568,7 +568,7 @@ func TestPosition_RepetitionHistory(t *testing.T) {
 	}
 
 	// Verify the RepetitionHistory is restored correctly for the first 5 moves
-	for i := 0; i < 5; i++ {
+	for i := range 5 {
 		if pos.RepetitionHistory[i] != expectedHashes[i] {
 			t.Errorf("after unmaking back to move 5, RepetitionHistory[%d] = %d, want %d", i, pos.RepetitionHistory[i], expectedHashes[i])
 		}

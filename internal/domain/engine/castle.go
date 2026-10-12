@@ -3,6 +3,7 @@ package engine
 // CastlingRights is an 8-bit mask holding all 4 castling states
 type CastlingRights uint8
 
+// Castling rights bitmask flags.
 const (
 	WhiteShort CastlingRights = 1 << 0 // 0001
 	WhiteLong  CastlingRights = 1 << 1 // 0010

@@ -148,11 +148,7 @@ func GenerateKingMoves(piece, own, enemy Bitboard) Bitboard {
 
 func generateDiagonalUp(piece, own, enemy Bitboard) Bitboard {
 	var moves Bitboard
-	for {
-		if (piece & (FileA | Rank8)) != 0 {
-			break
-		}
-
+	for (piece & (FileA | Rank8)) == 0 {
 		piece >>= 9
 		if (piece & own) != 0 {
 			break
@@ -168,11 +164,7 @@ func generateDiagonalUp(piece, own, enemy Bitboard) Bitboard {
 
 func generateDiagonalDown(piece, own, enemy Bitboard) Bitboard {
 	var moves Bitboard
-	for {
-		if (piece & (FileH | Rank1)) != 0 {
-			break
-		}
-
+	for (piece & (FileH | Rank1)) == 0 {
 		piece <<= 9
 		if (piece & own) != 0 {
 			break
@@ -188,11 +180,7 @@ func generateDiagonalDown(piece, own, enemy Bitboard) Bitboard {
 
 func generateAntidiagonalUp(piece, own, enemy Bitboard) Bitboard {
 	var moves Bitboard
-	for {
-		if (piece & (FileH | Rank8)) != 0 {
-			break
-		}
-
+	for (piece & (FileH | Rank8)) == 0 {
 		piece >>= 7
 		if (piece & own) != 0 {
 			break
@@ -208,11 +196,7 @@ func generateAntidiagonalUp(piece, own, enemy Bitboard) Bitboard {
 
 func generateAntidiagonalDown(piece, own, enemy Bitboard) Bitboard {
 	var moves Bitboard
-	for {
-		if (piece & (FileA | Rank1)) != 0 {
-			break
-		}
-
+	for (piece & (FileA | Rank1)) == 0 {
 		piece <<= 7
 		if (piece & own) != 0 {
 			break
@@ -228,11 +212,7 @@ func generateAntidiagonalDown(piece, own, enemy Bitboard) Bitboard {
 
 func generateVerticalUp(piece, own, enemy Bitboard) Bitboard {
 	var moves Bitboard
-	for {
-		if (piece & Rank8) != 0 {
-			break
-		}
-
+	for (piece & Rank8) == 0 {
 		piece >>= 8
 		if (piece & own) != 0 {
 			break
@@ -248,11 +228,7 @@ func generateVerticalUp(piece, own, enemy Bitboard) Bitboard {
 
 func generateVerticalDown(piece, own, enemy Bitboard) Bitboard {
 	var moves Bitboard
-	for {
-		if (piece & Rank1) != 0 {
-			break
-		}
-
+	for (piece & Rank1) == 0 {
 		piece <<= 8
 		if (piece & own) != 0 {
 			break
@@ -268,11 +244,7 @@ func generateVerticalDown(piece, own, enemy Bitboard) Bitboard {
 
 func generateHorizontalLeft(piece, own, enemy Bitboard) Bitboard {
 	var moves Bitboard
-	for {
-		if (piece & FileA) != 0 {
-			break
-		}
-
+	for (piece & FileA) == 0 {
 		piece >>= 1
 		if (piece & own) != 0 {
 			break
@@ -288,11 +260,7 @@ func generateHorizontalLeft(piece, own, enemy Bitboard) Bitboard {
 
 func generateHorizontalRight(piece, own, enemy Bitboard) Bitboard {
 	var moves Bitboard
-	for {
-		if (piece & FileH) != 0 {
-			break
-		}
-
+	for (piece & FileH) == 0 {
 		piece <<= 1
 		if (piece & own) != 0 {
 			break

@@ -44,7 +44,7 @@ func (d NNModelDetails) Value() (driver.Value, error) {
 }
 
 // Scan implements the sql.Scanner interface for database deserialization.
-func (d *NNModelDetails) Scan(value interface{}) error {
+func (d *NNModelDetails) Scan(value any) error {
 	b, ok := value.([]byte)
 	if !ok {
 		s, ok := value.(string)
