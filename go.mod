@@ -1,6 +1,6 @@
 module github.com/OKmeray/chess-engine
 
-go 1.27.1
+go 1.27.2
 
 require (
 	github.com/golang-migrate/migrate/v4 v4.20.1
@@ -65,6 +65,6 @@ require (
 	golang.org/x/crypto v0.54.0 // indirect
 	golang.org/x/sync v0.22.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
-	golang.org/x/text v0.40.0 // indirect
+	golang.org/x/text v0.41.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
