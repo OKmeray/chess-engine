@@ -24,7 +24,8 @@ import (
 func setupTestDB(t *testing.T) (*ModelRepository, func()) {
 	ctx := context.Background()
 
-	pgContainer, err := testcontainerspg.Run(ctx,
+	pgContainer, err := testcontainerspg.Run(
+		ctx,
 		"postgres:17-alpine",
 		testcontainerspg.WithDatabase("testdb"),
 		testcontainerspg.WithUsername("testuser"),
@@ -98,7 +99,8 @@ func TestModelRepository_GetByID(t *testing.T) {
 	}
 
 	var insertedID int
-	err := repo.db.QueryRowContext(ctx, `
+	err := repo.db.QueryRowContext(
+		ctx, `
 		INSERT INTO models (name, path, details) 
 		VALUES ($1, $2, $3) RETURNING id`,
 		testModelName, testModelPath, dummyDetails,
@@ -135,7 +137,7 @@ func TestModelRepository_GetByID_NotFound(t *testing.T) {
 	}
 }
 
-func TestModelRepository_GetAll(t *testing.T) {
+func TestModelRepository_List(t *testing.T) {
 	repo, teardown := setupTestDB(t)
 	defer teardown()
 
@@ -146,31 +148,77 @@ func TestModelRepository_GetAll(t *testing.T) {
 		t.Fatalf("failed to truncate table: %v", err)
 	}
 
+	const (
+		modelA = "model_a"
+		modelB = "model_b"
+		modelC = "model_c"
+	)
+
 	dummyJSON := `{"architecture": "CNN", "cnn": {"filters": 64}}`
-	_, err = repo.db.ExecContext(ctx, `
+	_, err = repo.db.ExecContext(
+		ctx, `
 		INSERT INTO models (name, path, details) VALUES 
-		('model_a', 'models/a.onnx', $1),
-		('model_b', 'models/b.onnx', $2)`,
-		dummyJSON, dummyJSON,
+		($1, 'models/a.onnx', $4),
+		($2, 'models/b.onnx', $5),
+		($3, 'models/c.onnx', $6)`,
+		modelA, modelB, modelC,
+		dummyJSON, dummyJSON, dummyJSON,
 	)
 	if err != nil {
 		t.Fatalf("failed to insert test data: %v", err)
 	}
 
-	models, err := repo.GetAll(ctx)
-	if err != nil {
-		t.Fatalf("GetAll(): unexpected error: %v", err)
+	tests := []struct {
+		name      string
+		limit     int
+		offset    int
+		wantTotal int
+		wantNames []string
+	}{
+		{
+			name:      "first page",
+			limit:     2,
+			offset:    0,
+			wantTotal: 3,
+			wantNames: []string{modelA, modelB},
+		},
+		{
+			name:      "second page",
+			limit:     2,
+			offset:    2,
+			wantTotal: 3,
+			wantNames: []string{modelC},
+		},
+		{
+			name:      "offset beyond total returns empty",
+			limit:     2,
+			offset:    10,
+			wantTotal: 3,
+			wantNames: nil,
+		},
 	}
 
-	if len(models) != 2 {
-		t.Errorf("Len: got %d; want %d", len(models), 2)
-	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			models, total, err := repo.List(ctx, tt.limit, tt.offset)
+			if err != nil {
+				t.Fatalf("List(%d, %d): unexpected error: %v", tt.limit, tt.offset, err)
+			}
 
-	if len(models) > 0 {
-		m := models[0]
-		if m.Name != "model_a" && m.Name != "model_b" {
-			t.Errorf("GetAll()[0].Name = %q, want %q or %q", m.Name, "model_a", "model_b")
-		}
+			if total != tt.wantTotal {
+				t.Errorf("List(%d, %d) total = %d, want %d", tt.limit, tt.offset, total, tt.wantTotal)
+			}
+
+			if len(models) != len(tt.wantNames) {
+				t.Fatalf("Len: got %d, want %d", len(models), len(tt.wantNames))
+			}
+
+			for i, wantName := range tt.wantNames {
+				if models[i].Name != wantName {
+					t.Errorf("models[%d].Name = %q, want %q", i, models[i].Name, wantName)
+				}
+			}
+		})
 	}
 }
 

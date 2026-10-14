@@ -44,17 +44,19 @@ func (r *ModelRepository) GetByID(ctx context.Context, id int) (domain.NNModel, 
 	return model, nil
 }
 
-// GetAll returns all available models.
-func (r *ModelRepository) GetAll(ctx context.Context) ([]domain.NNModel, error) {
-	query := `SELECT id, name, path, details, is_active, created_at FROM models`
+// List returns a paginated list of models and the total count.
+func (r *ModelRepository) List(ctx context.Context, limit, offset int) (models []domain.NNModel, total int, err error) {
+	countQuery := `SELECT COUNT(*) FROM models`
+	if err := r.db.QueryRowContext(ctx, countQuery).Scan(&total); err != nil {
+		return nil, 0, fmt.Errorf("error counting models: %w", err)
+	}
 
-	rows, err := r.db.QueryContext(ctx, query)
+	query := `SELECT id, name, path, details, is_active, created_at FROM models ORDER BY id LIMIT $1 OFFSET $2`
+	rows, err := r.db.QueryContext(ctx, query, limit, offset)
 	if err != nil {
-		return nil, fmt.Errorf("error querying models: %w", err)
+		return nil, 0, fmt.Errorf("error querying models: %w", err)
 	}
 	defer rows.Close()
-
-	var models []domain.NNModel
 
 	for rows.Next() {
 		var m domain.NNModel
@@ -66,14 +68,14 @@ func (r *ModelRepository) GetAll(ctx context.Context) ([]domain.NNModel, error) 
 			&m.IsActive,
 			&m.CreatedAt,
 		); err != nil {
-			return nil, fmt.Errorf("error scanning model row: %w", err)
+			return nil, 0, fmt.Errorf("error scanning model row: %w", err)
 		}
 		models = append(models, m)
 	}
 
 	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("error iterating model rows: %w", err)
+		return nil, 0, fmt.Errorf("error iterating model rows: %w", err)
 	}
 
-	return models, nil
+	return models, total, nil
 }

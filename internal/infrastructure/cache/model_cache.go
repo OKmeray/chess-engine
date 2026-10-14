@@ -11,7 +11,6 @@ import (
 // ModelProvider defines the data access contract required by the cache.
 type ModelProvider interface {
 	GetByID(ctx context.Context, id int) (domain.NNModel, error)
-	GetAll(ctx context.Context) ([]domain.NNModel, error)
 }
 
 type cacheItem struct {
@@ -24,10 +23,8 @@ type ModelCache struct {
 	provider ModelProvider
 	ttl      time.Duration
 
-	mu           sync.RWMutex
-	models       map[int]cacheItem
-	all          []domain.NNModel
-	allFetchedAt time.Time
+	mu     sync.RWMutex
+	models map[int]cacheItem
 }
 
 // NewModelCache initializes a new ModelCache wrapper.
@@ -37,43 +34,6 @@ func NewModelCache(provider ModelProvider, ttl time.Duration) *ModelCache {
 		ttl:      ttl,
 		models:   make(map[int]cacheItem),
 	}
-}
-
-// GetAll returns all models.
-func (c *ModelCache) GetAll(ctx context.Context) ([]domain.NNModel, error) {
-	c.mu.RLock()
-	if len(c.all) > 0 && time.Since(c.allFetchedAt) < c.ttl {
-		res := c.all
-		c.mu.RUnlock()
-		return res, nil
-	}
-	c.mu.RUnlock()
-
-	c.mu.Lock()
-	defer c.mu.Unlock()
-
-	// Double-check condition after acquiring write lock
-	if len(c.all) > 0 && time.Since(c.allFetchedAt) < c.ttl {
-		return c.all, nil
-	}
-
-	models, err := c.provider.GetAll(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	now := time.Now()
-	c.all = models
-	c.allFetchedAt = now
-
-	for _, m := range models {
-		c.models[m.ID] = cacheItem{
-			model:     m,
-			fetchedAt: now,
-		}
-	}
-
-	return c.all, nil
 }
 
 // GetByID returns a model by its ID.
