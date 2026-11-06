@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"errors"
 	"testing"
 	"time"
 
@@ -71,7 +72,10 @@ func TestMinimax_Search_Tactics(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 			defer cancel()
 
-			bestMove, _ := searcher.Search(ctx, pos)
+			bestMove, err := searcher.Search(ctx, pos)
+			if err != nil {
+				t.Fatalf("Search(): unexpected error: %v", err)
+			}
 
 			expectedMove, err := engine.ParseSAN(pos, tt.expectedSAN)
 			if err != nil {
@@ -125,7 +129,10 @@ func TestMinimax_Search_GameOver(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
-			bestMove, score := searcher.Search(ctx, pos)
+			bestMove, score, err := searcher.SearchWithScore(ctx, pos)
+			if err != nil {
+				t.Fatalf("SearchWithScore(): unexpected error: %v", err)
+			}
 
 			if bestMove != 0 {
 				t.Errorf("Search() move = %v, want %v", bestMove, 0)
@@ -167,7 +174,10 @@ func TestMinimax_Search_DeepDraws(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
-			_, score := searcher.Search(ctx, pos)
+			_, score, err := searcher.SearchWithScore(ctx, pos)
+			if err != nil {
+				t.Fatalf("SearchWithScore(): unexpected error: %v", err)
+			}
 
 			if score != tt.expectedScore {
 				t.Errorf("Search() score = %v, want %v", score, tt.expectedScore)
@@ -220,8 +230,35 @@ func TestMinimax_Search_ImmediateCancel(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
 
-	bestMove, _ := searcher.Search(ctx, pos)
+	bestMove, err := searcher.Search(ctx, pos)
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("Search() error = %v, wantErr %v", err, context.Canceled)
+	}
 	if bestMove != 0 {
-		t.Errorf("Search() move = %v, want 0", bestMove)
+		t.Errorf("Search() move = %v, want %v", bestMove, 0)
+	}
+}
+
+func TestMinimax_Search_NilPosition(t *testing.T) {
+	searcher := NewMinimax(5)
+	ctx := context.Background()
+
+	move, err := searcher.Search(ctx, nil)
+	if !errors.Is(err, engine.ErrNilPosition) {
+		t.Fatalf("Search(ctx, nil) error = %v, wantErr %v", err, engine.ErrNilPosition)
+	}
+	if move != 0 {
+		t.Errorf("Search(ctx, nil) move = %v, want %v", move, 0)
+	}
+
+	move, score, err := searcher.SearchWithScore(ctx, nil)
+	if !errors.Is(err, engine.ErrNilPosition) {
+		t.Fatalf("SearchWithScore(ctx, nil) error = %v, wantErr %v", err, engine.ErrNilPosition)
+	}
+	if move != 0 {
+		t.Errorf("SearchWithScore(ctx, nil) move = %v, want %v", move, 0)
+	}
+	if score != 0 {
+		t.Errorf("SearchWithScore(ctx, nil) score = %v, want %v", score, 0)
 	}
 }

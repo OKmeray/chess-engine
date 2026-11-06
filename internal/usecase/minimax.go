@@ -45,7 +45,17 @@ func NewMinimax(maxDepth int) *Minimax {
 }
 
 // Search finds the best move in the given position using iterative deepening.
-func (m *Minimax) Search(ctx context.Context, pos *engine.Position) (engine.Move, float32) {
+func (m *Minimax) Search(ctx context.Context, pos *engine.Position) (engine.Move, error) {
+	move, _, err := m.SearchWithScore(ctx, pos)
+	return move, err
+}
+
+// SearchWithScore finds the best move and its evaluation score using iterative deepening.
+func (m *Minimax) SearchWithScore(ctx context.Context, pos *engine.Position) (engine.Move, float32, error) {
+	if pos == nil {
+		return 0, 0, engine.ErrNilPosition
+	}
+
 	var bestMove engine.Move
 	var bestScore float32
 	m.nodesSearched = 0
@@ -73,7 +83,11 @@ func (m *Minimax) Search(ctx context.Context, pos *engine.Position) (engine.Move
 		}
 	}
 
-	return bestMove, bestScore
+	if err := ctx.Err(); err != nil && bestMove == 0 {
+		return 0, 0, err
+	}
+
+	return bestMove, bestScore, nil
 }
 
 // searchDepth finds the best move by initiating an alpha-beta search to the given depth.
