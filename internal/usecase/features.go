@@ -41,7 +41,8 @@ func ExtractTransformerFeatures(pos *engine.Position, out []float32) {
 
 	// Count position repetition
 	repCount := 0
-	for i := 0; i < pos.HalfMoves; i++ {
+	limit := min(pos.HalfMoves, len(pos.RepetitionHistory))
+	for i := range limit {
 		if pos.RepetitionHistory[i] == pos.Hash {
 			repCount++
 		}
