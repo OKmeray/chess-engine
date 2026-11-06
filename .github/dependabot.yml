@@ -1,0 +1,10 @@
+version: 2
+updates:
+  # Maintain Go dependencies and track Go versions / security vulnerabilities
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "chore"
