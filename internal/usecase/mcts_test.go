@@ -266,7 +266,7 @@ func TestMCTSSearcher_Search_TerminalNodes(t *testing.T) {
 			sum := searcher.nodes[0].getValue()
 			visits := float32(atomic.LoadInt32(&searcher.nodes[0].Visits))
 			got := sum / visits
-			if got != tt.expectedValue {
+			if math.Abs(float64(got-tt.expectedValue)) > 1e-6 {
 				t.Errorf("average value = %v, want %v", got, tt.expectedValue)
 			}
 		})
