@@ -11,6 +11,9 @@ import (
 // ErrModelNotFound is returned when a requested NN model cannot be found in the repository.
 var ErrModelNotFound = errors.New("model not found")
 
+// ActiveModelSentinelID represents the sentinel model ID used to request the active model.
+const ActiveModelSentinelID = 0
+
 // NNModel represents a neural network configuration used for position evaluation.
 type NNModel struct {
 	ID        int            `json:"id"`

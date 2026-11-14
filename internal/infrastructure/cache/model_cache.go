@@ -11,6 +11,7 @@ import (
 // ModelProvider defines the data access contract required by the cache.
 type ModelProvider interface {
 	GetByID(ctx context.Context, id int) (domain.NNModel, error)
+	GetActive(ctx context.Context) (domain.NNModel, error)
 }
 
 type cacheItem struct {
@@ -36,8 +37,40 @@ func NewModelCache(provider ModelProvider, ttl time.Duration) *ModelCache {
 	}
 }
 
-// GetByID returns a model by its ID.
+// GetActive returns the active model, leveraging cache if available.
+func (c *ModelCache) GetActive(ctx context.Context) (domain.NNModel, error) {
+	c.mu.RLock()
+	item, exists := c.models[domain.ActiveModelSentinelID]
+	if exists && time.Since(item.fetchedAt) < c.ttl {
+		c.mu.RUnlock()
+		return item.model, nil
+	}
+	c.mu.RUnlock()
+
+	model, err := c.provider.GetActive(ctx)
+	if err != nil {
+		return domain.NNModel{}, err
+	}
+
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	cacheEntry := cacheItem{
+		model:     model,
+		fetchedAt: time.Now(),
+	}
+	c.models[domain.ActiveModelSentinelID] = cacheEntry
+	c.models[model.ID] = cacheEntry
+
+	return model, nil
+}
+
+// GetByID returns a model by its ID or the default active model.
 func (c *ModelCache) GetByID(ctx context.Context, id int) (domain.NNModel, error) {
+	if id == domain.ActiveModelSentinelID {
+		return c.GetActive(ctx)
+	}
+
 	c.mu.RLock()
 	item, exists := c.models[id]
 	if exists && time.Since(item.fetchedAt) < c.ttl {

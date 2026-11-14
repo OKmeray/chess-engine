@@ -260,3 +260,66 @@ func TestManager_CloseAll(t *testing.T) {
 		t.Errorf("Len: got %d, want %d", gotLen, 0)
 	}
 }
+
+func TestManager_Get_DefaultActiveModel(t *testing.T) {
+	initTestEnvironment(t)
+	modelPath := getTestModelPath(t)
+
+	activeID := 42
+	fetcher := &mockFetcher{
+		models: map[int]domain.NNModel{
+			domain.ActiveModelSentinelID: {ID: activeID, Name: "model_active", Path: modelPath},
+			activeID:                     {ID: activeID, Name: "model_active", Path: modelPath},
+		},
+	}
+
+	mgr := NewManager(fetcher)
+	defer mgr.CloseAll()
+
+	ctx := context.Background()
+
+	defaultEval, err := mgr.Get(ctx, domain.ActiveModelSentinelID)
+	if err != nil {
+		t.Fatalf("Get(%d): unexpected error: %v", domain.ActiveModelSentinelID, err)
+	}
+	if defaultEval == nil {
+		t.Fatalf("Get(%d) eval = nil, want non-nil", domain.ActiveModelSentinelID)
+	}
+
+	explicitEval, err := mgr.Get(ctx, activeID)
+	if err != nil {
+		t.Fatalf("Get(%d): unexpected error: %v", activeID, err)
+	}
+	if defaultEval != explicitEval {
+		t.Errorf("Get(%d) instance mismatch: got %p, want %p", activeID, explicitEval, defaultEval)
+	}
+
+	mgr.mu.RLock()
+	defer mgr.mu.RUnlock()
+	if _, exists := mgr.loaded[domain.ActiveModelSentinelID]; exists {
+		t.Errorf("mgr.loaded[%d] exists = %v, want %v", domain.ActiveModelSentinelID, exists, false)
+	}
+	if _, exists := mgr.loaded[activeID]; !exists {
+		t.Errorf("mgr.loaded[%d] exists = %v, want %v", activeID, exists, true)
+	}
+	if len(mgr.loaded) != 1 {
+		t.Errorf("Len: got %d, want %d", len(mgr.loaded), 1)
+	}
+}
+
+func TestManager_Get_DefaultActiveModel_FetcherError(t *testing.T) {
+	fetcher := &mockFetcher{
+		err: domain.ErrModelNotFound,
+	}
+
+	mgr := NewManager(fetcher)
+	defer mgr.CloseAll()
+
+	_, err := mgr.Get(context.Background(), domain.ActiveModelSentinelID)
+	if !errors.Is(err, ErrFetchModelMetadata) {
+		t.Fatalf("Get(%d) error = %v, wantErr %v", domain.ActiveModelSentinelID, err, ErrFetchModelMetadata)
+	}
+	if !errors.Is(err, domain.ErrModelNotFound) {
+		t.Errorf("Get(%d) wrapped error = %v, wantErr %v", domain.ActiveModelSentinelID, err, domain.ErrModelNotFound)
+	}
+}
