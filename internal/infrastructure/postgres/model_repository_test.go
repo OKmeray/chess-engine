@@ -4,6 +4,7 @@ package postgres
 
 import (
 	"context"
+	"errors"
 	"path/filepath"
 	"testing"
 	"time"
@@ -227,5 +228,64 @@ func TestPostgres_New_FailsOnBadConnectionString(t *testing.T) {
 	_, err := New(invalidConn, 1, 1, time.Second)
 	if err == nil {
 		t.Errorf("New(%q) error = %v, wantErr %v", invalidConn, err, true)
+	}
+}
+
+func TestModelRepository_GetActive(t *testing.T) {
+	repo, teardown := setupTestDB(t)
+	defer teardown()
+
+	ctx := context.Background()
+
+	_, err := repo.db.ExecContext(ctx, "TRUNCATE TABLE models RESTART IDENTITY")
+	if err != nil {
+		t.Fatalf("failed to truncate table: %v", err)
+	}
+
+	// empty table returns ErrModelNotFound
+	_, err = repo.GetActive(ctx)
+	if !errors.Is(err, domain.ErrModelNotFound) {
+		t.Errorf("GetActive() error = %v, wantErr %v", err, domain.ErrModelNotFound)
+	}
+
+	dummyJSON := `{"architecture": "CNN", "cnn": {"filters": 64}}`
+
+	// table returns ErrModelNotFound because no model is active
+	_, err = repo.db.ExecContext(
+		ctx, `
+		INSERT INTO models (name, path, details, is_active) VALUES 
+		('model_first', 'models/first.onnx', $1, false),
+		('model_second', 'models/second.onnx', $2, false)`,
+		dummyJSON, dummyJSON,
+	)
+	if err != nil {
+		t.Fatalf("failed to insert test data: %v", err)
+	}
+
+	_, err = repo.GetActive(ctx)
+	if !errors.Is(err, domain.ErrModelNotFound) {
+		t.Errorf("GetActive() error = %v, wantErr %v", err, domain.ErrModelNotFound)
+	}
+
+	// table with active model should return model_active
+	_, err = repo.db.ExecContext(
+		ctx, `
+		INSERT INTO models (name, path, details, is_active) VALUES 
+		('model_active', 'models/active.onnx', $1, true)`,
+		dummyJSON,
+	)
+	if err != nil {
+		t.Fatalf("failed to insert active model: %v", err)
+	}
+
+	activeModel, err := repo.GetActive(ctx)
+	if err != nil {
+		t.Fatalf("GetActive(): unexpected error: %v", err)
+	}
+	if activeModel.Name != "model_active" {
+		t.Errorf("GetActive().Name = %q, want %q", activeModel.Name, "model_active")
+	}
+	if !activeModel.IsActive {
+		t.Errorf("GetActive().IsActive = %v, want %v", activeModel.IsActive, true)
 	}
 }

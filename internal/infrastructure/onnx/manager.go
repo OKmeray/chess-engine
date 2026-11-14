@@ -32,8 +32,16 @@ func NewManager(fetcher ModelFetcher) *Manager {
 	}
 }
 
-// Get returns a live ONNX Evaluator for the given model ID.
+// Get returns an Evaluator for the given model ID or the default active model.
 func (m *Manager) Get(ctx context.Context, modelID int) (usecase.Evaluator, error) {
+	if modelID == domain.ActiveModelSentinelID {
+		activeModel, err := m.fetcher.GetByID(ctx, domain.ActiveModelSentinelID)
+		if err != nil {
+			return nil, fmt.Errorf("%w: %w", ErrFetchModelMetadata, err)
+		}
+		modelID = activeModel.ID
+	}
+
 	m.mu.RLock()
 	eval, exists := m.loaded[modelID]
 	m.mu.RUnlock()

@@ -44,6 +44,29 @@ func (r *ModelRepository) GetByID(ctx context.Context, id int) (domain.NNModel, 
 	return model, nil
 }
 
+// GetActive returns the active model where is_active is true.
+func (r *ModelRepository) GetActive(ctx context.Context) (domain.NNModel, error) {
+	query := `SELECT id, name, path, details, is_active, created_at FROM models WHERE is_active = true LIMIT 1`
+
+	var model domain.NNModel
+	err := r.db.QueryRowContext(ctx, query).Scan(
+		&model.ID,
+		&model.Name,
+		&model.Path,
+		&model.Details,
+		&model.IsActive,
+		&model.CreatedAt,
+	)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return domain.NNModel{}, fmt.Errorf("%w: no active model found", domain.ErrModelNotFound)
+		}
+		return domain.NNModel{}, fmt.Errorf("error querying active model: %w", err)
+	}
+
+	return model, nil
+}
+
 // List returns a paginated list of models and the total count.
 func (r *ModelRepository) List(ctx context.Context, limit, offset int) (models []domain.NNModel, total int, err error) {
 	countQuery := `SELECT COUNT(*) FROM models`
