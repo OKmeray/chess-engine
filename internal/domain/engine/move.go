@@ -85,6 +85,30 @@ func (m Move) Promotion() PieceType {
 	return None
 }
 
+// UCI returns the move formatted in UCI notation (e.g., "e2e4", "e7e8q").
+func (m Move) UCI() string {
+	fromSq := int(m.From())
+	toSq := int(m.To())
+	uci := fmt.Sprintf("%c%c%c%c", 'a'+(fromSq%8), '8'-(fromSq/8), 'a'+(toSq%8), '8'-(toSq/8))
+
+	switch m.Promotion() {
+	case Knight:
+		uci += "n"
+	case Bishop:
+		uci += "b"
+	case Rook:
+		uci += "r"
+	case Queen:
+		uci += "q"
+	}
+	return uci
+}
+
+// String implements the fmt.Stringer interface by returning the move's UCI representation.
+func (m Move) String() string {
+	return m.UCI()
+}
+
 // ParseSAN converts a Standard Algebraic Notation (SAN) string into a Move.
 func ParseSAN(pos *Position, san string) (Move, error) {
 	if pos == nil {
@@ -296,4 +320,19 @@ func findFromSquare(pos *Position, piece PieceType, color PieceColor, toSquare S
 	}
 
 	return NoSquare
+}
+
+// ParseUCI parses a Long Algebraic Notation (UCI) move string.
+func (p *Position) ParseUCI(uci string) (Move, error) {
+	if p == nil {
+		return Move(0), ErrNilPosition
+	}
+	var movesBuf [256]Move
+	legalMoves := p.GenerateMoves(movesBuf[:0])
+	for _, m := range legalMoves {
+		if m.UCI() == uci {
+			return m, nil
+		}
+	}
+	return Move(0), fmt.Errorf("illegal or invalid move: %s", uci)
 }

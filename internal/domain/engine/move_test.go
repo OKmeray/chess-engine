@@ -591,3 +591,113 @@ func TestParseSANNilPosition(t *testing.T) {
 		t.Errorf("ParseSAN(nil, %q) error = %v, wantErr %v", "e4", err, ErrNilPosition)
 	}
 }
+
+func TestMove_UCI(t *testing.T) {
+	tests := []struct {
+		name string
+		move Move
+		want string
+	}{
+		{
+			name: "Quiet move e2e4",
+			move: NewMove(52, 36, FlagDoublePawn),
+			want: "e2e4",
+		},
+		{
+			name: "Knight move b1c3",
+			move: NewMove(57, 42, FlagQuiet),
+			want: "b1c3",
+		},
+		{
+			name: "Corner to corner a1h8",
+			move: NewMove(56, 7, FlagQuiet),
+			want: "a1h8",
+		},
+		{
+			name: "Promotion to Queen e7e8q",
+			move: NewMove(12, 4, FlagPromoQueen),
+			want: "e7e8q",
+		},
+		{
+			name: "Promotion to Rook with capture e7d8r",
+			move: NewMove(12, 3, FlagPromoRookCapture),
+			want: "e7d8r",
+		},
+		{
+			name: "Promotion to Bishop e7e8b",
+			move: NewMove(12, 4, FlagPromoBishop),
+			want: "e7e8b",
+		},
+		{
+			name: "Promotion to Knight e7e8n",
+			move: NewMove(12, 4, FlagPromoKnight),
+			want: "e7e8n",
+		},
+		{
+			name: "Black pawn promotion e2e1q",
+			move: NewMove(52, 60, FlagPromoQueen),
+			want: "e2e1q",
+		},
+		{
+			name: "White kingside castling e1g1",
+			move: NewMove(60, 62, FlagKingCastle),
+			want: "e1g1",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.move.UCI()
+			if got != tt.want {
+				t.Errorf("Move(%v).UCI() = %q, want %q", tt.move, got, tt.want)
+			}
+			if str := tt.move.String(); str != tt.want {
+				t.Errorf("Move(%v).String() = %q, want %q", tt.move, str, tt.want)
+			}
+		})
+	}
+}
+
+func TestPosition_ParseUCI(t *testing.T) {
+	startFEN := "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+	pos, err := ParseFEN(startFEN)
+	if err != nil {
+		t.Fatalf("failed to parse starting position FEN: %v", err)
+	}
+
+	// Valid move
+	move := "e2e4"
+	m, err := pos.ParseUCI(move)
+	if err != nil {
+		t.Fatalf("ParseUCI(%q): unexpected error: %v", move, err)
+	}
+	if got := m.UCI(); got != move {
+		t.Errorf("ParseUCI(%q).UCI() = %q, want %q", move, got, move)
+	}
+
+	// Illegal move
+	_, err = pos.ParseUCI("e2e5")
+	if err == nil {
+		t.Errorf("ParseUCI(%q) error = nil, want error", "e2e5")
+	}
+
+	// Promotion
+	promoPos, err := ParseFEN("4k3/7P/8/8/8/8/8/4K3 w - - 0 1")
+	if err != nil {
+		t.Fatalf("failed to parse FEN: %v", err)
+	}
+	promoMove, err := promoPos.ParseUCI("h7h8q")
+	if err != nil {
+		t.Fatalf("ParseUCI(%q): unexpected error: %v", "h7h8q", err)
+	}
+	if promoMove.Promotion() != Queen {
+		t.Errorf("promoMove.Promotion() = %v, want %v", promoMove.Promotion(), Queen)
+	}
+
+	// Nil position
+	var nilPos *Position
+	_, err = nilPos.ParseUCI("e2e4")
+	if !errors.Is(err, ErrNilPosition) {
+		t.Errorf("nilPos.ParseUCI(%q) error = %v, wantErr %v", "e2e4", err, ErrNilPosition)
+	}
+}
